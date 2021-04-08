@@ -12,6 +12,12 @@ class InputActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityInputBinding
 
+    companion object {
+        private const val INPUT_TALL_KG_TOAST = "키와 몸무게 모두 입력해주세요"
+        const val TALL = "tall"
+        const val KG = "kg"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInputBinding.inflate(layoutInflater)
@@ -28,13 +34,12 @@ class InputActivity : AppCompatActivity() {
             }
             false
         }
-
     }
 
     private fun buttonClick() {
         if (binding.tallEt.text.isEmpty() || binding.kgEt.text.isEmpty()) {
             Log.d("bmi", "토스트")
-            Toast.makeText(applicationContext, "키와 몸무게 모두 입력해주세요", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, INPUT_TALL_KG_TOAST, Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -42,8 +47,8 @@ class InputActivity : AppCompatActivity() {
         val kg = binding.kgEt.text.toString().toInt()
 
         val intent = Intent(this@InputActivity, ResultActivity::class.java)
-        intent.putExtra("tall", tall)
-        intent.putExtra("kg", kg)
+        intent.putExtra(TALL, tall)
+        intent.putExtra(KG, kg)
         startActivity(intent)
     }
 

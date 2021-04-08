@@ -5,7 +5,12 @@ package com.soten.bmicalculator.view.policy
  * 30 <= ModeratelyObese < 35
  */
 class ModeratelyObeseBMIPolicy : BMIPolicy {
+
+    companion object {
+        private const val PRINT_MODERATELY_OBESE = "중도비만"
+    }
+
     override fun printBMIInfo(): String {
-        return "중도비만"
+        return PRINT_MODERATELY_OBESE
     }
 }

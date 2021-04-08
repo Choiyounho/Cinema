@@ -5,7 +5,12 @@ package com.soten.bmicalculator.view.policy
  * 18.5 <= Normal < 25
  */
 class NormalBMIPolicy : BMIPolicy {
+
+    companion object {
+        private const val PRINT_NORMAL = "정상"
+    }
+
     override fun printBMIInfo(): String {
-        return "정상"
+        return PRINT_NORMAL
     }
 }

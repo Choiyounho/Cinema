@@ -5,7 +5,12 @@ package com.soten.bmicalculator.view.policy
  * 25 <= Overweight < 30
  */
 class OverweightBMIPolicy : BMIPolicy {
+
+    companion object {
+        private const val PRINT_OVERWEIGHT = "과체중"
+    }
+
     override fun printBMIInfo(): String {
-        return "과체중"
+        return PRINT_OVERWEIGHT
     }
 }

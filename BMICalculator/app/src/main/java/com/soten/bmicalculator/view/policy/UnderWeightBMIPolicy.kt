@@ -5,8 +5,13 @@ package com.soten.bmicalculator.view.policy
  * UnderWeight < 18.5
  */
 class UnderWeightBMIPolicy : BMIPolicy {
+
+    companion object {
+        private const val PRINT_UNDERWEIGHT = "저체중"
+    }
+
     override fun printBMIInfo(): String {
-        return "저체중"
+        return PRINT_UNDERWEIGHT
     }
 
 }

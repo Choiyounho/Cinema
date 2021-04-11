@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.soten.bmicalculator.databinding.ActivityResultBinding
 import com.soten.bmicalculator.view.InputActivity.Companion.TALL
-import com.soten.bmicalculator.view.policy.BMIPolicy
 import com.soten.bmicalculator.view.policy.BMIPolicyFactory
 import kotlin.math.pow
 import kotlin.math.round
@@ -33,10 +32,10 @@ class ResultActivity : AppCompatActivity() {
 
         binding.bmiResultTv.append(bmi.toString())
 
-        applyBMI(bmi)
+        applyBMIPolicy(bmi)
     }
 
-    private fun applyBMI(bmi: Double) {
+    private fun applyBMIPolicy(bmi: Double) {
         val bmiPolicy = BMIPolicyFactory.from(bmi)
         binding.bmiDescriptionTv.text = bmiPolicy.printBMIInfo()
     }

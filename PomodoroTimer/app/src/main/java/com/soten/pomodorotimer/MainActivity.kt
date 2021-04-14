@@ -3,6 +3,7 @@ package com.soten.pomodorotimer
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.SeekBar
 import android.widget.TextView
 
@@ -20,6 +21,8 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.seekBar)
     }
 
+    private var currentCountDownTimer: CountDownTimer? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,17 +32,48 @@ class MainActivity : AppCompatActivity() {
 
     private fun bindViews() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            @SuppressLint("SetTextI18n")
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                remainMinutesTextView.text = "%02d".format(progress)
+                if (fromUser) {
+                    updateRemainTime(progress * 60 * 1000L)
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                currentCountDownTimer?.cancel()
+                currentCountDownTimer = null
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                seekBar ?: return
+                currentCountDownTimer = createCountDownTimer(seekBar.progress * 60 * 1000L)
+                currentCountDownTimer?.start()
             }
-
         })
     }
+
+    private fun createCountDownTimer(initialMillis: Long) =
+        object : CountDownTimer(initialMillis, 1000L) {
+            override fun onTick(millisUntilFinished: Long) {
+                updateRemainTime(millisUntilFinished)
+                updateSeekBar(millisUntilFinished)
+            }
+
+            override fun onFinish() {
+                updateRemainTime(0)
+                updateSeekBar(0)
+            }
+        }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateRemainTime(remainMillis: Long) {
+        val remainSeconds = remainMillis / 1000L
+
+        remainMinutesTextView.text = "%02d".format(remainSeconds / 60)
+        remainSecondsTextView.text = "%02d".format(remainSeconds % 60)
+    }
+
+    private fun updateSeekBar(remainMillis: Long) {
+        seekBar.progress = (remainMillis / 1000 / 60).toInt()
+    }
+
 }

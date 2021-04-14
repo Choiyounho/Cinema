@@ -12,6 +12,14 @@ import com.example.recorder.State.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val soundVisualizerView: SoundVisualizerView by lazy {
+        findViewById(R.id.soundVisualizerView)
+    }
+
+    private val recordTimeTextView: CountUpView by lazy {
+        findViewById(R.id.recordTimeTextView)
+    }
+
     private val resetButton: Button by lazy {
         findViewById(R.id.resetButton)
     }
@@ -27,11 +35,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var state = BEFORE_RECORDING
-    set(value) {
-        field = value
-        resetButton.isEnabled = (value == AFTER_RECODING || value == ON_PLAYING)
-        recordingButton.updateIconWithState(value)
-    }
+        set(value) {
+            field = value
+            resetButton.isEnabled = (value == AFTER_RECODING || value == ON_PLAYING)
+            recordingButton.updateIconWithState(value)
+        }
 
     private var recorder: MediaRecorder? = null
     private var player: MediaPlayer? = null
@@ -71,13 +79,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bindViews() {
+        soundVisualizerView.onRequestCurrentAmplitude = {
+            recorder?.maxAmplitude ?: 0
+        }
+
         resetButton.setOnClickListener {
             stopPlaying()
+            soundVisualizerView.clearVisualization()
+            recordTimeTextView.clearCountTIme()
             state = BEFORE_RECORDING
         }
 
         recordingButton.setOnClickListener {
-            when(state) {
+            when (state) {
                 BEFORE_RECORDING -> startRecording()
                 ON_RECORDING -> stopRecording()
                 AFTER_RECODING -> startPlaying()
@@ -94,7 +108,15 @@ class MainActivity : AppCompatActivity() {
             setOutputFile(recordingFilePath)
             prepare()
         }
+
+        player?.setOnCompletionListener {
+            stopPlaying()
+            state = AFTER_RECODING
+        }
+
         recorder?.start()
+        soundVisualizerView.startVisualizing(false)
+        recordTimeTextView.startCountUp()
         state = ON_RECORDING
     }
 
@@ -104,6 +126,8 @@ class MainActivity : AppCompatActivity() {
             release()
         }
         recorder = null
+        soundVisualizerView.stopVisualizing()
+        recordTimeTextView.stopCountUp()
         state = AFTER_RECODING
     }
 
@@ -113,12 +137,16 @@ class MainActivity : AppCompatActivity() {
             prepare()
         }
         player?.start()
+        soundVisualizerView.startVisualizing(true)
+        recordTimeTextView.startCountUp()
         state = ON_PLAYING
     }
 
     private fun stopPlaying() {
         player?.release()
         player = null
+        soundVisualizerView.stopVisualizing()
+        recordTimeTextView.stopCountUp()
         state = AFTER_RECODING
     }
 

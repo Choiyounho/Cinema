@@ -30,6 +30,7 @@
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="textUri"
+            android:text="http://www."
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/backButton"
             app:layout_constraintStart_toEndOf="@+id/homeButton"

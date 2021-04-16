@@ -17,30 +17,6 @@ class LottoActivity : AppCompatActivity() {
         findViewById(R.id.numberPicker)
     }
 
-    private val firstNumber: TextView by lazy {
-        findViewById(R.id.first_number)
-    }
-
-    private val secondNumber: TextView by lazy {
-        findViewById(R.id.second_number)
-    }
-
-    private val thirdNumber: TextView by lazy {
-        findViewById(R.id.third_number)
-    }
-
-    private val fourthNumber: TextView by lazy {
-        findViewById(R.id.fourth_number)
-    }
-
-    private val fifthNumber: TextView by lazy {
-        findViewById(R.id.fifth_number)
-    }
-
-    private val sixthNumber: TextView by lazy {
-        findViewById(R.id.sixth_number)
-    }
-
     private val addButton: Button by lazy {
         findViewById(R.id.add_button)
     }
@@ -58,7 +34,14 @@ class LottoActivity : AppCompatActivity() {
     }
 
     private val ballList: List<TextView> by lazy {
-        listOf(firstNumber, secondNumber, thirdNumber, fourthNumber, fifthNumber, sixthNumber)
+        listOf(
+                findViewById(R.id.first_number),
+                findViewById(R.id.second_number),
+                findViewById(R.id.third_number),
+                findViewById(R.id.fourth_number),
+                findViewById(R.id.fifth_number),
+                findViewById(R.id.sixth_number)
+        )
     }
 
     private val numberList = ArrayList<Int>()

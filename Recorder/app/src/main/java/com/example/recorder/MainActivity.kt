@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         requestAudioPermission()
         initViews()
         bindViews()
+        initVariable()
     }
 
     override fun onRequestPermissionsResult(

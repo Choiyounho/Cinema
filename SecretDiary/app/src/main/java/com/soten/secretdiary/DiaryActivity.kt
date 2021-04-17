@@ -23,13 +23,13 @@ class DiaryActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val detailPreferences = getSharedPreferences("diary", Context.MODE_PRIVATE)
+        val detailPreferences = getSharedPreferences(GET_SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
-        binding.diaryEditText.setText(detailPreferences.getString("detail", ""))
+        binding.diaryEditText.setText(detailPreferences.getString(PUT_SHARED_PREFERENCES, ""))
 
         val runnable = Runnable {
-            getSharedPreferences("diary", Context.MODE_PRIVATE).edit {
-                putString("detail", binding.diaryEditText.text.toString())
+            getSharedPreferences(GET_SHARED_PREFERENCES, Context.MODE_PRIVATE).edit {
+                putString(PUT_SHARED_PREFERENCES, binding.diaryEditText.text.toString())
             }
 
             Log.d("DiaryActivity", "SAVE ${binding.diaryEditText.text}")
@@ -41,5 +41,10 @@ class DiaryActivity : AppCompatActivity() {
             handler.removeCallbacks(runnable)
             handler.postDelayed(runnable, 500)
         }
+    }
+
+    companion object {
+        private const val GET_SHARED_PREFERENCES = "diary"
+        private const val PUT_SHARED_PREFERENCES = "detail"
     }
 }

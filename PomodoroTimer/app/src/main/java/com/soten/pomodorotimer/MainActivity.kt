@@ -118,6 +118,8 @@ class MainActivity : AppCompatActivity() {
 
         bellSoundId?.let {
             soundPool.play(it, 1f, 1f, 0, -1, 1f)
+            Thread.sleep(3500L)
+            soundPool.release()
         }
     }
 
@@ -125,12 +127,17 @@ class MainActivity : AppCompatActivity() {
     private fun updateRemainTime(remainMillis: Long) {
         val remainSeconds = remainMillis / 1000L
 
-        remainMinutesTextView.text = "%02d'".format(remainSeconds / 60)
-        remainSecondsTextView.text = "%02d".format(remainSeconds % 60)
+        remainMinutesTextView.text = FORMAT_MINUTES.format(remainSeconds / 60)
+        remainSecondsTextView.text = FORMAT_SECONDS.format(remainSeconds % 60)
     }
 
     private fun updateSeekBar(remainMillis: Long) {
-        seekBar.progress = (remainMillis / 1000 / 60).toInt()
+        seekBar.progress = (remainMillis / 1000L / 60).toInt()
+    }
+
+    companion object {
+        private const val FORMAT_MINUTES = "%02d'"
+        private const val FORMAT_SECONDS = "%02d'"
     }
 
 }

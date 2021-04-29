@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    updateRemainTime(progress * 60 * 1000L)
+                    updateRemainTime(progress * TO_SEC * TO_MIN)
                 }
             }
 
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 seekBar ?: return
 
-                if (seekBar.progress == 0) {
+                if (seekBar.progress == INIT_SEEK_BAR) {
                     stopCountDown()
                 } else {
                     startCountDown()
@@ -79,12 +79,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initSounds() {
-        tickingSoundId = soundPool.load(this, R.raw.timer_ticking, 1)
-        bellSoundId = soundPool.load(this, R.raw.timer_bell, 1)
+        tickingSoundId = soundPool.load(this, R.raw.timer_ticking, PRIORITY_ONE)
+        bellSoundId = soundPool.load(this, R.raw.timer_bell, PRIORITY_ONE)
     }
 
     private fun createCountDownTimer(initialMillis: Long) =
-        object : CountDownTimer(initialMillis, 1000L) {
+        object : CountDownTimer(initialMillis, TO_MIN) {
             override fun onTick(millisUntilFinished: Long) {
                 updateRemainTime(millisUntilFinished)
                 updateSeekBar(millisUntilFinished)
@@ -96,11 +96,11 @@ class MainActivity : AppCompatActivity() {
         }
 
     private fun startCountDown() {
-        currentCountDownTimer = createCountDownTimer(seekBar.progress * 60 * 1000L)
+        currentCountDownTimer = createCountDownTimer(seekBar.progress * TO_SEC * TO_MIN)
         currentCountDownTimer?.start()
 
         tickingSoundId?.let {
-            soundPool.play(it, 1f, 1f, 0, -1, 1f)
+            soundPool.play(it, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY_ZERO, LOOP, RATE)
         }
     }
 
@@ -111,33 +111,44 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun completeCountDown() {
-        updateRemainTime(0)
-        updateSeekBar(0)
+        updateRemainTime(REMAIN_MILLIS)
+        updateSeekBar(REMAIN_MILLIS)
 
         soundPool.autoPause()
 
         bellSoundId?.let {
-            soundPool.play(it, 1f, 1f, 0, -1, 1f)
-            Thread.sleep(3500L)
+            soundPool.play(it, LEFT_VOLUME, RIGHT_VOLUME, PRIORITY_ZERO, LOOP, RATE)
+            Thread.sleep(FINISH_SOUND)
             soundPool.release()
         }
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateRemainTime(remainMillis: Long) {
-        val remainSeconds = remainMillis / 1000L
+        val remainSeconds = remainMillis / TO_MIN
 
-        remainMinutesTextView.text = FORMAT_MINUTES.format(remainSeconds / 60)
-        remainSecondsTextView.text = FORMAT_SECONDS.format(remainSeconds % 60)
+        remainMinutesTextView.text = FORMAT_MINUTES.format(remainSeconds / TO_SEC)
+        remainSecondsTextView.text = FORMAT_SECONDS.format(remainSeconds % TO_SEC)
     }
 
     private fun updateSeekBar(remainMillis: Long) {
-        seekBar.progress = (remainMillis / 1000L / 60).toInt()
+        seekBar.progress = (remainMillis / TO_MIN / TO_SEC).toInt()
     }
 
     companion object {
         private const val FORMAT_MINUTES = "%02d'"
-        private const val FORMAT_SECONDS = "%02d'"
+        private const val FORMAT_SECONDS = "%02d"
+        private const val INIT_SEEK_BAR = 0
+        private const val REMAIN_MILLIS = 0L
+        private const val TO_SEC = 60
+        private const val TO_MIN = 1000L
+        private const val FINISH_SOUND = 3500L
+        private const val LEFT_VOLUME = 1F
+        private const val RIGHT_VOLUME = 1F
+        private const val LOOP = -1
+        private const val RATE = 1F
+        private const val PRIORITY_ZERO = 0
+        private const val PRIORITY_ONE = 1
     }
 
 }

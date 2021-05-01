@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    updateRemainTime(progress * TO_SEC * TO_MIN)
+                    updateRemainTime(progress * TO_MIN * TO_SEC)
                 }
             }
 
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createCountDownTimer(initialMillis: Long) =
-        object : CountDownTimer(initialMillis, TO_MIN) {
+        object : CountDownTimer(initialMillis, TO_SEC) {
             override fun onTick(millisUntilFinished: Long) {
                 updateRemainTime(millisUntilFinished)
                 updateSeekBar(millisUntilFinished)
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     private fun startCountDown() {
-        currentCountDownTimer = createCountDownTimer(seekBar.progress * TO_SEC * TO_MIN)
+        currentCountDownTimer = createCountDownTimer(seekBar.progress * TO_MIN * TO_SEC)
         currentCountDownTimer?.start()
 
         tickingSoundId?.let {
@@ -125,14 +125,14 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateRemainTime(remainMillis: Long) {
-        val remainSeconds = remainMillis / TO_MIN
+        val remainSeconds = remainMillis / TO_SEC
 
-        remainMinutesTextView.text = FORMAT_MINUTES.format(remainSeconds / TO_SEC)
-        remainSecondsTextView.text = FORMAT_SECONDS.format(remainSeconds % TO_SEC)
+        remainMinutesTextView.text = FORMAT_MINUTES.format(remainSeconds / TO_MIN)
+        remainSecondsTextView.text = FORMAT_SECONDS.format(remainSeconds % TO_MIN)
     }
 
     private fun updateSeekBar(remainMillis: Long) {
-        seekBar.progress = (remainMillis / TO_MIN / TO_SEC).toInt()
+        seekBar.progress = (remainMillis / TO_SEC / TO_MIN).toInt()
     }
 
     companion object {
@@ -140,8 +140,8 @@ class MainActivity : AppCompatActivity() {
         private const val FORMAT_SECONDS = "%02d"
         private const val INIT_SEEK_BAR = 0
         private const val REMAIN_MILLIS = 0L
-        private const val TO_SEC = 60
-        private const val TO_MIN = 1000L
+        private const val TO_MIN = 60
+        private const val TO_SEC = 1000L
         private const val FINISH_SOUND = 3500L
         private const val LEFT_VOLUME = 1F
         private const val RIGHT_VOLUME = 1F

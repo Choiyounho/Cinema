@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "908884075799",
+    "project_id": "today-quote-b07e9",
+    "storage_bucket": "today-quote-b07e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908884075799:android:09f16b54d08a279f960352",
+        "android_client_info": {
+          "package_name": "com.soten.today_quote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908884075799-8f9tja4o2us7f5n9irerhko20qoobgjj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZzY5-98JNVZa0_LcwSFi5lcJiv1zSEI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908884075799-8f9tja4o2us7f5n9irerhko20qoobgjj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

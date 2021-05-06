@@ -1,8 +1,11 @@
 package com.soten.alarm
 
+import android.app.TimePickerDialog
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.soten.alarm.databinding.ActivityMainBinding
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,17 +18,43 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         initOnOffButton()
-        initChangeAlramTimeButton()
+        initChangeAlarmTimeButton()
         // todo step 1 : 뷰 초기화
         // todo step 2 : 데이터 가져오기
         // todo step 2 : 뷰에 데이터 그려주기기
     }
 
     private fun initOnOffButton() {
-        TODO("Not yet implemented")
+        binding.onOffButton.setOnClickListener {
+        }
     }
 
-    private fun initChangeAlramTimeButton() {
-        TODO("Not yet implemented")
+    private fun initChangeAlarmTimeButton() {
+        binding.changeAlarmTImeButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            TimePickerDialog(this, { picker, hour, minute ->
+
+                saveAlarmModel(hour, minute, false)
+            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false)
+                    .show()
+        }
+    }
+
+    private fun saveAlarmModel(hour: Int, minute: Int, onOff: Boolean): AlarmDisplayModel {
+        val model = AlarmDisplayModel(
+                hour = hour,
+                minute = minute,
+                onOff = onOff
+        )
+
+        val sharedPreferences = getSharedPreferences("time", Context.MODE_PRIVATE)
+
+        with(sharedPreferences.edit()) {
+            putString("alarm", model.makeDateForDB())
+            putBoolean("onOff", model.onOff)
+            apply()
+        }
+
+        return model
     }
 }

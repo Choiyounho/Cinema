@@ -1,4 +1,4 @@
-package com.soten.book_review.model
+package com.soten.book_review.model.book
 
 import com.google.gson.annotations.SerializedName
 

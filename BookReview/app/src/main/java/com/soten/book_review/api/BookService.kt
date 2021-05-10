@@ -1,7 +1,7 @@
 package com.soten.book_review.api
 
-import com.soten.book_review.model.BestSellerDTO
-import com.soten.book_review.model.SearchBookDTO
+import com.soten.book_review.model.book.BestSellerDTO
+import com.soten.book_review.model.book.SearchBookDTO
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

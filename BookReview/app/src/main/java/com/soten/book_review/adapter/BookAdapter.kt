@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.soten.book_review.databinding.ItemBookBinding
-import com.soten.book_review.model.Book
+import com.soten.book_review.model.book.Book
 
 /**
  * diffUtil : 리사이클러 뷰가 실제로 뷰의 포지션이 바꼈을 때 할당할 기준

@@ -5,9 +5,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * 책의 전체 모델
  */
-data class BestSellerDTO(
+data class BestSellersDTO(
     @SerializedName("title") val title: String,
-    @SerializedName("item") val books: List<Book>,
-
-    ) {
-}
+    @SerializedName("item") val books: List<Book>
+)

@@ -1,4 +1,4 @@
-package com.soten.book_review
+package com.soten.review
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

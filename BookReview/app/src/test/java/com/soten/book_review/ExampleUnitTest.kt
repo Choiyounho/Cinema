@@ -1,4 +1,4 @@
-package com.soten.book_review
+package com.soten.review
 
 import org.junit.Test
 

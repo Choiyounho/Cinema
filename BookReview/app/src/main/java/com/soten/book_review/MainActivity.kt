@@ -1,6 +1,7 @@
 package com.soten.book_review
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -12,10 +13,11 @@ import androidx.room.Room
 import com.soten.book_review.adapter.BookAdapter
 import com.soten.book_review.adapter.HistoryAdapter
 import com.soten.book_review.api.BookService
-import com.soten.book_review.databinding.ActivityMainBinding
-import com.soten.book_review.model.book.BestSellerDTO
-import com.soten.book_review.model.book.SearchBookDTO
+import com.soten.review.databinding.ActivityMainBinding
+import com.soten.book_review.model.book.BestSellersDTO
+import com.soten.book_review.model.book.SearchBooksDTO
 import com.soten.book_review.model.history.History
+import com.soten.review.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,120 +29,70 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: BookAdapter
     private lateinit var historyAdapter: HistoryAdapter
-    private lateinit var bookService: BookService
 
-    private lateinit var db: AppDataBase
+    private lateinit var service: BookService
 
+    private lateinit var db: AppDatabase
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initBookRecyclerView()
-        initHistoryRecyclerView()
 
         db = Room.databaseBuilder(
             applicationContext,
-            AppDataBase::class.java,
-            "BookSearchDB"
+            AppDatabase::class.java,
+            "historyDB"
         ).build()
 
+        adapter = BookAdapter(clickListener = {
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("bookModel", it)
+            startActivity(intent)
+        })
+        historyAdapter = HistoryAdapter(historyDeleteClickListener = {
+            deleteSearchKeyword(it)
+        })
+
+
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://book.interpark.com")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        bookService = retrofit.create(BookService::class.java)
+        service = retrofit.create(BookService::class.java)
+        service.getBestSeller(getString(R.string.interParkAPIKey))
+            .enqueue(object: Callback<BestSellersDTO> {
+                override fun onFailure(call: Call<BestSellersDTO>, t: Throwable) {
 
-        bookService.getBestSellerBooks(getString(R.string.interParkAPIKey))
-            .enqueue(object : Callback<BestSellerDTO> {
-                override fun onResponse(
-                    call: Call<BestSellerDTO>,
-                    response: Response<BestSellerDTO>
-                ) {
+                }
+
+                override fun onResponse(call: Call<BestSellersDTO>, response: Response<BestSellersDTO>) {
                     if (response.isSuccessful.not()) {
-                        Log.e(TAG, "NOT SUCCESS")
                         return
                     }
 
                     response.body()?.let {
-                        Log.d(TAG, it.toString())
-
-                        it.books.forEach { book ->
-                            Log.d(TAG, book.toString())
-                        }
-
                         adapter.submitList(it.books)
                     }
                 }
 
-                override fun onFailure(call: Call<BestSellerDTO>, t: Throwable) {
-                    Log.e(TAG, t.toString())
-                }
-
             })
-        binding.searchEditText.setOnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == MotionEvent.ACTION_DOWN) {
-                search(binding.searchEditText.text.toString())
-                return@setOnKeyListener true
-            }
 
-            return@setOnKeyListener false
-        }
-    }
 
-    private fun search(keyword: String) {
-        bookService.getBestByName(getString(R.string.interParkAPIKey), keyword)
-            .enqueue(object : Callback<SearchBookDTO> {
-                override fun onResponse(
-                    call: Call<SearchBookDTO>,
-                    response: Response<SearchBookDTO>
-                ) {
-                    hideHistoryView()
-                    saveSearchKeyword(keyword)
 
-                    if (response.isSuccessful.not()) {
-                        Log.e(TAG, "NOT SUCCESS")
-                        return
-                    }
-
-                    adapter.submitList(response.body()?.books.orEmpty())
-                }
-
-                override fun onFailure(call: Call<SearchBookDTO>, t: Throwable) {
-                    hideHistoryView()
-                    Log.e(TAG, t.toString())
-                }
-
-            })
-    }
-
-    private fun initBookRecyclerView() {
-        adapter = BookAdapter()
         binding.bookRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.bookRecyclerView.adapter = adapter
-    }
 
-    private fun initHistoryRecyclerView() {
-        historyAdapter = HistoryAdapter(historyDeleteClickedListener = {
-            deleteSearchKeyword(it)
-        })
-
-        binding.historyRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.historyRecyclerView.adapter = historyAdapter
-
-        initSearchEditText()
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private fun initSearchEditText() {
         binding.searchEditText.setOnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == MotionEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                 search(binding.searchEditText.text.toString())
                 return@setOnKeyListener true
             }
-
             return@setOnKeyListener false
+
         }
 
         binding.searchEditText.setOnTouchListener { v, event ->
@@ -150,18 +102,50 @@ class MainActivity : AppCompatActivity() {
 
             return@setOnTouchListener false
         }
+
+
+        binding.historyRecyclerView.adapter = historyAdapter
+        binding.historyRecyclerView.layoutManager = LinearLayoutManager(this)
+
+
+    }
+
+    private fun search(text: String) {
+
+        service.getBooksByName(getString(R.string.interParkAPIKey), text)
+            .enqueue(object: Callback<SearchBooksDTO> {
+                override fun onFailure(call: Call<SearchBooksDTO>, t: Throwable) {
+                    hideHistoryView()
+                }
+
+                override fun onResponse(call: Call<SearchBooksDTO>, response: Response<SearchBooksDTO>) {
+
+                    hideHistoryView()
+                    saveSearchKeyword(text)
+
+                    if (response.isSuccessful.not()) {
+                        return
+                    }
+
+                    response.body()?.let {
+                        adapter.submitList(it.books)
+                    }
+                }
+
+            })
     }
 
     private fun showHistoryView() {
         Thread {
-            val keywords = db.historyDao().getAll().reversed()
-
-            runOnUiThread {
-                binding.historyRecyclerView.isVisible = true
-                historyAdapter.submitList(keywords.orEmpty())
+            db.historyDao().getAll().reversed().run {
+                runOnUiThread {
+                    binding.historyRecyclerView.isVisible = true
+                    historyAdapter.submitList(this)
+                }
             }
+
         }.start()
-        binding.historyRecyclerView.isVisible = true
+
     }
 
     private fun hideHistoryView() {
@@ -177,12 +161,12 @@ class MainActivity : AppCompatActivity() {
     private fun deleteSearchKeyword(keyword: String) {
         Thread {
             db.historyDao().delete(keyword)
-
+            showHistoryView()
         }.start()
     }
 
     companion object {
         private const val TAG = "MainActivity"
+        private const val BASE_URL = "https://book.interpark.com/"
     }
 }
-

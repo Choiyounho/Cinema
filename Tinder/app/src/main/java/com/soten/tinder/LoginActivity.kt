@@ -18,6 +18,7 @@ import com.facebook.login.widget.LoginButton
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
@@ -136,11 +137,11 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "로그인에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             return
         }
-//        val userId: String = auth.currentUser.uid
-//        val currentUserDb = Firebase.database.reference.child("Users").child(userId)
-//        val user = mutableMapOf<String, Any>()
-//        user["userId"] = userId
-//        currentUserDb.updateChildren(user)
+        val userId = auth.currentUser?.uid.orEmpty()
+        val currentUserDb = Firebase.database.reference.child("Users").child(userId)
+        val user = mutableMapOf<String, Any>()
+        user["userId"] = userId
+        currentUserDb.updateChildren(user)
 
         finish()
     }

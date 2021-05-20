@@ -25,36 +25,27 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var callbackManager: CallbackManager
 
+    private val emailEditText by lazy { findViewById<EditText>(R.id.emailEditText) }
+    private val passwordEditText by lazy { findViewById<EditText>(R.id.passwordEditText) }
+    private val loginButton by lazy { findViewById<Button>(R.id.loginButton) }
+    private val signUpButton by lazy { findViewById<Button>(R.id.signUpButton) }
+    private val facebookLoginButton by lazy { findViewById<LoginButton>(R.id.facebookLoginButton) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         auth = Firebase.auth
 
-        val emailEditText = findViewById<EditText>(R.id.emailEditText)
-        val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
-        val loginButton = findViewById<Button>(R.id.loginButton)
-        val signUpButton = findViewById<Button>(R.id.signUpButton)
-        val facebookLoginButton = findViewById<LoginButton>(R.id.facebookLoginButton)
+        initEnabledButton()
+        initLoginButton()
+        initSignUpButton()
 
-        loginButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
+        callbackManager = CallbackManager.Factory.create()
+        initFacebookLoginButton()
+    }
 
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        successLogin()
-                    } else {
-                        Toast.makeText(
-                            this,
-                            "로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-        }
-
+    private fun initEnabledButton() {
         emailEditText.addTextChangedListener {
             val enable = emailEditText.text.isNotEmpty() && passwordEditText.text.isNotEmpty()
             loginButton.isEnabled = enable
@@ -66,7 +57,9 @@ class LoginActivity : AppCompatActivity() {
             loginButton.isEnabled = enable
             signUpButton.isEnabled = enable
         }
+    }
 
+    private fun initSignUpButton() {
         signUpButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
@@ -86,8 +79,29 @@ class LoginActivity : AppCompatActivity() {
                 }
 
         }
+    }
 
-        callbackManager = CallbackManager.Factory.create()
+    private fun initLoginButton() {
+        loginButton.setOnClickListener {
+            val email = emailEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        successLogin()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+        }
+    }
+
+    private fun initFacebookLoginButton() {
         facebookLoginButton.setPermissions("email", "public_profile")
         facebookLoginButton.registerCallback(
             callbackManager,
@@ -110,7 +124,6 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                 }
             })
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -136,7 +149,7 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "로그인에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             return
         }
-        val userId = auth.currentUser?.uid.orEmpty()
+        val userId: String = auth.currentUser?.uid.orEmpty()
         val currentUserDb = Firebase.database.reference.child("Users").child(userId)
         val user = mutableMapOf<String, Any>()
         user["userId"] = userId

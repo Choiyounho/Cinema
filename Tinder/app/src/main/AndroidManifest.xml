@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tinder"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MatchedUserActivity"></activity>
+        <activity android:name=".MatchListActivity"></activity>
         <activity android:name=".LikeActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">

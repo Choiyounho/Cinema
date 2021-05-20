@@ -8,18 +8,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class CardItemAdapter: ListAdapter<CardItem, CardItemAdapter.ViewHolder>(diffUtil) {
+class CardStackAdapter: ListAdapter<CardItem, CardStackAdapter.ViewHolder>(diffUtil) {
 
-    inner class ViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(cardItem: CardItem) {
             view.findViewById<TextView>(R.id.nameTextView).text = cardItem.name
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-
         return ViewHolder(inflater.inflate(R.layout.item_card, parent, false))
     }
 
@@ -29,15 +29,12 @@ class CardItemAdapter: ListAdapter<CardItem, CardItemAdapter.ViewHolder>(diffUti
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<CardItem>() {
-            override fun areItemsTheSame(oldItem: CardItem, newItem: CardItem): Boolean {
-                return oldItem.userId == newItem.userId
-            }
+            override fun areContentsTheSame(oldItem: CardItem, newItem: CardItem) =
+                oldItem == newItem
 
-            override fun areContentsTheSame(oldItem: CardItem, newItem: CardItem): Boolean {
-                return oldItem == newItem
-            }
+            override fun areItemsTheSame(oldItem: CardItem, newItem: CardItem) =
+                oldItem.userId == newItem.userId
         }
     }
-
 
 }

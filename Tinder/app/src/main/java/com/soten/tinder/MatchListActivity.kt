@@ -10,65 +10,60 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class MatchedUserActivity : AppCompatActivity() {
+class MatchListActivity : AppCompatActivity() {
 
+    private lateinit var usersDb: DatabaseReference
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private lateinit var userDB: DatabaseReference
     private val adapter = MatchedUserAdapter()
     private val cardItems = mutableListOf<CardItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_matched_user)
+        setContentView(R.layout.activity_matched_list)
 
-        userDB = Firebase.database.reference.child("Users")
-
-        initMatchedRecyclerView()
-        getMatchUsers()
-    }
-
-    private fun initMatchedRecyclerView() {
         val recyclerView = findViewById<RecyclerView>(R.id.matchedUserRecyclerView)
-
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+        usersDb = FirebaseDatabase.getInstance().reference.child("Users")
+        getMatchUsers()
 
     }
 
     private fun getMatchUsers() {
-        val matchedDb = userDB.child(getCurrentUserId()).child("likeBy").child("match")
+        val matchedDb = usersDb.child(getCurrentUserID()).child("likedBy").child("match")
 
         matchedDb.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                if (snapshot.key?.isNotEmpty() == true) {
-                    getUserByKey(snapshot.key.orEmpty())
+            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+                if(dataSnapshot.key?.isNotEmpty() == true) {
+                    getMatchUser(dataSnapshot.key.orEmpty())
                 }
             }
 
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {}
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onCancelled(error: DatabaseError) {}
+            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {}
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {}
+            override fun onCancelled(databaseError: DatabaseError) {}
         })
+
     }
 
-    private fun getUserByKey(userId: String) {
-        userDB.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+    private fun getMatchUser(userId: String) {
+        val matchedDb = usersDb.child(userId)
+        matchedDb.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 cardItems.add(CardItem(userId, snapshot.child("name").value.toString()))
                 adapter.submitList(cardItems)
             }
 
             override fun onCancelled(error: DatabaseError) {}
+
         })
     }
 
-    private fun getCurrentUserId(): String {
+    private fun getCurrentUserID(): String {
         if (auth.currentUser == null) {
-            Toast.makeText(this, "로그인이 되어있지 않습니다", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "로그인이 되어있지않습니다.", Toast.LENGTH_SHORT).show()
             finish()
         }
 

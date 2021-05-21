@@ -1,9 +1,11 @@
 package com.soten.usedtransaction.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -56,6 +58,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         fragmentHomeBinding.articleRecyclerView.layoutManager = LinearLayoutManager(context)
         fragmentHomeBinding.articleRecyclerView.adapter = articleAdapter
+
+        fragmentHomeBinding.addFloatingButton.setOnClickListener {
+            context?.let {
+//                auth.currentUser?.let { _ ->
+                    val intent = Intent(Intent(it, AddArticleActivity::class.java))
+                    startActivity(intent)
+//                } ?: (Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_SHORT).show())
+            }
+        }
+
 
         articleDb.addChildEventListener(listener)
     }

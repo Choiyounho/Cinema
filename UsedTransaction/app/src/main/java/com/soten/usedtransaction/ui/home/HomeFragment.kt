@@ -99,10 +99,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         fragmentHomeBinding.addFloatingButton.setOnClickListener {
             context?.let {
-//                auth.currentUser?.let { _ ->
+                auth.currentUser?.let { _ ->
                     val intent = Intent(Intent(it, AddArticleActivity::class.java))
                     startActivity(intent)
-//                } ?: (Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_SHORT).show())
+                } ?: (Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_SHORT).show())
             }
         }
 

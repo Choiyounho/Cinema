@@ -1,5 +1,6 @@
 package com.soten.usedtransaction.ui.chatlist
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import com.soten.usedtransaction.DBKey.Companion.CHILD_CHAT
 import com.soten.usedtransaction.DBKey.Companion.DB_USERS
 import com.soten.usedtransaction.R
 import com.soten.usedtransaction.databinding.FragmentChatlistBinding
+import com.soten.usedtransaction.ui.chatdetail.ChatRoomActivity
 
 class ChatListFragment : Fragment(R.layout.fragment_chatlist) {
 
@@ -27,15 +29,19 @@ class ChatListFragment : Fragment(R.layout.fragment_chatlist) {
         Firebase.auth
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val fragmentChatListBinding = FragmentChatlistBinding.bind(view)
         binding = fragmentChatListBinding
 
-        chatListAdapter = ChatListAdapter(onItemClicked = {
+        chatListAdapter = ChatListAdapter(onItemClicked = { chatRoom ->
             // 채팅방으로 이동
+            context?.let {
+                val intent = Intent(it, ChatRoomActivity::class.java)
+                intent.putExtra("chatKey", chatRoom.key)
+                startActivity(intent)
+            }
 
         })
 

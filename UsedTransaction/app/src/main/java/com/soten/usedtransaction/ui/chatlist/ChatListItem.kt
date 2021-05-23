@@ -6,7 +6,5 @@ data class ChatListItem(
     val itemTitle: String,
     val key: Long
 ) {
-
     constructor(): this("", "", "", 0)
-
 }

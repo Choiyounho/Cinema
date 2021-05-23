@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UsedTransaction">
-        <activity android:name=".ui.home.AddArticleActivity"></activity>
+        <activity android:name=".ui.chatdetail.ChatRoomActivity"></activity>
+        <activity android:name=".ui.home.AddArticleActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

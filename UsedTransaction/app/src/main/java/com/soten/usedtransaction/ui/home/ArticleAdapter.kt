@@ -51,12 +51,9 @@ class ArticleAdapter(val onItemClicked: (ArticleModel) -> Unit) : ListAdapter<Ar
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<ArticleModel>() {
-            override fun areItemsTheSame(oldItem: ArticleModel, newItem: ArticleModel) =
-                oldItem.createdAt == newItem.createdAt
+            override fun areItemsTheSame(oldItem: ArticleModel, newItem: ArticleModel) = oldItem.createdAt == newItem.createdAt
 
-
-            override fun areContentsTheSame(oldItem: ArticleModel, newItem: ArticleModel) =
-                oldItem == newItem
+            override fun areContentsTheSame(oldItem: ArticleModel, newItem: ArticleModel) = oldItem == newItem
         }
     }
 }

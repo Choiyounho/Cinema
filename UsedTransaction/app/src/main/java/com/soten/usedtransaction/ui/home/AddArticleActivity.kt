@@ -88,8 +88,6 @@ class AddArticleActivity : AppCompatActivity() {
             } else { // 동기
                 uploadArticle(sellerId, title, price, "")
             }
-
-
         }
     }
 

@@ -24,6 +24,12 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
         val fragmentMyPageBinding = FragmentMypageBinding.bind(view)
         binding = fragmentMyPageBinding
 
+        initSignInOutButton(fragmentMyPageBinding)
+        initSignUpButton(fragmentMyPageBinding)
+        initEnabledButton(fragmentMyPageBinding)
+    }
+
+    private fun initSignInOutButton(fragmentMyPageBinding: FragmentMypageBinding) {
         fragmentMyPageBinding.signInOutButton.setOnClickListener {
             binding?.let {
                 val email = it.emailEditText.text.toString()
@@ -55,7 +61,9 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
                 }
             }
         }
+    }
 
+    private fun initSignUpButton(fragmentMyPageBinding: FragmentMypageBinding) {
         fragmentMyPageBinding.signUpButton.setOnClickListener {
             binding?.let {
                 val email = it.emailEditText.text.toString()
@@ -76,14 +84,13 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-
                     }
             }
 
         }
+    }
 
-
-
+    private fun initEnabledButton(fragmentMyPageBinding: FragmentMypageBinding) {
         fragmentMyPageBinding.emailEditText.addTextChangedListener {
             binding?.let {
                 val enable =
@@ -101,7 +108,6 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
                 it.signUpButton.isEnabled = enable
             }
         }
-
     }
 
     override fun onStart() {

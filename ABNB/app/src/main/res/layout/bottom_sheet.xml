@@ -7,6 +7,7 @@
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/bottomSheetTitleTextView"
         android:layout_width="0dp"

@@ -1,11 +1,16 @@
 package com.soten.abnb
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -42,8 +47,50 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         naverMap.locationSource = locationsSource
 
         // 마커 찍기
-        val marker = Marker(LatLng(37.608718, 127.161160))
-        marker.map = naverMap
+//        val marker = Marker(LatLng(37.608718, 127.161160))
+//        marker.map = naverMap
+
+        getHouseListFromApi()
+    }
+
+    private fun getHouseListFromApi() {
+        // 레트로핏 객체 생성
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://run.mocky.io")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        // api 호출
+        retrofit.create(HouseService::class.java).also {
+            it.getHouseList()
+                .enqueue(object : Callback<HouseDto> {
+                    override fun onResponse(call: Call<HouseDto>, response: Response<HouseDto>) {
+                        if (response.isSuccessful.not()) {
+                            // 실패 처리에 대한 구현
+                            return
+                        }
+                        response.body()?.let { dto ->
+                            updaterMarker(dto.items)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<HouseDto>, t: Throwable) {
+                        // 실패 처리 구현
+                    }
+                })
+        }
+    }
+
+    private fun updaterMarker(house: List<HouseModel>) {
+        house.forEach { house ->
+            val marker = Marker()
+            marker.position = LatLng(house.lat, house.lng)
+
+            marker.map = naverMap
+            marker.tag = house.id
+            marker.icon = MarkerIcons.BLACK
+            marker.iconTintColor = Color.RED
+        }
     }
 
     override fun onRequestPermissionsResult(

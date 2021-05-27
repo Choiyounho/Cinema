@@ -1,14 +1,11 @@
-package com.soten.abnb
+package com.soten.abnb.ui
 
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -19,6 +16,12 @@ import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.naver.maps.map.widget.LocationButtonView
+import com.soten.abnb.R
+import com.soten.abnb.data.HouseDto
+import com.soten.abnb.data.HouseModel
+import com.soten.abnb.network.HouseService
+import com.soten.abnb.ui.adapter.HouseListAdapter
+import com.soten.abnb.ui.adapter.HouseViewPagerAdapter
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 

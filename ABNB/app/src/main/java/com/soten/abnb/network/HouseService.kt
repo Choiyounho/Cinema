@@ -1,5 +1,6 @@
-package com.soten.abnb
+package com.soten.abnb.network
 
+import com.soten.abnb.data.HouseDto
 import retrofit2.Call
 import retrofit2.http.GET
 

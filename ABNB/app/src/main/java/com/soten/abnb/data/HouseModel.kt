@@ -1,4 +1,4 @@
-package com.soten.abnb
+package com.soten.abnb.data
 
 data class HouseModel(
     val id: Int,

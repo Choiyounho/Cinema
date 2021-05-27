@@ -1,23 +1,26 @@
 package com.soten.abnb
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.widget.LinearLayout
+import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.naver.maps.map.widget.LocationButtonView
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickListener {
 
     private lateinit var naverMap: NaverMap
     private val mapView: MapView by lazy {
@@ -51,6 +54,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         viewPager.adapter = viewPagerAdapter
         recyclerView.adapter = recyclerAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                // 카드 선택시 카드의 마커찍힌 위치로 이동
+                val selectedHouseModel = viewPagerAdapter.currentList[position]
+                val cameraUpdate = CameraUpdate.scrollTo(LatLng(selectedHouseModel.lat, selectedHouseModel.lng))
+                    .animate(CameraAnimation.Linear)
+
+                naverMap.moveCamera(cameraUpdate)
+            }
+        })
+
     }
 
     override fun onMapReady(map: NaverMap) {
@@ -83,6 +100,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getHouseListFromApi() {
+
         // 레트로핏 객체 생성
         val retrofit = Retrofit.Builder()
             .baseUrl("https://run.mocky.io")
@@ -113,12 +131,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun updaterMarker(house: List<HouseModel>) {
-        house.forEach { house ->
+        house.forEach {
             val marker = Marker()
-            marker.position = LatLng(house.lat, house.lng)
+            marker.position = LatLng(it.lat, it.lng)
+
+            marker.onClickListener = this
 
             marker.map = naverMap
-            marker.tag = house.id
+            marker.tag = it.id
             marker.icon = MarkerIcons.BLACK
             marker.iconTintColor = Color.RED
         }
@@ -174,6 +194,23 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onLowMemory() {
         super.onLowMemory()
         mapView.onLowMemory()
+    }
+
+    // 마커 클릭시 뷰페이저2 위치를 맞춰주는 기능
+    override fun onClick(overlay: Overlay): Boolean {
+        overlay.tag // 마커 아이디 값으로 이동
+
+        // 클릭한 마커가 뷰페이저의 어느 위치에 있는 지 찾는 기능
+        val selectedModel = viewPagerAdapter.currentList.firstOrNull {
+            it.id == overlay.tag
+        }
+
+        selectedModel?.let {
+            val position = viewPagerAdapter.currentList.indexOf(it)
+            viewPager.currentItem = position
+        }
+
+        return true
     }
 
     companion object {

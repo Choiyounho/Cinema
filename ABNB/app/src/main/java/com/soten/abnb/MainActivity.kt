@@ -3,13 +3,17 @@ package com.soten.abnb
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
+import com.naver.maps.map.widget.LocationButtonView
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -27,6 +31,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private val viewPagerAdapter = HouseViewPagerAdapter()
+    private val recyclerAdapter = HouseListAdapter()
+
+    private val currentLocationButton: LocationButtonView by lazy {
+        findViewById(R.id.currentLocationButton)
+    }
+
+    private val recyclerView: RecyclerView by lazy {
+        findViewById(R.id.recyclerView)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +49,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapView.getMapAsync(this)
 
         viewPager.adapter = viewPagerAdapter
+        recyclerView.adapter = recyclerAdapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onMapReady(map: NaverMap) {
@@ -50,7 +65,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // 현 위치 (권한 필요)
         val uiSetting = naverMap.uiSettings
-        uiSetting.isLocationButtonEnabled = true
+//        uiSetting.isLocationButtonEnabled = true
+
+        // 현위치 버튼 위치 변경
+        uiSetting.isLocationButtonEnabled = false
+        currentLocationButton.map = naverMap
 
         // 위치에 마커 찍기위한 권한
         locationsSource = FusedLocationSource(this@MainActivity, LOCATION_PERMISSION_REQUEST_CODE)
@@ -82,6 +101,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         response.body()?.let { dto ->
                             updaterMarker(dto.items)
                             viewPagerAdapter.submitList(dto.items)
+                            recyclerAdapter.submitList(dto.items)
                         }
                     }
 

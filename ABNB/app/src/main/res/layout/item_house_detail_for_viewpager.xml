@@ -7,6 +7,7 @@
     android:layout_marginStart="30dp"
     android:layout_marginEnd="30dp"
     android:background="@color/white"
+    app:cardCornerRadius="16dp"
     tools:layout_height="100dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,27 +29,27 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
+            android:maxLines="2"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/thumbnailImageView"
             app:layout_constraintTop_toTopOf="parent"
-            android:maxLines="2"
             tools:text="도농역" />
 
         <TextView
             android:id="@+id/priceTextView"
-            app:layout_constraintStart_toEndOf="@id/thumbnailImageView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:layout_width="0dp"
             android:maxLines="1"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:layout_height="wrap_content"
-            tools:text="23000원"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/thumbnailImageView"
+            app:layout_constraintTop_toBottomOf="@id/titleTextView"
+            tools:text="23000원" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

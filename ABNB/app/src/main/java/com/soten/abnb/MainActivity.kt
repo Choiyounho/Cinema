@@ -62,6 +62,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
         setContentView(R.layout.activity_main)
         mapView.onCreate(savedInstanceState)
 
+        val window = window
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
         mapView.getMapAsync(this)
 
         viewPager.adapter = viewPagerAdapter

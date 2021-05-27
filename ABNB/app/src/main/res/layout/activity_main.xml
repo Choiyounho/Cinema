@@ -15,7 +15,7 @@
     <com.naver.maps.map.widget.LocationButtonView
         android:id="@+id/currentLocationButton"
         android:layout_gravity="center|end"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

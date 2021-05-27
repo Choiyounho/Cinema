@@ -1,10 +1,12 @@
 package com.soten.abnb
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,7 +35,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
         findViewById(R.id.houseViewPager)
     }
 
-    private val viewPagerAdapter = HouseViewPagerAdapter()
+    private val viewPagerAdapter = HouseViewPagerAdapter(itemClicked = {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "${it.title} 예약 하세요")
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(intent, null))
+    })
     private val recyclerAdapter = HouseListAdapter()
 
     private val currentLocationButton: LocationButtonView by lazy {
@@ -42,6 +51,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
 
     private val recyclerView: RecyclerView by lazy {
         findViewById(R.id.recyclerView)
+    }
+
+    private val bottomSheetTitleTextView: TextView by lazy {
+        findViewById(R.id.bottomSheetTitleTextView)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,6 +133,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
                             updaterMarker(dto.items)
                             viewPagerAdapter.submitList(dto.items)
                             recyclerAdapter.submitList(dto.items)
+
+                            bottomSheetTitleTextView.text = "${dto.items.size}개의 숙소"
                         }
                     }
 

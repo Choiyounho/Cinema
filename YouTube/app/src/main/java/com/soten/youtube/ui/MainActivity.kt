@@ -1,15 +1,21 @@
-package com.soten.youtube
+package com.soten.youtube.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.soten.youtube.R
 import com.soten.youtube.dto.VideoDto
 import com.soten.youtube.network.VideoService
+import com.soten.youtube.ui.adapter.VideoAdapter
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var videoAdapter: VideoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +24,13 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, PlayerFragment())
             .commit()
+
+        videoAdapter = VideoAdapter()
+
+        findViewById<RecyclerView>(R.id.mainRecyclerView).apply {
+            adapter = videoAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
 
         getVideoList()
     }
@@ -38,8 +51,7 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         response.body()?.let { dto ->
-                            Log.d("TTTTTT", "${dto.videos.size}")
-
+                            videoAdapter.submitList(dto.videos)
                         }
                     }
 

@@ -17,7 +17,7 @@ import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.naver.maps.map.widget.LocationButtonView
 import com.soten.abnb.R
-import com.soten.abnb.data.HouseDto
+import com.soten.abnb.dto.HouseDto
 import com.soten.abnb.data.HouseModel
 import com.soten.abnb.network.HouseService
 import com.soten.abnb.ui.adapter.HouseListAdapter
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
 
         // 레트로핏 객체 생성
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://run.mocky.io")
+            .baseUrl("https://run.mocky.io/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

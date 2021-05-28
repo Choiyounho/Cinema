@@ -1,10 +1,10 @@
-package com.soten.youtube
+package com.soten.youtube.ui
 
 import android.os.Bundle
 import android.view.View
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import com.soten.youtube.R
 import com.soten.youtube.databinding.FragmentPlayerBinding
 import kotlin.math.abs
 

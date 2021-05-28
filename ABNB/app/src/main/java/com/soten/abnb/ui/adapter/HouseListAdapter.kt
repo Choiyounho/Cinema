@@ -15,6 +15,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.soten.abnb.R
 import com.soten.abnb.data.HouseModel
+import java.text.NumberFormat
+import java.util.*
 
 class HouseListAdapter : ListAdapter<HouseModel, HouseListAdapter.ItemViewHolder>(differ) {
 
@@ -25,8 +27,10 @@ class HouseListAdapter : ListAdapter<HouseModel, HouseListAdapter.ItemViewHolder
             val priceTextView = view.findViewById<TextView>(R.id.priceTextView)
             val thumbnailImageView = view.findViewById<ImageView>(R.id.thumbnailImageView)
 
+            val toWon = NumberFormat.getCurrencyInstance(Locale.KOREA).format(houseModel.price.toLong())
+
             titleTextView.text = houseModel.title
-            priceTextView.text = houseModel.price
+            priceTextView.text = "${toWon}원"
 
             Glide.with(thumbnailImageView.context)
                 .load(houseModel.imgUrl)

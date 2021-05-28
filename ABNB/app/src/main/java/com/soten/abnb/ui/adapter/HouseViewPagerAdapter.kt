@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.soten.abnb.R
 import com.soten.abnb.data.HouseModel
+import java.text.NumberFormat
+import java.util.*
 
 class HouseViewPagerAdapter(val itemClicked: (HouseModel) -> Unit): ListAdapter<HouseModel, HouseViewPagerAdapter.ItemViewHolder>(
     differ
@@ -23,8 +25,10 @@ class HouseViewPagerAdapter(val itemClicked: (HouseModel) -> Unit): ListAdapter<
             val priceTextView = view.findViewById<TextView>(R.id.priceTextView)
             val thumbnailImageView = view.findViewById<ImageView>(R.id.thumbnailImageView)
 
+            val toWon = NumberFormat.getCurrencyInstance(Locale.KOREA).format(houseModel.price.toLong())
+
             titleTextView.text = houseModel.title
-            priceTextView.text = houseModel.price
+            priceTextView.text = "${toWon}원"
 
             view.setOnLongClickListener {
                 itemClicked(houseModel)

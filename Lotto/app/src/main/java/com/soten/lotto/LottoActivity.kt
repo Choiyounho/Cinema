@@ -9,7 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import kotlin.random.Random
+import java.util.*
+import kotlin.collections.ArrayList
 
 class LottoActivity : AppCompatActivity() {
 
@@ -45,39 +46,27 @@ class LottoActivity : AppCompatActivity() {
     }
 
     private val numberList = ArrayList<Int>()
-
     private var index = 0
-
     private var pickNumberList = ArrayList<Int>()
-
-
-    companion object {
-        const val ERROR_ADD_BUTTON = "이미 고른 숫자입니다!!"
-        const val ERROR_FIX_BUTTON = "저장할 로또 번호가 없습니다."
-        const val INFO_FIX_NUMBER = "고정"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lotto)
 
-        numberPicker.minValue = 1
-        numberPicker.maxValue = 45
+        numberPicker.minValue = LOTTO_MIN_NUMBER
+        numberPicker.maxValue = LOTTO_MAX_NUMBER
 
         initButton()
     }
 
     private fun initButton() {
         initAddButton()
-
         initAutoAddNumberButton()
-
         initClearButton()
-
-        initFixButton()
+        fixNumberButton()
     }
 
-    private fun initFixButton() {
+    private fun fixNumberButton() {
         fixButton.setOnClickListener {
             Log.d("printNum", "number List $numberList")
             if (numberList.isEmpty()) {
@@ -105,7 +94,7 @@ class LottoActivity : AppCompatActivity() {
             Log.d("sorted", "$printNumberList")
             for (i in printNumberList.indices) {
                 ballList[i].text = printNumberList[i].toString()
-                setLottoBall(printNumberList, i)
+                matchColorToLottoBall(printNumberList, i)
             }
 
             index++
@@ -118,22 +107,22 @@ class LottoActivity : AppCompatActivity() {
 
     private fun initAutoAddNumberButton() {
         autoAddNumberButton.setOnClickListener {
-            val setList = if (pickNumberList.isEmpty()) mutableListOf() else pickNumberList.toMutableList()
+            val autoLottoList = if (pickNumberList.isEmpty()) mutableListOf() else pickNumberList.toMutableList()
 
             index = 0
             Log.d("printNum", "pick set $pickNumberList")
-            Log.d("printNum", "set $setList")
+            Log.d("printNum", "set $autoLottoList")
 
-            while (setList.size < 6) {
-                val random = Random.nextInt(45) + 1
-                if (setList.contains(random)) {
+            while (autoLottoList.size < 6) {
+                val random = RANDOM.nextInt(45) + 1
+                if (autoLottoList.contains(random)) {
                     continue
                 }
-                setList.add(random)
+                autoLottoList.add(random)
             }
-            Log.d("printNum", "set $setList")
+            Log.d("printNum", "set $autoLottoList")
 
-            val printNumberList = setList.sorted().toList()
+            val printNumberList = autoLottoList.sorted().toList()
             Log.d("printNum", "list $printNumberList")
 
             isVisibleBall()
@@ -141,7 +130,7 @@ class LottoActivity : AppCompatActivity() {
                 ballList[i].text = printNumberList[i].toString()
                 ballList[i].isVisible = true
                 Log.d("printNum", "ball ${ballList[i].text}")
-                setLottoBall(printNumberList, i)
+                matchColorToLottoBall(printNumberList, i)
             }
 
             addButton.isEnabled = false
@@ -165,7 +154,7 @@ class LottoActivity : AppCompatActivity() {
         }
     }
 
-    private fun setLottoBall(printNumberList: List<Int>, i: Int) {
+    private fun matchColorToLottoBall(printNumberList: List<Int>, i: Int) {
         when (printNumberList[i]) {
             in 1..10 -> ballList[i].background = ContextCompat.getDrawable(this, R.drawable.ball_yellow_1_10)
             in 11..20 -> ballList[i].background = ContextCompat.getDrawable(this, R.drawable.ball_blue_11_20)
@@ -173,5 +162,15 @@ class LottoActivity : AppCompatActivity() {
             in 31..40 -> ballList[i].background = ContextCompat.getDrawable(this, R.drawable.ball_gray_31_40)
             else -> ballList[i].background = ContextCompat.getDrawable(this, R.drawable.ball_green_41_45)
         }
+    }
+
+    companion object {
+        private const val ERROR_ADD_BUTTON = "이미 고른 숫자입니다!!"
+        private const val ERROR_FIX_BUTTON = "저장할 로또 번호가 없습니다."
+        private const val INFO_FIX_NUMBER = "고정"
+        private const val LOTTO_MIN_NUMBER = 1
+        private const val LOTTO_MAX_NUMBER = 45
+
+        private val RANDOM = Random()
     }
 }

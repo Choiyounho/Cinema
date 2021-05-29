@@ -35,8 +35,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // 타입이 맞지않아서 에러가 발생하여 null 값이 반환되면 알림을 생성하지 않음
         type ?: return
 
-
-
         NotificationManagerCompat.from(this)
             .notify(type.id, createNotification(type, title, message))
     }

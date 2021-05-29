@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
@@ -23,6 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,38 +57,16 @@ class MainActivity : AppCompatActivity() {
         })
         historyAdapter = HistoryAdapter(
             historySearchClickListener = {
-            search(it)
+                search(it)
             },
             historyDeleteClickListener = {
-            deleteSearchKeyword(it)
-        })
-
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        service = retrofit.create(BookService::class.java)
-        service.getBestSeller(getString(R.string.interParkAPIKey))
-            .enqueue(object: Callback<BestSellersDTO> {
-                override fun onFailure(call: Call<BestSellersDTO>, t: Throwable) {
-
-                }
-
-                override fun onResponse(call: Call<BestSellersDTO>, response: Response<BestSellersDTO>) {
-                    if (response.isSuccessful.not()) {
-                        return
-                    }
-
-                    response.body()?.let {
-                        adapter.submitList(it.books)
-                    }
-                }
-
+                deleteSearchKeyword(it)
             })
 
 
+
+
+        getBestSellerList()
 
         binding.bookRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.bookRecyclerView.adapter = adapter
@@ -114,15 +95,46 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun search(text: String) {
+    private fun getBestSellerList() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
+        service = retrofit.create(BookService::class.java)
+        service.getBestSeller(getString(R.string.interParkAPIKey))
+            .enqueue(object : Callback<BestSellersDTO> {
+                override fun onFailure(call: Call<BestSellersDTO>, t: Throwable) {
+
+                }
+
+                override fun onResponse(
+                    call: Call<BestSellersDTO>,
+                    response: Response<BestSellersDTO>
+                ) {
+                    if (response.isSuccessful.not()) {
+                        return
+                    }
+
+                    response.body()?.let {
+                        adapter.submitList(it.books)
+                    }
+                }
+
+            })
+    }
+
+    private fun search(text: String) {
         service.getBooksByName(getString(R.string.interParkAPIKey), text)
-            .enqueue(object: Callback<SearchBooksDTO> {
+            .enqueue(object : Callback<SearchBooksDTO> {
                 override fun onFailure(call: Call<SearchBooksDTO>, t: Throwable) {
                     hideHistoryView()
                 }
 
-                override fun onResponse(call: Call<SearchBooksDTO>, response: Response<SearchBooksDTO>) {
+                override fun onResponse(
+                    call: Call<SearchBooksDTO>,
+                    response: Response<SearchBooksDTO>
+                ) {
 
                     hideHistoryView()
                     saveSearchKeyword(text)
@@ -168,6 +180,20 @@ class MainActivity : AppCompatActivity() {
             showHistoryView()
         }.start()
     }
+
+    var lastTimeBackPressed: Long = 0
+
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - lastTimeBackPressed >= 1500) {
+            lastTimeBackPressed = System.currentTimeMillis()
+            getBestSellerList()
+        } else {
+            ActivityCompat.finishAffinity(this)
+            System.runFinalization()
+            exitProcess(0)
+        }
+    }
+
 
     companion object {
         private const val TAG = "MainActivity"

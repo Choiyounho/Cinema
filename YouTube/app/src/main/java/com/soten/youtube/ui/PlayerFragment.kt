@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.exoplayer2.MediaItem
@@ -37,6 +38,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         val fragmentPlayerBinding = FragmentPlayerBinding.bind(view)
         binding = fragmentPlayerBinding
 
+        initPlayerRemote(fragmentPlayerBinding)
 
         initMotionLayoutEvent(fragmentPlayerBinding)
         initRecyclerView(fragmentPlayerBinding)
@@ -44,6 +46,19 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         initControlButton(fragmentPlayerBinding)
 
         getVideoList()
+    }
+
+    private fun initPlayerRemote(fragmentPlayerBinding: FragmentPlayerBinding) {
+        fragmentPlayerBinding.playerMotionLayout.isVisible = false
+
+        fragmentPlayerBinding.mainContainerLayout.setOnLongClickListener {
+            fragmentPlayerBinding.playerMotionLayout.isVisible = false
+            fragmentPlayerBinding.bottomPlayerControlButton.isVisible = false
+            fragmentPlayerBinding.playerView.isVisible = false
+            fragmentPlayerBinding.bottomTitleTextView.isVisible = false
+            player?.release()
+            return@setOnLongClickListener true
+        }
     }
 
     // binding을 사용하지 않는 이유 : null 처리를 안해줘도 된다.
@@ -96,6 +111,10 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
                     super.onIsPlayingChanged(isPlaying)
 
                     if (isPlaying) {
+                        fragmentPlayerBinding.playerMotionLayout.isVisible = true
+                        fragmentPlayerBinding.bottomPlayerControlButton.isVisible = true
+                        fragmentPlayerBinding.playerView.isVisible = true
+                        fragmentPlayerBinding.bottomTitleTextView.isVisible = true
                         it.bottomPlayerControlButton.setImageResource(R.drawable.ic_pause_24)
                     } else {
                         it.bottomPlayerControlButton.setImageResource(R.drawable.ic_play_arrow_24)

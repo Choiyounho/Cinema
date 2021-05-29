@@ -59,5 +59,4 @@ class CustomMotionLayout(context: Context, attributeSet: AttributeSet? = null): 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         return gestureDetector.onTouchEvent(event)
     }
-
 }

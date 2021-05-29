@@ -17,7 +17,6 @@ class BookAdapter(val clickListener: (Book) -> Unit) : ListAdapter<Book, BookAda
 
     inner class ViewHolder(private val binding: ItemBookBinding) : RecyclerView.ViewHolder(binding.root) {
 
-
         fun bind(bookModel: Book) {
             binding.titleTextView.text = bookModel.title
             binding.descriptionTextView.text = bookModel.description

@@ -30,7 +30,7 @@ class DetailActivity : AppCompatActivity() {
 
         Glide
             .with(binding.coverImageView.context)
-            .load(bookModel?.coverSmallUrl.orEmpty())
+            .load(bookModel?.coverLargeUrl.orEmpty())
             .into(binding.coverImageView)
 
         binding.descriptionTextView.text = bookModel?.description.orEmpty()

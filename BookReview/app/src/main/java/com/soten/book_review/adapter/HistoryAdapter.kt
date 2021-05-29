@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.soten.book_review.model.history.History
 import com.soten.review.databinding.ItemHistoryBinding
 
-class HistoryAdapter(val historyDeleteClickListener: (String) -> (Unit)) :
+class HistoryAdapter(
+    val historySearchClickListener: (String) -> Unit,
+    val historyDeleteClickListener: (String) -> (Unit)
+) :
     ListAdapter<History, HistoryAdapter.ViewHolder>(diffUtil) {
 
     inner class ViewHolder(private val binding: ItemHistoryBinding) :
@@ -16,6 +19,9 @@ class HistoryAdapter(val historyDeleteClickListener: (String) -> (Unit)) :
 
         fun bind(historyModel: History) {
             binding.historyKeywordTextView.text = historyModel.keyword
+            binding.historyKeywordTextView.setOnClickListener {
+                historySearchClickListener(historyModel.keyword.orEmpty())
+            }
             binding.historyKeywordDeleteButton.setOnClickListener {
                 historyDeleteClickListener(historyModel.keyword.orEmpty())
             }

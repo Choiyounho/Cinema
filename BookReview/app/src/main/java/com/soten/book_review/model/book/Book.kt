@@ -10,5 +10,6 @@ data class Book(
     @SerializedName("title") val title: String,
     @SerializedName("description") val description: String,
     @SerializedName("coverSmallUrl") val coverSmallUrl: String,
+    @SerializedName("coverLargeUrl") val coverLargeUrl: String,
     @SerializedName("mobileLink") val mobileLink: String
 ) : Parcelable

@@ -52,7 +52,11 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("bookModel", it)
             startActivity(intent)
         })
-        historyAdapter = HistoryAdapter(historyDeleteClickListener = {
+        historyAdapter = HistoryAdapter(
+            historySearchClickListener = {
+            search(it)
+            },
+            historyDeleteClickListener = {
             deleteSearchKeyword(it)
         })
 

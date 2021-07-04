@@ -104,7 +104,6 @@ class AddArticleActivity : AppCompatActivity() {
                         }.addOnFailureListener {
                             errorHandler()
                         }
-
                 } else {
                     errorHandler()
                 }

@@ -82,7 +82,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                     Snackbar.make(view, "채팅방이 생성되었습니다. 채팅탭에서 확인해주세요", Snackbar.LENGTH_SHORT).show()
 
-
                 } else {
                     // 내가 올린 아이템
                     Snackbar.make(view, "내가 올린 아이템입니다.", Snackbar.LENGTH_SHORT).show()
@@ -105,7 +104,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 } ?: (Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_SHORT).show())
             }
         }
-
 
         articleDb.addChildEventListener(listener)
     }

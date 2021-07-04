@@ -23,7 +23,6 @@ fun getAppDatabase(context: Context): AppDatabase {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL("CREATE TABLE `REVIEW` (`id` INTEGER, `review` TEXT," + "PRIMARY KEY(`id`))")
         }
-
     }
 
     return Room.databaseBuilder(

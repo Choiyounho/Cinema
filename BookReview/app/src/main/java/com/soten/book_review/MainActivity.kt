@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java,
@@ -63,9 +62,6 @@ class MainActivity : AppCompatActivity() {
                 deleteSearchKeyword(it)
             })
 
-
-
-
         getBestSellerList()
 
         binding.bookRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -77,7 +73,6 @@ class MainActivity : AppCompatActivity() {
                 return@setOnKeyListener true
             }
             return@setOnKeyListener false
-
         }
 
         binding.searchEditText.setOnTouchListener { v, event ->
@@ -88,11 +83,8 @@ class MainActivity : AppCompatActivity() {
             return@setOnTouchListener false
         }
 
-
         binding.historyRecyclerView.adapter = historyAdapter
         binding.historyRecyclerView.layoutManager = LinearLayoutManager(this)
-
-
     }
 
     private fun getBestSellerList() {
@@ -105,9 +97,7 @@ class MainActivity : AppCompatActivity() {
         service.getBestSeller(getString(R.string.interParkAPIKey))
             .enqueue(object : Callback<BestSellersDTO> {
                 override fun onFailure(call: Call<BestSellersDTO>, t: Throwable) {
-
                 }
-
                 override fun onResponse(
                     call: Call<BestSellersDTO>,
                     response: Response<BestSellersDTO>
@@ -115,12 +105,10 @@ class MainActivity : AppCompatActivity() {
                     if (response.isSuccessful.not()) {
                         return
                     }
-
                     response.body()?.let {
                         adapter.submitList(it.books)
                     }
                 }
-
             })
     }
 
@@ -135,7 +123,6 @@ class MainActivity : AppCompatActivity() {
                     call: Call<SearchBooksDTO>,
                     response: Response<SearchBooksDTO>
                 ) {
-
                     hideHistoryView()
                     saveSearchKeyword(text)
 
@@ -147,7 +134,6 @@ class MainActivity : AppCompatActivity() {
                         adapter.submitList(it.books)
                     }
                 }
-
             })
     }
 
@@ -159,9 +145,7 @@ class MainActivity : AppCompatActivity() {
                     historyAdapter.submitList(this)
                 }
             }
-
         }.start()
-
     }
 
     private fun hideHistoryView() {
@@ -181,7 +165,7 @@ class MainActivity : AppCompatActivity() {
         }.start()
     }
 
-    var lastTimeBackPressed: Long = 0
+    private var lastTimeBackPressed: Long = 0
 
     override fun onBackPressed() {
         if (System.currentTimeMillis() - lastTimeBackPressed >= 1500) {
@@ -193,7 +177,6 @@ class MainActivity : AppCompatActivity() {
             exitProcess(0)
         }
     }
-
 
     companion object {
         private const val TAG = "MainActivity"

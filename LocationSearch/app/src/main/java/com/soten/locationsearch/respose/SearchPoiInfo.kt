@@ -1,4 +1,4 @@
-package com.soten.locationsearch.respose.search
+package com.soten.locationsearch.respose
 
 data class SearchPoiInfo(
     val totalCount: String,

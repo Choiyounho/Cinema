@@ -46,5 +46,6 @@ class SearchRecyclerViewAdapter : RecyclerView.Adapter<SearchRecyclerViewAdapter
     ) {
         this.itemList = itemList
         this.itemClickedListener = itemClickedListener
+        notifyDataSetChanged()
     }
 }

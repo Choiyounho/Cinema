@@ -54,4 +54,5 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "빌딩이름 : ${it.name} 주소 : ${it.fullAddress}", Toast.LENGTH_SHORT).show()
         }
     }
+
 }

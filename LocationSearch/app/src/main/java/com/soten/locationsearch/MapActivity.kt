@@ -9,6 +9,8 @@ import android.location.LocationListener
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,17 +20,26 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.soten.locationsearch.MainActivity.Companion.SEARCH_RESULT_EXTRA_KEY
 import com.soten.locationsearch.databinding.ActivityMapBinding
 import com.soten.locationsearch.model.LocationLatLngEntity
 import com.soten.locationsearch.model.SearchResultEntity
+import com.soten.locationsearch.utility.RetrofitUtil
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, CoroutineScope {
+
+    private lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     private lateinit var binding: ActivityMapBinding
     private lateinit var map: GoogleMap
     private var currentSelectMarker: Marker? = null
 
-    private lateinit var searchResult: SearchResultEntity
+    private lateinit var searchResultEntity: SearchResultEntity
     private lateinit var locationManager: LocationManager
 
     private lateinit var myLocationListener: MyLocationListener
@@ -38,11 +49,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        job = Job()
+
         // 데이터가 존재하지 않다면, MainActivity 에서 가져온다.
-        if (::searchResult.isInitialized.not()) {
+        if (::searchResultEntity.isInitialized.not()) {
             intent?.let {
-                searchResult =
-                    it.getParcelableExtra(SEARCH_RESULT_EXTRA_KEY) ?: throw Exception("데이터가 존재 x")
+                Log.d("TestT1", SEARCH_RESULT_EXTRA_KEY)
+                searchResultEntity =
+                    intent.getParcelableExtra(SEARCH_RESULT_EXTRA_KEY) ?: throw Exception("데이터가 존재 x")
                 setupGoogleMap()
             }
         }
@@ -103,7 +117,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             )
 
             requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
+                LocationManager.NETWORK_PROVIDER,
                 minTime,
                 minDistance,
                 myLocationListener
@@ -112,19 +126,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setupGoogleMap() {
-        val mapFragment =
-            supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(map: GoogleMap) {
         this.map = map
-        currentSelectMarker = setUpMarker(searchResult)
+        currentSelectMarker = setupMarker(searchResultEntity)
 
         currentSelectMarker?.showInfoWindow()
     }
 
-    private fun setUpMarker(searchResultEntity: SearchResultEntity): Marker? {
+    private fun setupMarker(searchResultEntity: SearchResultEntity): Marker? {
         val positionLatLng = LatLng(
             searchResultEntity.locationLatLng.latitude.toDouble(),
             searchResultEntity.locationLatLng.longitude.toDouble()
@@ -150,13 +163,69 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 ), CAMERA_ZOOM_LEVEL
             )
         )
+        loadReverseGeoInformation(locationLatLngEntity)
+        removeLocationListener()
+    }
+
+    private fun loadReverseGeoInformation(locationLatLngEntity: LocationLatLngEntity) {
+        launch(coroutineContext) {
+            try {
+                withContext(Dispatchers.IO) {
+                    val response = RetrofitUtil.apiService.getReverseGeoCode(
+                        lat = locationLatLngEntity.latitude.toDouble(),
+                        lon = locationLatLngEntity.longitude.toDouble()
+                    )
+
+                    if (response.isSuccessful) {
+                        val body = response.body()
+                        withContext(Dispatchers.Main) {
+                            Log.e("list", body.toString())
+                            body?.let {
+                                currentSelectMarker = setupMarker(
+                                    SearchResultEntity(
+                                        fullAddress = it.addressInfo.fullAddress ?: "주소 정보 없음",
+                                        name = "내 위치",
+                                        locationLatLng = locationLatLngEntity
+                                    )
+                                )
+                                currentSelectMarker?.showInfoWindow()
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@MapActivity, "검색하는 과정에서 에러 발생", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun removeLocationListener() {
+        if (::locationManager.isInitialized && ::myLocationListener.isInitialized) {
+            locationManager.removeUpdates(myLocationListener)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                grantResults[1] == PackageManager.PERMISSION_GRANTED
+            ) {
+                setMyLocationListener()
+            } else {
+                Toast.makeText(this, "권한을 받지 못했습니다", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     companion object {
-        const val SEARCH_RESULT_EXTRA_KEY = "SEARCH_RESULT_EXTRA_KEY"
-        const val CAMERA_ZOOM_LEVEL = 17f
-
-        const val PERMISSION_REQUEST_CODE = 101
+        private const val CAMERA_ZOOM_LEVEL = 17f
+        private const val PERMISSION_REQUEST_CODE = 101
     }
 
     inner class MyLocationListener : LocationListener {

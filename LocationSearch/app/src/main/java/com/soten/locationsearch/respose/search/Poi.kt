@@ -1,4 +1,4 @@
-package com.soten.locationsearch.respose
+package com.soten.locationsearch.respose.search
 
 data class Poi(
     //POI 의  id

@@ -1,10 +1,12 @@
 package com.soten.locationsearch
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isVisible
+import com.soten.locationsearch.MapActivity.Companion.SEARCH_RESULT_EXTRA_KEY
 import com.soten.locationsearch.databinding.ActivityMainBinding
 import com.soten.locationsearch.model.LocationLatLngEntity
 import com.soten.locationsearch.model.SearchResultEntity
@@ -69,8 +71,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
 
         adapter.setSearchResultListener(dataList) {
-            Toast.makeText(this, "빌딩이름 : ${it.name} 주소 : ${it.fullAddress} 위도/경도 : ${it.locationLatLng}", Toast.LENGTH_SHORT)
-                .show()
+            startActivity(
+                Intent(this@MainActivity, MapActivity::class.java).apply {
+                    putExtra(SEARCH_RESULT_EXTRA_KEY, it)
+                }
+            )
         }
     }
 
@@ -113,4 +118,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                     (poi.firstNo?.trim() ?: "") + " " +
                     poi.secondNo?.trim()
         }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
+    }
 }

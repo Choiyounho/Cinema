@@ -22,10 +22,12 @@ class MainActivity : AppCompatActivity() {
             if (binding.scrollView.scrollY > 150f.dpToPx(this).toInt()) {
                 if (isMotionAnimation.not()) {
                     binding.gatheringDigitalThingsLayout.transitionToEnd()
+                    binding.buttonShownMotionLayout.transitionToEnd()
                 }
             } else {
                 if (isMotionAnimation.not()) {
                     binding.gatheringDigitalThingsLayout.transitionToStart()
+                    binding.buttonShownMotionLayout.transitionToStart()
                 }
             }
         }

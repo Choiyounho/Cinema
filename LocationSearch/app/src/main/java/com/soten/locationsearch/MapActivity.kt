@@ -7,10 +7,10 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -20,7 +20,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.soten.locationsearch.MainActivity.Companion.SEARCH_RESULT_EXTRA_KEY
 import com.soten.locationsearch.databinding.ActivityMapBinding
 import com.soten.locationsearch.model.LocationLatLngEntity
 import com.soten.locationsearch.model.SearchResultEntity
@@ -54,7 +53,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, CoroutineScope {
         // 데이터가 존재하지 않다면, MainActivity 에서 가져온다.
         if (::searchResultEntity.isInitialized.not()) {
             intent?.let {
-                Log.d("TestT1", SEARCH_RESULT_EXTRA_KEY)
                 searchResultEntity =
                     intent.getParcelableExtra(SEARCH_RESULT_EXTRA_KEY) ?: throw Exception("데이터가 존재 x")
                 setupGoogleMap()
@@ -224,6 +222,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, CoroutineScope {
     }
 
     companion object {
+        const val SEARCH_RESULT_EXTRA_KEY = "SEARCH_RESULT_EXTRA_KEY" //"SearchResult"
+
         private const val CAMERA_ZOOM_LEVEL = 17f
         private const val PERMISSION_REQUEST_CODE = 101
     }

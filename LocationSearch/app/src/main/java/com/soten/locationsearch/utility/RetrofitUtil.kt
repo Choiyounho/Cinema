@@ -35,5 +35,4 @@ object RetrofitUtil {
             .addInterceptor(interceptor)
             .build()
     }
-
 }

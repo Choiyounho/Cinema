@@ -19,10 +19,8 @@ class SearchRecyclerViewAdapter : RecyclerView.Adapter<SearchRecyclerViewAdapter
         fun bind(data: SearchResultEntity) = with(binding) {
             titleTextView.text = data.name
             subtitleTextView.text = data.fullAddress
-        }
 
-        fun bindViews(data: SearchResultEntity) {
-            binding.root.setOnClickListener {
+            root.setOnClickListener {
                 itemClickedListener(data)
             }
         }
@@ -35,7 +33,6 @@ class SearchRecyclerViewAdapter : RecyclerView.Adapter<SearchRecyclerViewAdapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(itemList[position])
-        holder.bindViews(itemList[position])
     }
 
     override fun getItemCount() = itemList.size

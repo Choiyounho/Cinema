@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
+import com.soten.locationsearch.MapActivity.Companion.SEARCH_RESULT_EXTRA_KEY
 import com.soten.locationsearch.databinding.ActivityMainBinding
 import com.soten.locationsearch.model.LocationLatLngEntity
 import com.soten.locationsearch.model.SearchResultEntity
@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun initViews() = with(binding) {
-        emptyResultTextView.isVisible = false
         searchRecyclerView.adapter = adapter
     }
 
@@ -68,7 +67,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         adapter.setSearchResultListener(dataList) {
             startActivity(
                 Intent(this, MapActivity::class.java).apply {
-                    Log.d("TestT", SEARCH_RESULT_EXTRA_KEY)
                     putExtra(SEARCH_RESULT_EXTRA_KEY, it)
                 }
             )
@@ -83,6 +81,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                         keyword = keywordString
                     )
                     if (response.isSuccessful) {
+
                         val body = response.body()
                         withContext(Dispatchers.Main) {
                             Log.e("list", body.toString())
@@ -94,7 +93,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this@MainActivity, "검색하는 과정에서 에러가 발생했습니다. : ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "검색하는 과정에서 에러가 발생했습니다. : ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -118,9 +121,5 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
-    }
-
-    companion object {
-        const val SEARCH_RESULT_EXTRA_KEY = "SEARCH_RESULT_EXTRA_KEY" //"SearchResult"
     }
 }

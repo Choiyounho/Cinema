@@ -12,5 +12,5 @@ data class GithubRepositoryEntity(
     val description: String?,
     val language: String?,
     val updateAt: String,
-    val stargazerCount: Int
+    val stargazersCount: Int
 )

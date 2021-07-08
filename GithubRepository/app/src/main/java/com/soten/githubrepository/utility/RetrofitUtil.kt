@@ -1,6 +1,7 @@
 package com.soten.githubrepository.utility
 
 import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.soten.githubrepository.BuildConfig
 import com.soten.githubrepository.data.Url
@@ -17,6 +18,22 @@ object RetrofitUtil {
     private fun getGithubAuthRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Url.GITHUB_URL)
+            .addConverterFactory(
+                GsonConverterFactory.create(
+                    GsonBuilder()
+                        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                        .create()
+                )
+            )
+            .client(buildOkHttpClient())
+            .build()
+    }
+
+    val githubApiService: GithubApiService by lazy { getGithubRetrofit().create(GithubApiService::class.java) }
+
+    private fun getGithubRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Url.GITHUB_API_URL)
             .addConverterFactory(
                 GsonConverterFactory.create(
                     GsonBuilder()

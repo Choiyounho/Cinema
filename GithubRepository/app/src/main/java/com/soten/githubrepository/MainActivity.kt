@@ -1,5 +1,6 @@
 package com.soten.githubrepository
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -27,34 +28,44 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        launch {
-            addMockData()
-            val githubRepositories = loadGithubRepositories()
-            withContext(coroutineContext) {
-                Log.e("githubRepositories", githubRepositories.toString())
-            }
-        }
+        initViews()
+
+//        launch {
+//            addMockData()
+//            val githubRepositories = loadGithubRepositories()
+//            withContext(coroutineContext) {
+//                Log.e("githubRepositories", githubRepositories.toString())
+//            }
+//        }
     }
 
-    private suspend fun addMockData() = withContext(Dispatchers.IO) {
-        val mockData = (0 until 10).map {
-            GithubRepositoryEntity(
-                name = "repo $it",
-                fullName = "repo $it",
-                owner = GithubOwner(
-                    "login",
-                    "avatarUrl"
-                ),
-                description = null,
-                language = null,
-                updateAt = Date().toString(),
-                stargazerCount = it
+    private fun initViews() = with(binding) {
+        searchButton.setOnClickListener {
+            startActivity(
+                Intent(this@MainActivity, SearchActivity::class.java)
             )
         }
-        repositoryDao.insertAll(mockData)
     }
 
-    private suspend fun loadGithubRepositories() = withContext(Dispatchers.IO) {
-        return@withContext repositoryDao.getHistory()
-    }
+//    private suspend fun addMockData() = withContext(Dispatchers.IO) {
+//        val mockData = (0 until 10).map {
+//            GithubRepositoryEntity(
+//                name = "repo $it",
+//                fullName = "repo $it",
+//                owner = GithubOwner(
+//                    "login",
+//                    "avatarUrl"
+//                ),
+//                description = null,
+//                language = null,
+//                updateAt = Date().toString(),
+//                stargazersCount = it
+//            )
+//        }
+//        repositoryDao.insertAll(mockData)
+//    }
+//
+//    private suspend fun loadGithubRepositories() = withContext(Dispatchers.IO) {
+//        return@withContext repositoryDao.getHistory()
+//    }
 }

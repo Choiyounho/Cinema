@@ -36,7 +36,6 @@ class SignInActivity : AppCompatActivity(), CoroutineScope {
             launchMainActivity()
         } else {
             initViews()
-
         }
     }
 
@@ -74,7 +73,7 @@ class SignInActivity : AppCompatActivity(), CoroutineScope {
         intent?.data?.getQueryParameter("code")?.let {
             launch(coroutineContext) {
                 showProgress()
-                val getAccessTokenJob = getAccessToken(it)
+                getAccessToken(it)
                 disMissProgress()
             }
         }

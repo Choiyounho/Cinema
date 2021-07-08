@@ -1,22 +1,19 @@
 package com.soten.githubrepository.data.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.soten.githubrepository.data.entity.GithubRepositoryEntity
 
 @Dao
 interface SearchHistoryDao {
 
     @Insert
-    suspend fun insert(repository: GithubRepositoryEntity)
+    suspend fun insert(repo: GithubRepositoryEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(repositoryList: List<GithubRepositoryEntity>)
+    suspend fun insertAll(repoList: List<GithubRepositoryEntity>)
 
-//    @Query("SELECT * FROM githubrepository")
-//    suspend fun getHistory(): List<GithubRepositoryEntity>
+    @Query("SELECT * FROM githubrepository")
+    suspend fun getHistory(): List<GithubRepositoryEntity>
 
     @Query("SELECT * FROM githubrepository WHERE fullName = :repoName")
     suspend fun getRepository(repoName: String): GithubRepositoryEntity?

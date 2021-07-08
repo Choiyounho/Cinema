@@ -38,7 +38,7 @@ class SearchActivity : AppCompatActivity(), CoroutineScope {
 
     private fun initViews() = with(binding) {
         emptyResultTextView.isGone = true
-        recyclerView.adapter = adapter
+        searchRecyclerView.adapter = adapter
     }
 
     private fun bindViews() = with(binding) {
@@ -75,10 +75,10 @@ class SearchActivity : AppCompatActivity(), CoroutineScope {
         showLoading(false)
         if (githubRepositoryList.isEmpty()) {
             emptyResultTextView.isGone = false
-            recyclerView.isGone = true
+            searchRecyclerView.isGone = true
         } else {
             emptyResultTextView.isGone = true
-            recyclerView.isGone = false
+            searchRecyclerView.isGone = false
             adapter.setSearchResultList(githubRepositoryList) {
                 startActivity(
                     Intent(this@SearchActivity, RepositoryActivity::class.java).apply {

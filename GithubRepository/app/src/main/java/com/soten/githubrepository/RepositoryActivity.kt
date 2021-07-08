@@ -17,10 +17,13 @@ import kotlin.coroutines.CoroutineContext
 
 class RepositoryActivity : AppCompatActivity(), CoroutineScope {
 
-    private val job by lazy { Job() }
-
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+        get() = Dispatchers.Main + Job()
+
+    companion object {
+        const val REPOSITORY_OWNER_KEY = "repositoryOwner"
+        const val REPOSITORY_NAME_KEY = "repositoryName"
+    }
 
     private lateinit var binding: ActivityRepositoryBinding
 
@@ -29,12 +32,12 @@ class RepositoryActivity : AppCompatActivity(), CoroutineScope {
         binding = ActivityRepositoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val repositoryOwner = intent.getStringExtra(REPOSITORY_OWNER_KEY) ?: kotlin.run {
+        val repositoryOwner = intent.getStringExtra(REPOSITORY_OWNER_KEY) ?: run {
             toast("Repository Owner 이름이 없습니다.")
             finish()
             return
         }
-        val repositoryName = intent.getStringExtra(REPOSITORY_NAME_KEY) ?: kotlin.run {
+        val repositoryName = intent.getStringExtra(REPOSITORY_NAME_KEY) ?: run {
             toast("Repository 이름이 없습니다.")
             finish()
             return
@@ -81,12 +84,12 @@ class RepositoryActivity : AppCompatActivity(), CoroutineScope {
         githubRepositoryEntity.language?.let { language ->
             languageText.isGone = false
             languageText.text = language
-        } ?: kotlin.run {
+        } ?: run {
             languageText.isGone = true
             languageText.text = ""
         }
         descriptionTextView.text = githubRepositoryEntity.description
-        updateTimeTextView.text = githubRepositoryEntity.updateAt
+        updateTimeTextView.text = githubRepositoryEntity.updatedAt
 
         setLikeState(githubRepositoryEntity)
     }
@@ -98,6 +101,7 @@ class RepositoryActivity : AppCompatActivity(), CoroutineScope {
             withContext(Dispatchers.Main) {
                 setLikeImage(isLike)
                 binding.likeButton.setOnClickListener {
+                    Log.e("testT", "클릭")
                     likeRepository(githubRepositoryEntity, isLike)
                 }
             }
@@ -134,9 +138,4 @@ class RepositoryActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun Context.toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-
-    companion object {
-        const val REPOSITORY_OWNER_KEY = "repositoryOwner"
-        const val REPOSITORY_NAME_KEY = "repositoryName"
-    }
 }

@@ -95,23 +95,25 @@ class SignInActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private suspend fun getAccessToken(code: String) = withContext(Dispatchers.IO) {
-        val response = RetrofitUtil.authApiService.getAccessToken(
-            clientId = BuildConfig.GITHUB_CLIENT_ID,
-            clientSecret = BuildConfig.GITHUB_CLIENT_SECRET,
-            code = code
-        )
-
-        if (response.isSuccessful) {
-            val accessToken = response.body()?.accessToken ?: "xx"
-            Log.e("accessToken", accessToken)
-            if (accessToken.isNotEmpty()) {
-                authTokenProvider.updateToken(accessToken)
-            } else {
-                Toast.makeText(this@SignInActivity, "accessToken이 존재 하지 않습니다.", Toast.LENGTH_SHORT)
-                    .show()
+    private fun getAccessToken(code: String) = launch(coroutineContext) {
+        try {
+            withContext(Dispatchers.IO) {
+                val response = RetrofitUtil.authApiService.getAccessToken(
+                    clientId = BuildConfig.GITHUB_CLIENT_ID,
+                    clientSecret = BuildConfig.GITHUB_CLIENT_SECRET,
+                    code = code
+                )
+                val accessToken = response.accessToken
+                Log.e("accessToken", accessToken)
+                if (accessToken.isNotEmpty()) {
+                    withContext(coroutineContext) {
+                        authTokenProvider.updateToken(accessToken)
+                    }
+                }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this@SignInActivity, "로그인 과정에서 에러가 발생했습니다. : ${e.message}", Toast.LENGTH_SHORT).show()
         }
-
     }
 }

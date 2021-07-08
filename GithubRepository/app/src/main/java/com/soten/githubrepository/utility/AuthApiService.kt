@@ -1,7 +1,6 @@
 package com.soten.githubrepository.utility
 
 import com.soten.githubrepository.data.response.GithubAccessTokenResponse
-import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Headers
@@ -16,5 +15,6 @@ interface AuthApiService {
         @Field("client_id") clientId: String,
         @Field("client_secret") clientSecret: String,
         @Field("code") code: String
-    ): Response<GithubAccessTokenResponse>
+    ): GithubAccessTokenResponse
+
 }

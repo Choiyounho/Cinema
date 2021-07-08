@@ -11,6 +11,6 @@ data class GithubRepositoryEntity(
     @Embedded val owner: GithubOwner,
     val description: String?,
     val language: String?,
-    val updateAt: String,
+    val updatedAt: String,
     val stargazersCount: Int
 )

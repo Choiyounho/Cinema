@@ -1,7 +1,6 @@
 package com.soten.githubrepository.utility
 
 import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.soten.githubrepository.BuildConfig
 import com.soten.githubrepository.data.Url
@@ -45,14 +44,13 @@ object RetrofitUtil {
             .build()
     }
 
-    private fun buildOkHttpClient():OkHttpClient {
+    private fun buildOkHttpClient(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor()
         if (BuildConfig.DEBUG) {
             interceptor.level = HttpLoggingInterceptor.Level.BODY
         } else {
             interceptor.level = HttpLoggingInterceptor.Level.NONE
         }
-
         return OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS)
             .addInterceptor(interceptor)

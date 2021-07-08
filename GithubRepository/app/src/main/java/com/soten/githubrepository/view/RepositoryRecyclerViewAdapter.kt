@@ -27,7 +27,7 @@ class RepositoryRecyclerAdapter : RecyclerView.Adapter<RepositoryRecyclerAdapter
             data.language?.let { language ->
                 languageText.isGone = false
                 languageText.text = language
-            } ?: kotlin.run {
+            } ?: run {
                 languageText.isGone = true
                 languageText.text = ""
             }

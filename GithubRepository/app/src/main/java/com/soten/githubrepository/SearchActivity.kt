@@ -1,12 +1,15 @@
 package com.soten.githubrepository
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import com.soten.githubrepository.RepositoryActivity.Companion.REPOSITORY_NAME_KEY
+import com.soten.githubrepository.RepositoryActivity.Companion.REPOSITORY_OWNER_KEY
 import com.soten.githubrepository.data.entity.GithubRepositoryEntity
 import com.soten.githubrepository.databinding.ActivitySearchBinding
-import com.soten.githubrepository.utility.RetrofitUtil.githubApiService
+import com.soten.githubrepository.utility.RetrofitUtil
 import com.soten.githubrepository.view.RepositoryRecyclerAdapter
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -14,13 +17,10 @@ import kotlin.coroutines.CoroutineContext
 class SearchActivity : AppCompatActivity(), CoroutineScope {
 
     private lateinit var binding: ActivitySearchBinding
-
-    private val job by lazy { Job() }
+    private lateinit var adapter: RepositoryRecyclerAdapter
 
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-    private lateinit var adapter: RepositoryRecyclerAdapter
+        get() = Dispatchers.Main + Job()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,35 +37,61 @@ class SearchActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun initViews() = with(binding) {
-        RepositoryRecyclerView.adapter = adapter
+        emptyResultTextView.isGone = true
+        recyclerView.adapter = adapter
     }
 
     private fun bindViews() = with(binding) {
         searchButton.setOnClickListener {
-            searchKeyword(searchInputText.text.toString())
-            Log.e("responsee", searchInputText.text.toString())
+            searchKeyword(searchBarInputView.text.toString())
         }
     }
 
-    private fun searchKeyword(keyword: String) = launch {
-        withContext(Dispatchers.IO) {
-            val response = githubApiService.searchRepositories(keyword)
-            if (response.isSuccessful) {
-                val body = response.body()
-                withContext(Dispatchers.Main) {
-                    body?.let {
-                        setData(it.items)
+    private fun searchKeyword(ketword: String) {
+        showLoading(true)
+        launch(coroutineContext) {
+            try {
+                withContext(Dispatchers.IO) {
+                    val response = RetrofitUtil.githubApiService.searchRepositories(
+                        query = ketword
+                    )
+                    if (response.isSuccessful) {
+                        val body = response.body()
+                        withContext(Dispatchers.Main) {
+                            body?.let { searchResponse ->
+                                setData(searchResponse.items)
+                            }
+                        }
                     }
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@SearchActivity, "검색하는 과정에서 에러가 발생했습니다. : ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun setData(items: List<GithubRepositoryEntity>) {
-        Log.e("responsee", items.toString())
-
-        adapter.setSearchResultList (items) {
-            Toast.makeText(this@SearchActivity, "클릭", Toast.LENGTH_SHORT).show()
+    private fun setData(githubRepositoryList: List<GithubRepositoryEntity>) = with(binding) {
+        showLoading(false)
+        if (githubRepositoryList.isEmpty()) {
+            emptyResultTextView.isGone = false
+            recyclerView.isGone = true
+        } else {
+            emptyResultTextView.isGone = true
+            recyclerView.isGone = false
+            adapter.setSearchResultList(githubRepositoryList) {
+                startActivity(
+                    Intent(this@SearchActivity, RepositoryActivity::class.java).apply {
+                        putExtra(REPOSITORY_OWNER_KEY, it.owner.login)
+                        putExtra(REPOSITORY_NAME_KEY, it.name)
+                    }
+                )
+            }
         }
     }
+
+    private fun showLoading(isShown: Boolean) = with(binding) {
+        progressBar.isGone = isShown.not()
+    }
+
 }

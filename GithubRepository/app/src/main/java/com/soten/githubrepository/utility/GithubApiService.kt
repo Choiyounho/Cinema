@@ -1,5 +1,6 @@
 package com.soten.githubrepository.utility
 
+import com.soten.githubrepository.data.entity.GithubRepositoryEntity
 import com.soten.githubrepository.data.response.GithubRepositorySearchResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -15,5 +16,5 @@ interface GithubApiService {
     suspend fun getRepository(
         @Path("owner") ownerLogin: String,
         @Path("name") repoName: String
-    ): Response<GithubRepositorySearchResponse>
+    ): Response<GithubRepositoryEntity>
 }

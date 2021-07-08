@@ -1,0 +1,23 @@
+package com.soten.githubrepository.data.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.soten.githubrepository.data.entity.GithubRepositoryEntity
+
+@Dao
+interface RepositoryDao {
+
+    @Insert
+    suspend fun insert(repo: GithubRepositoryEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(repoList: List<GithubRepositoryEntity>)
+
+    @Query("SELECT * FROM githubrepository")
+    suspend fun getHistory(): List<GithubRepositoryEntity>
+
+    @Query("DELETE FROM githubrepository")
+    suspend fun clearAll()
+}

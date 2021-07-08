@@ -38,7 +38,6 @@ class RepositoryRecyclerAdapter : RecyclerView.Adapter<RepositoryRecyclerAdapter
                 searchResultClickListener(data)
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryItemViewHolder {

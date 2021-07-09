@@ -11,7 +11,11 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.soten.dustapp.data.Repository
 import com.soten.dustapp.databinding.ActivityMainBinding
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var cancellationTokenSource: CancellationTokenSource? = null
+
+    private val scope = MainScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,13 +65,23 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "권한이 없어 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
             finish()
         } else {
-            cancellationTokenSource = CancellationTokenSource()
+            fetchAirQualityData()
+        }
+    }
 
-            fusedLocationProviderClient.getCurrentLocation(
-                LocationRequest.PRIORITY_HIGH_ACCURACY,
-                cancellationTokenSource?.token
-            ).addOnSuccessListener { location ->
-                binding.temp.text = "${location.latitude}, ${location.longitude}"
+    @SuppressLint("MissingPermission")
+    private fun fetchAirQualityData() {
+        cancellationTokenSource = CancellationTokenSource()
+
+        fusedLocationProviderClient.getCurrentLocation(
+            LocationRequest.PRIORITY_HIGH_ACCURACY,
+            cancellationTokenSource!!.token
+        ).addOnSuccessListener { location ->
+            scope.launch {
+                val monitoringStation =
+                    Repository.getNearbyMonitoringStation(location.latitude, location.longitude)
+
+                binding.temp.text = monitoringStation?.stationName
             }
         }
     }
@@ -74,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
 
         cancellationTokenSource?.cancel()
+        scope.cancel()
     }
 
     companion object {

@@ -81,7 +81,10 @@ class MainActivity : AppCompatActivity() {
                 val monitoringStation =
                     Repository.getNearbyMonitoringStation(location.latitude, location.longitude)
 
-                binding.temp.text = monitoringStation?.stationName
+                val measuredValue =
+                    Repository.getLatestAirQualityData(monitoringStation!!.stationName!!)
+
+                binding.temp.text = measuredValue.toString()
             }
         }
     }

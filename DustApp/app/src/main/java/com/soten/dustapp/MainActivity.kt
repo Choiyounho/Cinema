@@ -3,9 +3,11 @@ package com.soten.dustapp
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -61,6 +63,15 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun requestBackgroundLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION,),
+            REQUEST_BACKGROUND_ACCESS_LOCATION_PERMISSION
+        )
+    }
+
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -73,11 +84,23 @@ class MainActivity : AppCompatActivity() {
             requestCode == REQUEST_ACCESS_LOCATION_PERMISSION &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
 
-        if (!locationPermissionGranted) {
-            Toast.makeText(this, "권한이 없어 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
-            finish()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val backgroundLocationPermissionGranted =
+                requestCode == REQUEST_BACKGROUND_ACCESS_LOCATION_PERMISSION &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED
+
+            if (!backgroundLocationPermissionGranted) {
+                requestBackgroundLocationPermission()
+            } else {
+                fetchAirQualityData()
+            }
         } else {
-            fetchAirQualityData()
+            if (!locationPermissionGranted) {
+                Toast.makeText(this, "권한이 없어 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                fetchAirQualityData()
+            }
         }
     }
 
@@ -169,5 +192,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_ACCESS_LOCATION_PERMISSION = 100
+        private const val REQUEST_BACKGROUND_ACCESS_LOCATION_PERMISSION = 101
     }
 }

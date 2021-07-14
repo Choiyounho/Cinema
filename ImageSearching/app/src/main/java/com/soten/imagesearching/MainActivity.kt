@@ -1,6 +1,7 @@
 package com.soten.imagesearching
 
 import android.Manifest
+import android.app.WallpaperManager
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
@@ -134,6 +135,25 @@ class MainActivity : AppCompatActivity() {
                         transition: Transition<in Bitmap>?
                     ) {
                         saveBitmapToMediaStore(resource)
+
+                        val wallpaperManager = WallpaperManager.getInstance(this@MainActivity)
+                        val snackbar =
+                            Snackbar.make(binding.root, "다운로드 완료", Snackbar.LENGTH_SHORT)
+
+                        if (wallpaperManager.isWallpaperSupported
+                            && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                                    && wallpaperManager.isSetWallpaperAllowed)
+                        ) {
+                            snackbar.setAction("배경 화면으로 저장") {
+                                try {
+                                    wallpaperManager.setBitmap(resource)
+                                } catch (e: Exception) {
+                                    Snackbar.make(binding.root, "배경화면 설정 실패", Snackbar.LENGTH_SHORT)
+                                }
+                            }
+                            snackbar.duration = Snackbar.LENGTH_INDEFINITE
+                        }
+                        snackbar.show()
                     }
 
                     override fun onLoadStarted(placeholder: Drawable?) {
@@ -183,8 +203,6 @@ class MainActivity : AppCompatActivity() {
             imageDetails.put(MediaStore.Images.Media.IS_PENDING, 0)
             resolver.update(imageUri, imageDetails, null, null)
         }
-
-        Snackbar.make(binding.root, "다운로드 완료", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onRequestPermissionsResult(

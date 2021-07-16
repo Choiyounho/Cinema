@@ -19,7 +19,6 @@ internal class ListViewModel(
     private val getTodoListUseCase: GetTodoListUseCase,
     private val updateTodoUseCase: UpdateTodoUseCase,
     private val deleteAllTodoItemUseCase: DeleteAllTodoItemUseCase,
-    private val insertTodoListUseCase: InsertTodoListUseCase
 ): BaseViewModel() {
 
     private var _todoListLiveData = MutableLiveData<TodoListState>(TodoListState.UnInitialized)
@@ -27,16 +26,6 @@ internal class ListViewModel(
 
     override fun fetchData(): Job = viewModelScope.launch {
         _todoListLiveData.postValue(TodoListState.Loading)
-        insertTodoListUseCase(
-            (0 until 10).map {
-                TodoEntity(
-                    it.toLong(),
-                    "title $it",
-                    "des $it",
-                    hasCompleted = false
-                )
-            }
-        )
         _todoListLiveData.postValue(TodoListState.Success(getTodoListUseCase()))
     }
 

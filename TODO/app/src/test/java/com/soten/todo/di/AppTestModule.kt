@@ -12,27 +12,27 @@ import org.koin.dsl.module
 internal val appTestModule = module {
 
     // viewModel
-    viewModel { ListViewModel(get(), get(), get()) }
-    viewModel { (detailMode: DetailMode, id: Long) ->
-        DetailViewModel(
-            detailMode = detailMode,
-            id = id,
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-
-    // UseCase
-    factory { GetTodoListUseCase(get()) }
-    factory { InsertTodoItemUseCase(get()) }
-    factory { InsertTodoListUseCase(get()) }
-    factory { UpdateTodoUseCase(get()) }
-    factory { GetTodoItemUseCase(get()) }
-    factory { DeleteTodoItemUseCase(get()) }
-    factory { DeleteAllTodoItemUseCase(get()) }
-
-    // Repository
-    single<TodoRepository> { TestTodoRepository() }
+//    viewModel { ListViewModel(get(), get(), get()) }
+//    viewModel { (detailMode: DetailMode, id: Long) ->
+//        DetailViewModel(
+//            detailMode = detailMode,
+//            id = id,
+//            get(),
+//            get(),
+//            get(),
+//            get()
+//        )
+//    }
+//
+//    // UseCase
+//    factory { GetTodoListUseCase(get()) }
+//    factory { InsertTodoItemUseCase(get()) }
+//    factory { InsertTodoListUseCase(get()) }
+//    factory { UpdateTodoUseCase(get()) }
+//    factory { GetTodoItemUseCase(get()) }
+//    factory { DeleteTodoItemUseCase(get()) }
+//    factory { DeleteAllTodoItemUseCase(get()) }
+//
+//    // Repository
+//    single<TodoRepository> { TestTodoRepository() }
 }

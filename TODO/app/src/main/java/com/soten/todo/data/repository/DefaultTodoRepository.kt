@@ -26,12 +26,11 @@ class DefaultTodoRepository(
         todoDao.insert(todoList)
     }
 
-
     override suspend fun updateTodo(todo: TodoEntity) = withContext(ioDispatcher) {
         todoDao.update(todo)
     }
 
-    override suspend fun deleteTodoItem(id: Long) = withContext(ioDispatcher) {
+    override suspend fun delete(id: Long) = withContext(ioDispatcher) {
         todoDao.delete(id)
     }
 

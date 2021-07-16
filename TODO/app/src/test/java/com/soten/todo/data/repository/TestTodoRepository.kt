@@ -38,7 +38,7 @@ class TestTodoRepository: TodoRepository {
         todoList.clear()
     }
 
-    override suspend fun deleteTodoItem(id: Long): Boolean {
+    override suspend fun delete(id: Long): Boolean {
         val foundTodoEntity = todoList.find { it.id == id }
         return if (foundTodoEntity == null) {
             false

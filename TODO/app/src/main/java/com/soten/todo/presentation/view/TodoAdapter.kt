@@ -8,35 +8,35 @@ import com.soten.todo.R
 import com.soten.todo.data.entity.TodoEntity
 import com.soten.todo.databinding.ItemTodoBinding
 
-class TodoAdapter : RecyclerView.Adapter<TodoAdapter.ToDoItemViewHolder>() {
+class TodoAdapter : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
 
-    private var toDoList: List<TodoEntity> = listOf()
-    private lateinit var toDoItemClickListener: (TodoEntity) -> Unit
-    private lateinit var toDoCheckListener: (TodoEntity) -> Unit
+    private var todoList: List<TodoEntity> = listOf()
+    private lateinit var todoItemClickListener: (TodoEntity) -> Unit
+    private lateinit var todoCheckListener: (TodoEntity) -> Unit
 
-    inner class ToDoItemViewHolder(
+    inner class ViewHolder(
         private val binding: ItemTodoBinding,
-        val toDoItemClickListener: (TodoEntity) -> Unit
+        val todoItemClickListener: (TodoEntity) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindData(data: TodoEntity) = with(binding) {
             checkBox.text = data.title
-            checkToDoComplete(data.hasCompleted)
+            checkTodoComplete(data.hasCompleted)
         }
 
         fun bindViews(data: TodoEntity) {
             binding.checkBox.setOnClickListener {
-                toDoCheckListener(
+                todoCheckListener(
                     data.copy(hasCompleted = binding.checkBox.isChecked)
                 )
-                checkToDoComplete(binding.checkBox.isChecked)
+                checkTodoComplete(binding.checkBox.isChecked)
             }
             binding.root.setOnClickListener {
-                toDoItemClickListener(data)
+                todoItemClickListener(data)
             }
         }
 
-        private fun checkToDoComplete(isChecked: Boolean) = with(binding) {
+        private fun checkTodoComplete(isChecked: Boolean) = with(binding) {
             checkBox.isChecked = isChecked
             container.setBackgroundColor(
                 ContextCompat.getColor(
@@ -52,22 +52,22 @@ class TodoAdapter : RecyclerView.Adapter<TodoAdapter.ToDoItemViewHolder>() {
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ToDoItemViewHolder(view, toDoItemClickListener)
+        return ViewHolder(view, todoItemClickListener)
     }
 
-    override fun onBindViewHolder(holder: ToDoItemViewHolder, position: Int) {
-        holder.bindData(toDoList[position])
-        holder.bindViews(toDoList[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bindData(todoList[position])
+        holder.bindViews(todoList[position])
     }
 
-    override fun getItemCount(): Int = toDoList.size
+    override fun getItemCount(): Int = todoList.size
 
     fun setToDoList(toDoList: List<TodoEntity>, toDoItemClickListener: (TodoEntity) -> Unit, toDoCheckListener: (TodoEntity) -> Unit) {
-        this.toDoList = toDoList
-        this.toDoItemClickListener = toDoItemClickListener
-        this.toDoCheckListener = toDoCheckListener
+        this.todoList = toDoList
+        this.todoItemClickListener = toDoItemClickListener
+        this.todoCheckListener = toDoCheckListener
         notifyDataSetChanged()
     }
 }

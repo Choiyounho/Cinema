@@ -96,4 +96,8 @@ internal class DetailViewModel(
         }
     }
 
+    fun setModifyMode() = viewModelScope.launch {
+        _todoDetailLiveData.postValue(TodoDetailState.Modify)
+    }
+
 }

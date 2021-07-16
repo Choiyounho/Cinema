@@ -1,0 +1,134 @@
+package com.soten.todo.presentation.detail
+
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Toast
+import androidx.core.view.isGone
+import com.soten.todo.databinding.ActivityDetailBinding
+import com.soten.todo.presentation.BaseActivity
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+
+internal class DetailActivity : BaseActivity<DetailViewModel>() {
+
+    override val viewModel: DetailViewModel by viewModel {
+        parametersOf(
+            intent.getSerializableExtra(DETAIL_MODE_KEY),
+            intent.getLongExtra(TODO_ID_KEY, -1)
+        )
+    }
+
+    private var _binding: ActivityDetailBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        _binding = ActivityDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setResult(Activity.RESULT_OK)
+    }
+
+    private fun initViews(binding: ActivityDetailBinding) = with(binding) {
+        titleInput.isEnabled = false
+        descriptionInput.isEnabled = false
+
+        deleteButton.isGone = true
+        modifyButton.isGone = true
+        updateButton.isGone = true
+
+        deleteButton.setOnClickListener {
+            viewModel.deleteTodo()
+        }
+        modifyButton.setOnClickListener {
+            viewModel.setModifyMode()
+        }
+        updateButton.setOnClickListener {
+            viewModel.writeTodo(
+                title = titleInput.text.toString(),
+                description = descriptionInput.text.toString()
+            )
+        }
+    }
+
+    override fun observeData() = viewModel.todoDetailLiveData.observe(this@DetailActivity) {
+        when (it) {
+            is TodoDetailState.UnInitialized -> {
+                initViews(binding)
+            }
+            is TodoDetailState.Loading -> {
+                handleLoadingState()
+            }
+            is TodoDetailState.Success -> {
+                handleSuccessState(it)
+            }
+            is TodoDetailState.Modify -> {
+                handleModifyState()
+            }
+            is TodoDetailState.Delete -> {
+                Toast.makeText(this, "성공적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            is TodoDetailState.Error -> {
+                Toast.makeText(this, "에러가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            is TodoDetailState.Write -> {
+                handleWriteState()
+            }
+        }
+    }
+
+    private fun handleLoadingState() = with(binding) {
+        progressBar.isGone = false
+    }
+
+    private fun handleModifyState() = with(binding) {
+        titleInput.isEnabled = true
+        descriptionInput.isEnabled = true
+
+        deleteButton.isGone = true
+        modifyButton.isGone = true
+        updateButton.isGone = false
+    }
+
+    private fun handleWriteState() = with(binding) {
+        titleInput.isEnabled = true
+        descriptionInput.isEnabled = true
+
+        updateButton.isGone = false
+    }
+
+    private fun handleSuccessState(state: TodoDetailState.Success) = with(binding) {
+        progressBar.isGone = true
+
+        titleInput.isEnabled = false
+        descriptionInput.isEnabled = false
+
+        deleteButton.isGone = false
+        modifyButton.isGone = false
+        updateButton.isGone = true
+
+        val toDoItem = state.todoItem
+        titleInput.setText(toDoItem.title)
+        descriptionInput.setText(toDoItem.description)
+    }
+
+
+    companion object {
+        const val TODO_ID_KEY = "ToDoId"
+        const val DETAIL_MODE_KEY = "DetailMode"
+
+        const val FETCH_REQUEST_CODE = 10
+
+        fun getIntent(context: Context, detailMode: DetailMode) = Intent(context, DetailActivity::class.java).apply {
+            putExtra(DETAIL_MODE_KEY, detailMode)
+        }
+
+        fun getIntent(context: Context, id: Long, detailMode: DetailMode) = Intent(context, DetailActivity::class.java).apply {
+            putExtra(TODO_ID_KEY, id)
+            putExtra(DETAIL_MODE_KEY, detailMode)
+        }
+    }
+}

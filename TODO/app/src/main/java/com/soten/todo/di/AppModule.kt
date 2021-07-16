@@ -20,7 +20,7 @@ internal val appModule = module {
     single { Dispatchers.IO }
 
     // viewModel
-    viewModel { ListViewModel(get(), get(), get(), get()) }
+    viewModel { ListViewModel(get(), get(), get()) }
     viewModel { (detailMode: DetailMode, id: Long) ->
         DetailViewModel(
             detailMode = detailMode,

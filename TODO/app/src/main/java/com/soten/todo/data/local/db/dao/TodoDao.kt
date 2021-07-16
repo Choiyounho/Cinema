@@ -13,18 +13,18 @@ interface TodoDao {
     suspend fun getById(id: Long): TodoEntity?
 
     @Insert
-    suspend fun insert(todoEntity: TodoEntity): Long
+    suspend fun insert(toDoEntity: TodoEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(todoEntityList: List<TodoEntity>)
+    suspend fun insert(toDoEntityList: List<TodoEntity>)
 
     @Query("DELETE FROM TodoEntity WHERE id=:id")
-    suspend fun delete(id: Long): Boolean
+    suspend fun delete(id: Long)
 
     @Query("DELETE FROM TodoEntity")
     suspend fun deleteAll()
 
     @Update
-    suspend fun update(todoEntity: TodoEntity): Boolean
+    suspend fun update(toDoEntity: TodoEntity)
 
 }

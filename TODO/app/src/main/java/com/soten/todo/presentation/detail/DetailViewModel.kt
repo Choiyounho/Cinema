@@ -51,11 +51,9 @@ internal class DetailViewModel(
         _todoDetailLiveData.postValue(TodoDetailState.Loading)
 
         try {
-            if (deleteTodoItemUseCase(id)) {
-                _todoDetailLiveData.postValue(TodoDetailState.Delete)
-            } else {
-                _todoDetailLiveData.postValue(TodoDetailState.Error)
-            }
+            deleteTodoItemUseCase(id)
+            _todoDetailLiveData.postValue(TodoDetailState.Delete)
+
         } catch (e: Exception) {
             e.printStackTrace()
             _todoDetailLiveData.postValue(TodoDetailState.Error)

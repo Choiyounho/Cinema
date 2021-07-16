@@ -9,13 +9,18 @@ import com.soten.todo.domain.todo.*
 import com.soten.todo.presentation.detail.DetailMode
 import com.soten.todo.presentation.detail.DetailViewModel
 import com.soten.todo.presentation.list.ListViewModel
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 internal val appModule = module {
+
+    single { Dispatchers.Main }
+    single { Dispatchers.IO }
+
     // viewModel
-    viewModel { ListViewModel(get(), get(), get()) }
+    viewModel { ListViewModel(get(), get(), get(), get()) }
     viewModel { (detailMode: DetailMode, id: Long) ->
         DetailViewModel(
             detailMode = detailMode,

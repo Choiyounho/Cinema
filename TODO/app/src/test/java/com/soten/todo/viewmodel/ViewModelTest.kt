@@ -1,6 +1,7 @@
 package com.soten.todo.viewmodel
 
 import android.app.Application
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import com.soten.todo.di.appTestModule
 import com.soten.todo.livadata.LiveDataTestObserver
@@ -21,10 +22,13 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 
 @ExperimentalCoroutinesApi
-internal class ViewModelTest : KoinTest {
+internal abstract class ViewModelTest : KoinTest {
 
     @get:Rule
     val mockitoRule: MockitoRule = MockitoJUnit.rule()
+
+    @get:Rule
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     @Mock
     private lateinit var context: Application

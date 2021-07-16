@@ -1,35 +1,42 @@
 package com.soten.todo.data.repository
 
 import com.soten.todo.data.entity.TodoEntity
+import com.soten.todo.data.local.db.dao.TodoDao
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
-object DefaultTodoRepository: TodoRepository {
+class DefaultTodoRepository(
+    private val todoDao: TodoDao,
+    private val ioDispatcher: CoroutineDispatcher
+) : TodoRepository {
 
-    override suspend fun getTodoList(): List<TodoEntity> {
-        TODO("Not yet implemented")
+    override suspend fun getTodoList(): List<TodoEntity> = withContext(ioDispatcher) {
+        todoDao.getAll()
     }
 
-    override suspend fun insertTodoItem(todo: TodoEntity): Long {
-        TODO("Not yet implemented")
+    override suspend fun getTodoItem(itemId: Long): TodoEntity? = withContext(ioDispatcher) {
+        todoDao.getById(itemId)
     }
 
-    override suspend fun insertTodoList(todoList: List<TodoEntity>) {
-        TODO("Not yet implemented")
+    override suspend fun insertTodoItem(todo: TodoEntity): Long = withContext(ioDispatcher) {
+        todoDao.insert(todo)
     }
 
-    override suspend fun updateTodo(todo: TodoEntity): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun insertTodoList(todoList: List<TodoEntity>) = withContext(ioDispatcher) {
+        todoDao.insert(todoList)
     }
 
-    override suspend fun getTodoItem(itemId: Long): TodoEntity? {
-        TODO("Not yet implemented")
+
+    override suspend fun updateTodo(todo: TodoEntity): Boolean = withContext(ioDispatcher) {
+        todoDao.update(todo)
     }
 
-    override suspend fun deleteAll() {
-        TODO("Not yet implemented")
+    override suspend fun deleteTodoItem(id: Long): Boolean = withContext(ioDispatcher) {
+        todoDao.delete(id)
     }
 
-    override suspend fun deleteTodoItem(id: Long): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun deleteAll() = withContext(ioDispatcher) {
+        todoDao.deleteAll()
     }
 
 }

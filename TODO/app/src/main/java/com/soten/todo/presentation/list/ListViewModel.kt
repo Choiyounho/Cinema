@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 
 import com.soten.todo.data.entity.TodoEntity
+import com.soten.todo.domain.todo.DeleteAllTodoItemUseCase
 import com.soten.todo.domain.todo.GetTodoListUseCase
+import com.soten.todo.domain.todo.UpdateTodoUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -17,13 +19,26 @@ import kotlinx.coroutines.launch
  * 3. [DeleteAllTodoItemUseCase]
  */
 internal class ListViewModel(
-    private val getTodoListUseCase: GetTodoListUseCase
+    private val getTodoListUseCase: GetTodoListUseCase,
+    private val updateTodoUseCase: UpdateTodoUseCase,
+    private val deleteAllTodoItemUseCase: DeleteAllTodoItemUseCase
 ): ViewModel() {
 
-    private var _todoListLiveData = MutableLiveData<List<TodoEntity>>()
-    val todoListLiveData: LiveData<List<TodoEntity>> = _todoListLiveData
+    private var _todoListLiveData = MutableLiveData<TodoListState>(TodoListState.UnInitialized)
+    val todoListLiveData: LiveData<TodoListState> = _todoListLiveData
 
     fun fetchData(): Job = viewModelScope.launch {
-        _todoListLiveData.postValue(getTodoListUseCase())
+        _todoListLiveData.postValue(TodoListState.Loading)
+        _todoListLiveData.postValue(TodoListState.Success(getTodoListUseCase()))
+    }
+
+    fun updateEntity(todo: TodoEntity) = viewModelScope.launch {
+        updateTodoUseCase(todo)
+    }
+
+    fun deleteAll() = viewModelScope.launch {
+        _todoListLiveData.postValue(TodoListState.Loading)
+        deleteAllTodoItemUseCase()
+        _todoListLiveData.postValue(TodoListState.Success(getTodoListUseCase()))
     }
 }

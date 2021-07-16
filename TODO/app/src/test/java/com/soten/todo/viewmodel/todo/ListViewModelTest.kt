@@ -1,8 +1,10 @@
 package com.soten.todo.viewmodel.todo
 
 import com.soten.todo.data.entity.TodoEntity
+import com.soten.todo.domain.todo.GetTodoItemUseCase
 import com.soten.todo.domain.todo.InsertTodoListUseCase
 import com.soten.todo.presentation.list.ListViewModel
+import com.soten.todo.presentation.list.TodoListState
 import com.soten.todo.viewmodel.ViewModelTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -28,6 +30,8 @@ internal class ListViewModelTest: ViewModelTest() {
     private val viewModel: ListViewModel by inject()
 
     private val insertTodoListUseCase: InsertTodoListUseCase by inject()
+
+    private val getTodoItemUseCase: GetTodoItemUseCase by inject()
 
     private val mockList = (0..9).map {
         TodoEntity(
@@ -60,7 +64,37 @@ internal class ListViewModelTest: ViewModelTest() {
         viewModel.fetchData()
         testObservable.assertValueSequence(
             listOf(
-                mockList
+                TodoListState.UnInitialized,
+                TodoListState.Loading,
+                TodoListState.Success(mockList)
+            )
+        )
+    }
+
+    // Test : 데이터 업데이트 했을 때 잘 반영 되는지 확인한다.
+    @Test
+    fun `test Item Update`(): Unit = runBlockingTest {
+        val todo = TodoEntity(
+            id = 1,
+            title = "title 1",
+            description = "description 1",
+            hasCompleted = true
+        )
+
+        viewModel.updateEntity(todo)
+        assert(getTodoItemUseCase(todo.id)?.hasCompleted ?: false == todo.hasCompleted)
+    }
+
+    // Test : 데이터를 모두 제거했을 때, 빈 상태로 되는 지 확인
+    @Test
+    fun `test Item Delete All`(): Unit = runBlockingTest {
+        val testObservable = viewModel.todoListLiveData.test()
+        viewModel.deleteAll()
+        testObservable.assertValueSequence(
+            listOf(
+                TodoListState.UnInitialized,
+                TodoListState.Loading,
+                TodoListState.Success(listOf())
             )
         )
     }

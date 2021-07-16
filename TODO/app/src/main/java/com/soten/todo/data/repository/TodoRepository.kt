@@ -11,6 +11,8 @@ interface TodoRepository {
 
     suspend fun getTodoList(): List<TodoEntity>
 
+    suspend fun insertTodoItem(todo: TodoEntity)
+
     suspend fun insertTodoList(todoList: List<TodoEntity>)
 
     suspend fun updateTodo(todo: TodoEntity): Boolean
@@ -18,5 +20,7 @@ interface TodoRepository {
     suspend fun getTodoItem(itemId: Long): TodoEntity?
 
     suspend fun deleteAll()
+
+    suspend fun deleteTodoItem(id: Long): Boolean
 
 }

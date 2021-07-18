@@ -10,8 +10,6 @@ class PreferenceManager(
     private val context: Context
 ) {
 
-
-
     private fun getPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     }

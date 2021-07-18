@@ -60,10 +60,11 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
     }
 
     override fun observeData() = viewModel.mainStateLiveData.observe(this) {
-        when(it) {
+        when (it) {
             is MainState.RefreshOrderList -> {
                 binding.bottomNav.selectedItemId = R.id.menu_profile
                 val fragment = supportFragmentManager.findFragmentByTag(ProfileFragment.TAG)
+                (fragment as? BaseFragment<*, *>)?.viewModel?.fetchData()
             }
         }
     }

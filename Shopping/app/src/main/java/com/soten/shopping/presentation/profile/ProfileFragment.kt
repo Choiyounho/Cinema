@@ -46,8 +46,7 @@ internal class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileB
                 try {
                     task.getResult(ApiException::class.java)?.let {
                         Log.d("TestT", "firebaseAuthWith Google : ${it.id}")
-
-
+                        viewModel.saveToken(it.idToken ?: throw Exception())
                     } ?: throw Exception()
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -62,7 +61,7 @@ internal class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileB
             signInGoogle()
         }
         logoutButton.setOnClickListener {
-//            signOut()
+            signOut()
         }
     }
 
@@ -100,9 +99,9 @@ internal class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileB
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-//                    viewModel.setUserInfo(user)
+                    viewModel.setUserInfo(user)
                 } else {
-//                    viewModel.setUserInfo(null)
+                    viewModel.setUserInfo(null)
                     requireContext().toast("로그아웃이 되어 재로그인 필요합니다.")
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                 }
@@ -154,7 +153,7 @@ internal class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileB
 
     private fun signOut() {
         auth.signOut()
-//        viewModel.signOut()
+        viewModel.signOut()
     }
 
     companion object {

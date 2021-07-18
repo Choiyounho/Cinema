@@ -9,6 +9,9 @@ import com.soten.shopping.data.network.provideProductRetrofit
 import com.soten.shopping.data.preference.PreferenceManager
 import com.soten.shopping.data.repository.DefaultProductRepository
 import com.soten.shopping.data.repository.ProductRepository
+import com.soten.shopping.domain.*
+import com.soten.shopping.domain.DeleteOrderedProductListUseCase
+import com.soten.shopping.domain.GetOrderedProductListUseCase
 import com.soten.shopping.domain.GetProductItemUseCase
 import com.soten.shopping.domain.GetProductListUseCase
 import com.soten.shopping.domain.OrderProductItemUseCase
@@ -25,7 +28,7 @@ val appModule = module {
 
     viewModel { MainViewModel() }
     viewModel { ProductListViewModel(get()) }
-    viewModel { ProfileViewModel(get()) }
+    viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { (productId: Long) -> ProductDetailViewModel(productId, get(), get()) }
 
     single { provideGsonConverterFactory() }
@@ -45,6 +48,8 @@ val appModule = module {
     factory { GetProductItemUseCase(get()) }
     factory { GetProductListUseCase(get()) }
     factory { OrderProductItemUseCase(get()) }
+    factory { GetOrderedProductListUseCase(get()) }
+    factory { DeleteOrderedProductListUseCase(get()) }
 
     // Database
     single { provideDb(androidContext()) }

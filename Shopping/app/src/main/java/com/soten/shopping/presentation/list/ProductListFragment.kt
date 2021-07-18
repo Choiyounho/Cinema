@@ -71,7 +71,6 @@ internal class ProductListFragment: BaseFragment<ProductListViewModel, FragmentP
                 startProductDetailForResult.launch(
                     ProductDetailActivity.newIntent(requireContext(), it.id)
                 )
-                requireContext().toast("Product Entity $it")
             }
         }
     }

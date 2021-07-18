@@ -7,7 +7,9 @@ import androidx.core.view.isGone
 import com.soten.shopping.databinding.FragmentProductListBinding
 import com.soten.shopping.extensions.toast
 import com.soten.shopping.presentation.BaseFragment
+import com.soten.shopping.presentation.MainActivity
 import com.soten.shopping.presentation.adapter.ProductListAdapter
+import com.soten.shopping.presentation.detail.ProductDetailActivity
 import org.koin.android.ext.android.inject
 
 internal class ProductListFragment: BaseFragment<ProductListViewModel, FragmentProductListBinding>() {
@@ -27,7 +29,9 @@ internal class ProductListFragment: BaseFragment<ProductListViewModel, FragmentP
 
     private val startProductDetailForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-//            if ()
+            if (result.resultCode == ProductDetailActivity.PRODUCT_ORDERED_RESULT_CODE) {
+                (requireActivity() as MainActivity).viewModel.refreshOrderList()
+            }
         }
 
     override fun observeData() {
@@ -64,9 +68,9 @@ internal class ProductListFragment: BaseFragment<ProductListViewModel, FragmentP
             emptyResultTextView.isGone = true
             recyclerView.isGone = false
             adapter.setProductList(state.productList) {
-//                startProductDetailForResult.launch(
-//                    ProductDetailActivity.newIntent(requireContext(), it.id)
-//                )
+                startProductDetailForResult.launch(
+                    ProductDetailActivity.newIntent(requireContext(), it.id)
+                )
                 requireContext().toast("Product Entity $it")
             }
         }

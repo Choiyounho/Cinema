@@ -8,6 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.soten.shopping.R
 import com.soten.shopping.databinding.ActivityMainBinding
 import com.soten.shopping.presentation.list.ProductListFragment
+import com.soten.shopping.presentation.main.MainState
 import com.soten.shopping.presentation.main.MainViewModel
 import com.soten.shopping.presentation.profile.ProfileFragment
 import org.koin.android.ext.android.inject
@@ -58,7 +59,13 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
 
     }
 
-    override fun observeData() {
+    override fun observeData() = viewModel.mainStateLiveData.observe(this) {
+        when(it) {
+            is MainState.RefreshOrderList -> {
+                binding.bottomNav.selectedItemId = R.id.menu_profile
+                val fragment = supportFragmentManager.findFragmentByTag(ProfileFragment.TAG)
+            }
+        }
     }
 
 }

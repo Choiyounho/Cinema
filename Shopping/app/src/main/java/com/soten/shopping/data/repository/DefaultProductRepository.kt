@@ -11,7 +11,12 @@ class DefaultProductRepository(
 ) : ProductRepository {
 
     override suspend fun getProductList(): List<ProductEntity> = withContext(ioDispatcher) {
-        TODO("Not yet implemented")
+        val response = productApiService.getProducts()
+        return@withContext if (response.isSuccessful) {
+            response.body()?.items?.map { it.toEntity() } ?: listOf()
+        } else {
+            listOf()
+        }
     }
 
     override suspend fun getLocalProductList(): List<ProductEntity> = withContext(ioDispatcher) {

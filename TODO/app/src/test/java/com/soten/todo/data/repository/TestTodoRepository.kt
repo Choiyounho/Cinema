@@ -3,7 +3,7 @@ package com.soten.todo.data.repository
 import com.soten.todo.data.entity.TodoEntity
 import org.junit.Assert.*
 
-class TestTodoRepository: TodoRepository {
+class TestTodoRepository : TodoRepository {
 
     private val todoList: MutableList<TodoEntity> = mutableListOf()
 
@@ -20,14 +20,10 @@ class TestTodoRepository: TodoRepository {
         this.todoList.addAll(todoList)
     }
 
-    override suspend fun updateTodo(todo: TodoEntity): Boolean {
+    override suspend fun updateTodo(todo: TodoEntity) {
         val foundTodoEntity = todoList.find { it.id == todo.id }
-        return if (foundTodoEntity == null) {
-            false
-        } else {
-            this.todoList[todoList.indexOf(foundTodoEntity)] = todo
-            true
-        }
+        this.todoList[todoList.indexOf(foundTodoEntity)] = todo
+
     }
 
     override suspend fun getTodoItem(itemId: Long): TodoEntity? {
@@ -38,13 +34,8 @@ class TestTodoRepository: TodoRepository {
         todoList.clear()
     }
 
-    override suspend fun delete(id: Long): Boolean {
+    override suspend fun delete(id: Long) {
         val foundTodoEntity = todoList.find { it.id == id }
-        return if (foundTodoEntity == null) {
-            false
-        } else {
-            this.todoList.removeAt(todoList.indexOf(foundTodoEntity))
-            true
-        }
+        this.todoList.removeAt(todoList.indexOf(foundTodoEntity))
     }
 }

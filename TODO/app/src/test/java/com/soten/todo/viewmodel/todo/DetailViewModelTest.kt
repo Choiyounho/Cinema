@@ -24,6 +24,7 @@ import org.koin.test.inject
  * 4. test update todo
  *
  */
+
 @ExperimentalCoroutinesApi
 internal class DetailViewModelTest : ViewModelTest() {
 

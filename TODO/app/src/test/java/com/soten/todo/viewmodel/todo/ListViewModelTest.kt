@@ -42,12 +42,6 @@ internal class ListViewModelTest: ViewModelTest() {
         )
     }
 
-    /**
-     * 필요한 UseCase
-     * 1. InsertTodoListUseCase
-     * 2. GetTodoItemUseCase
-     */
-
     @Before
     fun init() {
         initData()

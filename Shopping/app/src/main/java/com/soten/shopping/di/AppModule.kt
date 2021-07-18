@@ -6,6 +6,7 @@ import com.soten.shopping.data.network.buildOkHttpClient
 import com.soten.shopping.data.network.provideGsonConverterFactory
 import com.soten.shopping.data.network.provideProductApiService
 import com.soten.shopping.data.network.provideProductRetrofit
+import com.soten.shopping.data.preference.PreferenceManager
 import com.soten.shopping.data.repository.DefaultProductRepository
 import com.soten.shopping.data.repository.ProductRepository
 import com.soten.shopping.domain.GetProductItemUseCase
@@ -24,13 +25,14 @@ val appModule = module {
 
     viewModel { MainViewModel() }
     viewModel { ProductListViewModel(get()) }
-    viewModel { ProfileViewModel() }
+    viewModel { ProfileViewModel(get()) }
     viewModel { (productId: Long) -> ProductDetailViewModel(productId, get(), get()) }
 
     single { provideGsonConverterFactory() }
     single { buildOkHttpClient() }
     single { provideProductRetrofit(get(), get()) }
     single { provideProductApiService(get()) }
+    single { PreferenceManager(androidContext()) }
 
     // Coroutines Dispatcher
     single { Dispatchers.Main }

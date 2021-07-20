@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var isCapture = false
-    private val uriList = mutableListOf<Uri>()
+    private var uriList = mutableListOf<Uri>()
     private var isFlashEnable = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,6 +127,7 @@ class MainActivity : AppCompatActivity() {
                 bindCaptureListener()
                 bindZoomListener()
                 initFlashAndAddListener()
+                bindPreviewImageViewClickListener()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -181,6 +182,12 @@ class MainActivity : AppCompatActivity() {
                 flashLight(false)
                 false
             }
+        }
+    }
+
+    private fun bindPreviewImageViewClickListener() = with(binding) {
+        previewImageView.setOnClickListener {
+            startActivity(ImageListActivity.newIntent(this@MainActivity, uriList))
         }
     }
 

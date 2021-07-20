@@ -10,18 +10,13 @@ import com.soten.shopping.data.preference.PreferenceManager
 import com.soten.shopping.data.repository.DefaultProductRepository
 import com.soten.shopping.data.repository.ProductRepository
 import com.soten.shopping.domain.*
-import com.soten.shopping.domain.DeleteOrderedProductListUseCase
-import com.soten.shopping.domain.GetOrderedProductListUseCase
-import com.soten.shopping.domain.GetProductItemUseCase
-import com.soten.shopping.domain.GetProductListUseCase
-import com.soten.shopping.domain.OrderProductItemUseCase
 import com.soten.shopping.presentation.detail.ProductDetailViewModel
 import com.soten.shopping.presentation.list.ProductListViewModel
 import com.soten.shopping.presentation.main.MainViewModel
 import com.soten.shopping.presentation.profile.ProfileViewModel
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {

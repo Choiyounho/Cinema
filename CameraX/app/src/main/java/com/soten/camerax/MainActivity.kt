@@ -173,13 +173,11 @@ class MainActivity : AppCompatActivity() {
                 Handler(Looper.getMainLooper()).post {
                     binding.previewImageView.loadCenterCrop(url = it.toString(), corner = 4f)
                 }
+                if (isFlashEnable) flashLight(false)
                 uriList.add(it)
-                flashLight(false)
                 false
-            } catch (e: Exception) {
+            } catch (e: FileNotFoundException) {
                 e.printStackTrace()
-                Toast.makeText(this, "파일이 존재하지 않습니다", Toast.LENGTH_SHORT).show()
-                flashLight(false)
                 false
             }
         }

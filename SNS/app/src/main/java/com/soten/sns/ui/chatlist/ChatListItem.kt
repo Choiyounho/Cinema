@@ -1,4 +1,4 @@
-package com.soten.usedtransaction.ui.chatlist
+package com.soten.sns.ui.chatlist
 
 data class ChatListItem(
     val buyerId: String,

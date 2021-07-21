@@ -1,4 +1,4 @@
-package com.soten.usedtransaction.ui.home
+package com.soten.sns.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.soten.usedtransaction.databinding.ItemArticleBinding
+import com.soten.sns.databinding.ItemArticleBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,7 +21,7 @@ class ArticleAdapter(val onItemClicked: (ArticleModel) -> Unit) : ListAdapter<Ar
 
             binding.titleTextView.text = articleModel.title
             binding.dateTextView.text = format.format(date).toString()
-            binding.priceTextView.text = articleModel.price
+            binding.priceTextView.text = articleModel.content
 
             if (articleModel.imageUrl.isNotEmpty()) {
                 Glide.with(binding.thumbnailImageView)

@@ -1,4 +1,4 @@
-package com.soten.usedtransaction.ui.home
+package com.soten.sns.ui.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,12 +11,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.soten.usedtransaction.DBKey.Companion.CHILD_CHAT
-import com.soten.usedtransaction.DBKey.Companion.DB_ARTICLES
-import com.soten.usedtransaction.DBKey.Companion.DB_USERS
-import com.soten.usedtransaction.R
-import com.soten.usedtransaction.databinding.FragmentHomeBinding
-import com.soten.usedtransaction.ui.chatlist.ChatListItem
+import com.soten.sns.DBKey.Companion.CHILD_CHAT
+import com.soten.sns.DBKey.Companion.DB_ARTICLES
+import com.soten.sns.DBKey.Companion.DB_USERS
+import com.soten.sns.R
+import com.soten.sns.databinding.FragmentHomeBinding
+import com.soten.sns.ui.chatlist.ChatListItem
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 

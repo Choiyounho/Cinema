@@ -1,4 +1,4 @@
-package com.soten.usedtransaction.ui.mypage
+package com.soten.sns.ui.mypage
 
 import android.os.Bundle
 import android.view.View
@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.soten.usedtransaction.R
-import com.soten.usedtransaction.databinding.FragmentMypageBinding
+import com.soten.sns.R
+import com.soten.sns.databinding.FragmentMypageBinding
 
 class MyPageFragment : Fragment(R.layout.fragment_mypage) {
 

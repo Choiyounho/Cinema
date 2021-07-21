@@ -1,4 +1,4 @@
-package com.soten.usedtransaction.ui.chatdetail
+package com.soten.sns.ui.chatdetail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,9 +11,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.soten.usedtransaction.DBKey.Companion.DB_CHAT
-import com.soten.usedtransaction.R
-import com.soten.usedtransaction.databinding.ActivityChatRoomBinding
+import com.soten.sns.DBKey.Companion.DB_CHAT
+import com.soten.sns.databinding.ActivityChatRoomBinding
 
 class ChatRoomActivity : AppCompatActivity() {
 

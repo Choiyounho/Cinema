@@ -1,4 +1,4 @@
-package com.soten.usedtransaction.ui.home
+package com.soten.sns.ui.home
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -17,8 +17,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import com.soten.usedtransaction.DBKey.Companion.DB_ARTICLES
-import com.soten.usedtransaction.R
+import com.soten.sns.DBKey.Companion.DB_ARTICLES
+import com.soten.sns.R
 
 class AddArticleActivity : AppCompatActivity() {
 
@@ -70,7 +70,7 @@ class AddArticleActivity : AppCompatActivity() {
 
         submitButton.setOnClickListener {
             val title = findViewById<EditText>(R.id.titleEditText).text.toString()
-            val price = findViewById<EditText>(R.id.priceEditText).text.toString()
+            val content = findViewById<EditText>(R.id.contentEditText).text.toString()
             val sellerId = auth.currentUser?.uid.orEmpty()
 
             showProgress()
@@ -78,7 +78,7 @@ class AddArticleActivity : AppCompatActivity() {
                 val photoUri = selectedUri ?: return@setOnClickListener
                 uploadPhoto(photoUri,
                     successHandler = { uri ->
-                        uploadArticle(sellerId, title, price, uri)
+                        uploadArticle(sellerId, title, content, uri)
                     },
                     errorHandler = {
                         Toast.makeText(this, "사진 업로드에 실패했습니다", Toast.LENGTH_SHORT).show()
@@ -86,7 +86,7 @@ class AddArticleActivity : AppCompatActivity() {
                     }
                 )
             } else { // 동기
-                uploadArticle(sellerId, title, price, "")
+                uploadArticle(sellerId, title, content, "")
             }
         }
     }
@@ -110,8 +110,8 @@ class AddArticleActivity : AppCompatActivity() {
             }
     }
 
-    private fun uploadArticle(sellerId: String, title: String, price: String, imageUrl: String) {
-        val model = ArticleModel(sellerId, title, System.currentTimeMillis(), "$price 원", imageUrl)
+    private fun uploadArticle(sellerId: String, title: String, content: String, imageUrl: String) {
+        val model = ArticleModel(sellerId, title, System.currentTimeMillis(), content, imageUrl)
         articleDb.push().setValue(model)
 
         hideProgress()

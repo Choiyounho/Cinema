@@ -1,11 +1,11 @@
-package com.soten.usedtransaction.ui.chatlist
+package com.soten.sns.ui.chatlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.soten.usedtransaction.databinding.ItemChatListBinding
+import com.soten.sns.databinding.ItemChatListBinding
 
 class ChatListAdapter(val onItemClicked: (ChatListItem) -> Unit) :
     ListAdapter<ChatListItem, ChatListAdapter.ViewHolder>(diffUtil) {

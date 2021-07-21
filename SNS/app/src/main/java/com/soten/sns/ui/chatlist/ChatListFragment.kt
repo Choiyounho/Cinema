@@ -1,4 +1,4 @@
-package com.soten.usedtransaction.ui.chatlist
+package com.soten.sns.ui.chatlist
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,11 +12,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.soten.usedtransaction.DBKey.Companion.CHILD_CHAT
-import com.soten.usedtransaction.DBKey.Companion.DB_USERS
-import com.soten.usedtransaction.R
-import com.soten.usedtransaction.databinding.FragmentChatlistBinding
-import com.soten.usedtransaction.ui.chatdetail.ChatRoomActivity
+import com.soten.sns.DBKey.Companion.CHILD_CHAT
+import com.soten.sns.DBKey.Companion.DB_USERS
+import com.soten.sns.R
+import com.soten.sns.databinding.FragmentChatlistBinding
+import com.soten.sns.ui.chatdetail.ChatRoomActivity
 
 class ChatListFragment : Fragment(R.layout.fragment_chatlist) {
 

@@ -1,4 +1,4 @@
-package com.soten.usedtransaction.ui.chatdetail
+package com.soten.sns.ui.chatdetail
 
 data class ChatItem(
     val senderId: String,

@@ -1,4 +1,4 @@
-package com.soten.usedtransaction
+package com.soten.sns
 
 import org.junit.Test
 

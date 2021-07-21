@@ -19,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.soten.sns.DBKey.Companion.DB_ARTICLES
+import com.soten.sns.adapter.PhotoListAdapter
 import com.soten.sns.databinding.ActivityAddArticleBinding
 import com.soten.sns.photo.CameraActivity
 import kotlinx.coroutines.*
@@ -39,7 +40,7 @@ class AddArticleActivity : AppCompatActivity() {
         Firebase.database.reference.child(DB_ARTICLES)
     }
 
-    private val photoListAdapter = PhotoListAdapter { uri -> removePhoto(uri) }
+    private val photoListAdapter by lazy { PhotoListAdapter { uri -> removePhoto(uri) } }
 
     private lateinit var binding: ActivityAddArticleBinding
 
@@ -104,7 +105,7 @@ class AddArticleActivity : AppCompatActivity() {
 
         when {
             errorResults.isNotEmpty() && successResults.isNotEmpty() -> {
-                photoUploadErrorButContinurDialog(errorResults, successResults, title, content, sellerId)
+                photoUploadErrorButContinueDialog(errorResults, successResults, title, content, sellerId)
             }
             errorResults.isNotEmpty() && successResults.isEmpty() -> {
                 uploadError()
@@ -125,7 +126,6 @@ class AddArticleActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         when (requestCode) {
             PERMISSION_REQUEST_CODE ->
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -137,10 +137,10 @@ class AddArticleActivity : AppCompatActivity() {
     }
 
     private fun startGalleryScreen() {
-        startActivityForResult(
-            GalleryActivity.newIntent(this),
-            GALLERY_REQUEST_CODE
-        )
+//        startActivityForResult(
+//            GalleryActivity.newIntent(this),
+//            GALLERY_REQUEST_CODE
+//        )
     }
 
     private fun startCameraScreen() {
@@ -171,7 +171,7 @@ class AddArticleActivity : AppCompatActivity() {
                         imageUriList.addAll(list)
                         photoListAdapter.setPhotoList(imageUriList)
                     }
-                } ?: kotlin.run {
+                } ?: run {
                     Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -182,7 +182,7 @@ class AddArticleActivity : AppCompatActivity() {
                         imageUriList.addAll(list)
                         photoListAdapter.setPhotoList(imageUriList)
                     }
-                } ?: kotlin.run {
+                } ?: run {
                     Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -236,10 +236,9 @@ class AddArticleActivity : AppCompatActivity() {
             }
             .create()
             .show()
-
     }
 
-    private fun photoUploadErrorButContinurDialog(
+    private fun photoUploadErrorButContinueDialog(
         errorResults: List<Pair<Uri, Exception>>,
         successResults: List<String>,
         title: String,
@@ -273,5 +272,4 @@ class AddArticleActivity : AppCompatActivity() {
         const val GALLERY_REQUEST_CODE = 1001
         const val CAMERA_REQUEST_CODE = 1002
     }
-    
 }

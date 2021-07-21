@@ -12,8 +12,7 @@ import java.util.*
 
 class ArticleAdapter(val onItemClicked: (ArticleModel) -> Unit) : ListAdapter<ArticleModel, ArticleAdapter.ViewHolder>(diffUtil) {
 
-    inner class ViewHolder(private val binding: ItemArticleBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(articleModel: ArticleModel) {
             val format = SimpleDateFormat("MM월 dd일")
@@ -23,9 +22,9 @@ class ArticleAdapter(val onItemClicked: (ArticleModel) -> Unit) : ListAdapter<Ar
             binding.dateTextView.text = format.format(date).toString()
             binding.priceTextView.text = articleModel.content
 
-            if (articleModel.imageUrl.isNotEmpty()) {
+            if (articleModel.imageUrlList.isNotEmpty()) {
                 Glide.with(binding.thumbnailImageView)
-                    .load(articleModel.imageUrl)
+                    .load(articleModel.imageUrlList.first())
                     .into(binding.thumbnailImageView)
             }
 
@@ -36,13 +35,7 @@ class ArticleAdapter(val onItemClicked: (ArticleModel) -> Unit) : ListAdapter<Ar
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            ItemArticleBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+        return ViewHolder(ItemArticleBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -51,9 +44,13 @@ class ArticleAdapter(val onItemClicked: (ArticleModel) -> Unit) : ListAdapter<Ar
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<ArticleModel>() {
-            override fun areItemsTheSame(oldItem: ArticleModel, newItem: ArticleModel) = oldItem.createdAt == newItem.createdAt
+            override fun areItemsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean {
+                return oldItem.createdAt == newItem.createdAt
+            }
 
-            override fun areContentsTheSame(oldItem: ArticleModel, newItem: ArticleModel) = oldItem == newItem
+            override fun areContentsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

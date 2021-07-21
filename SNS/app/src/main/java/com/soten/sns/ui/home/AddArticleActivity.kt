@@ -1,5 +1,6 @@
 package com.soten.sns.ui.home
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -19,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.soten.sns.DBKey.Companion.DB_ARTICLES
 import com.soten.sns.R
+import com.soten.sns.databinding.ActivityAddArticleBinding
 
 class AddArticleActivity : AppCompatActivity() {
 
@@ -36,41 +38,40 @@ class AddArticleActivity : AppCompatActivity() {
         Firebase.database.reference.child(DB_ARTICLES)
     }
 
-    private val submitButton: Button by lazy {
-        findViewById(R.id.submitButton)
-    }
-
-    private val progressBar: ProgressBar by lazy {
-        findViewById(R.id.progressBar)
-    }
+    private lateinit var binding: ActivityAddArticleBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_article)
+        binding = ActivityAddArticleBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        findViewById<Button>(R.id.imageAddButton).setOnClickListener {
+        initViews()
+    }
+
+    private fun initViews() {
+        binding.imageAddButton.setOnClickListener {
             when {
                 ContextCompat.checkSelfPermission(
                     this,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    Manifest.permission.READ_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED -> {
                     startContentProvider()
                 }
-                shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
                     showPermissionContextPopup()
                 }
                 else -> {
                     requestPermissions(
-                        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
                         1010
                     )
                 }
             }
         }
 
-        submitButton.setOnClickListener {
-            val title = findViewById<EditText>(R.id.titleEditText).text.toString()
-            val content = findViewById<EditText>(R.id.contentEditText).text.toString()
+        binding.submitButton.setOnClickListener {
+            val title = binding.titleEditText.text.toString()
+            val content = binding.contentEditText.text.toString()
             val sellerId = auth.currentUser?.uid.orEmpty()
 
             showProgress()
@@ -143,11 +144,11 @@ class AddArticleActivity : AppCompatActivity() {
     }
 
     private fun showProgress() {
-        progressBar.isVisible = true
+        binding.progressBar.isVisible = true
     }
 
     private fun hideProgress() {
-        progressBar.isVisible = false
+        binding.progressBar.isVisible = false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -161,7 +162,7 @@ class AddArticleActivity : AppCompatActivity() {
             2020 -> {
                 val uri = data?.data
                 if (uri != null) {
-                    findViewById<ImageView>(R.id.photoImageView).setImageURI(uri)
+                    binding.photoImageView.setImageURI(uri)
                     selectedUri = uri
                 } else {
                     Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
@@ -183,4 +184,5 @@ class AddArticleActivity : AppCompatActivity() {
             .create()
             .show()
     }
+
 }

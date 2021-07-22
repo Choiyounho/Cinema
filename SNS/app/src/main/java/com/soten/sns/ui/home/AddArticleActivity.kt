@@ -21,6 +21,7 @@ import com.google.firebase.storage.ktx.storage
 import com.soten.sns.DBKey.Companion.DB_ARTICLES
 import com.soten.sns.adapter.PhotoListAdapter
 import com.soten.sns.databinding.ActivityAddArticleBinding
+import com.soten.sns.gallery.GalleryActivity
 import com.soten.sns.photo.CameraActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
@@ -82,7 +83,7 @@ class AddArticleActivity : AppCompatActivity() {
         val uploadDeferred: List<Deferred<Any>> = uriList.mapIndexed { index, uri ->
             lifecycleScope.async {
                 try {
-                    val fileName = "image${index}.png"
+                    val fileName = "${System.currentTimeMillis()}image${index}.png"
                     return@async storage.reference.child("article/photo").child(fileName)
                         .putFile(uri)
                         .await()
@@ -137,10 +138,10 @@ class AddArticleActivity : AppCompatActivity() {
     }
 
     private fun startGalleryScreen() {
-//        startActivityForResult(
-//            GalleryActivity.newIntent(this),
-//            GALLERY_REQUEST_CODE
-//        )
+        startActivityForResult(
+            GalleryActivity.newIntent(this),
+            GALLERY_REQUEST_CODE
+        )
     }
 
     private fun startCameraScreen() {

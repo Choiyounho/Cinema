@@ -55,7 +55,7 @@ class StationsAdapter : RecyclerView.Adapter<StationsAdapter.ViewHolder>() {
                     )
                 }
             binding.stationNameTextView.text = station.name
-            binding.favorite.isChecked = station.isFavorite
+            binding.favorite.isChecked = station.isFavorited
         }
     }
 

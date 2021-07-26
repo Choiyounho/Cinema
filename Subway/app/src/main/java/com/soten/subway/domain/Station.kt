@@ -6,6 +6,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Station(
     val name: String,
-    val isFavorite: Boolean,
+    val isFavorited: Boolean,
     val connectedSubways: List<Subway>
 ) : Parcelable

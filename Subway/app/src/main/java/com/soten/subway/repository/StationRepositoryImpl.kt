@@ -4,6 +4,7 @@ import com.soten.subway.data.api.StationApi
 import com.soten.subway.data.api.StationArrivalsApi
 import com.soten.subway.data.api.response.mapper.toArrivalInformation
 import com.soten.subway.data.db.StationDao
+import com.soten.subway.data.db.entity.mapper.toStationEntity
 import com.soten.subway.data.db.entity.mapper.toStations
 import com.soten.subway.data.preference.PreferenceManager
 import com.soten.subway.domain.ArrivalInformation
@@ -26,9 +27,8 @@ class StationRepositoryImpl(
     override val stations: Flow<List<Station>> =
         stationDao.getStationWithSubways()
             .distinctUntilChanged() // Observable 하며 과도한 방출을 방지
-            .map { it.toStations() }
+            .map { stations -> stations.toStations().sortedByDescending { it.isFavorited } }
             .flowOn(dispatcher) // 어떤 스레드에서 데이터 흐름을 사용할 지 (IO 에서 하면 됨)
-
 
     override suspend fun refreshStations() {
         val fileUpdatedTimeMillis = stationApi.getStationDataUpdatedTimeMillis()
@@ -50,6 +50,10 @@ class StationRepositoryImpl(
             ?.distinctBy { it.direction }
             ?.sortedBy { it.subway }
             ?: throw RuntimeException("도착 정보를 불러오는 데에 실패했습니다.")
+    }
+
+    override suspend fun updateStation(station: Station) {
+        stationDao.updateStation(station.toStationEntity())
     }
 
     companion object {

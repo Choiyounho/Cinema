@@ -54,13 +54,13 @@ class StationArrivalsFragment : ScopeFragment(), StationArrivalsContract.View {
         inflater.inflate(R.menu.menu_station_arrivals, menu)
         menu.findItem(R.id.favoriteAction).apply {
             setIcon(
-                if (arguments.station.isFavorite) {
+                if (arguments.station.isFavorited) {
                     R.drawable.ic_star
                 } else {
                     R.drawable.ic_star_empty
                 }
             )
-            isChecked = arguments.station.isFavorite
+            isChecked = arguments.station.isFavorited
         }
     }
 
@@ -79,6 +79,7 @@ class StationArrivalsFragment : ScopeFragment(), StationArrivalsContract.View {
                         R.drawable.ic_star_empty
                     }
                 )
+                presenter.toggleStationFavorite()
                 true
             }
             else -> super.onOptionsItemSelected(item)

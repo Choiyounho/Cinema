@@ -18,12 +18,12 @@
 
     <fragment
         android:id="@+id/station_arrivals_dest"
-        android:name="com.soten.subway.StationArrivalsFragment"
+        android:name="com.soten.subway.presenter.stationarrivals.StationArrivalsFragment"
         tools:layout="@layout/fragment_station_arrivals">
 
-<!--        <argument-->
-<!--            android:name="station"-->
-<!--            app:argType="con.soten.subway.domain.Station" />-->
+        <argument
+            android:name="station"
+            app:argType="com.soten.subway.domain.Station" />
 
     </fragment>
 

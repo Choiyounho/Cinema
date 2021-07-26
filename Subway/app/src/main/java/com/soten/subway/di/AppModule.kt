@@ -11,6 +11,9 @@ import com.soten.subway.data.api.Url
 import com.soten.subway.data.db.AppDatabase
 import com.soten.subway.data.preference.PreferenceManager
 import com.soten.subway.data.preference.SharedPreferenceManager
+import com.soten.subway.presenter.stationarrivals.StationArrivalsContract
+import com.soten.subway.presenter.stationarrivals.StationArrivalsFragment
+import com.soten.subway.presenter.stationarrivals.StationArrivalsPresenter
 import com.soten.subway.presenter.stations.StationContract
 import com.soten.subway.presenter.stations.StationsFragment
 import com.soten.subway.presenter.stations.StationsPresenter
@@ -67,6 +70,9 @@ val appModule = module {
     // Presentation
     scope<StationsFragment> {
         scoped<StationContract.Presenter> { StationsPresenter(getSource(), get()) }
+    } // StationsFragment 와 StationContract.Presenter 를 같은 스코프에 둬서 결속력이 강하게 만든다.
+    scope<StationArrivalsFragment> {
+        scoped<StationArrivalsContract.Presenter> { StationArrivalsPresenter(getSource(), get(), get()) }
     } // StationsFragment 와 StationContract.Presenter 를 같은 스코프에 둬서 결속력이 강하게 만든다.
 }
 

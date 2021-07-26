@@ -41,6 +41,7 @@ class StationsFragment: ScopeFragment(), StationContract.View {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        hideKeyboard()
         presenter.onDestroyView()
     }
 
@@ -80,8 +81,8 @@ class StationsFragment: ScopeFragment(), StationContract.View {
 
         (binding?.recyclerView?.adapter as? StationsAdapter)?.apply {
             onItemClickListener = { station ->
-//                val action = StationsFragmentDirections.toStationArrivalsAction(station)
-//                findNavController().navigate(action)
+                val action = StationsFragmentDirections.toStationArrivalsAction(station)
+                findNavController().navigate(action)
             }
             onFavoriteClickListener = { station ->
                 presenter.toggleStationFavorite(station)

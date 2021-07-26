@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface StationRepository {
 
-    val station: Flow<List<Station>>
+    val stations: Flow<List<Station>>
 
     suspend fun refreshStations()
 

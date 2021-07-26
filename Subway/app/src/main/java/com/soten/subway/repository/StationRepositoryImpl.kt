@@ -15,10 +15,10 @@ class StationRepositoryImpl(
     private val stationApi: StationApi,
     private val stationDao: StationDao,
     private val preferenceManager: PreferenceManager,
-    private val dispatcher: CoroutineDispatcher
+    private val dispatcher: CoroutineDispatcher,
 ) : StationRepository {
 
-    override val station: Flow<List<Station>> =
+    override val stations: Flow<List<Station>> =
         stationDao.getStationWithSubways()
             .distinctUntilChanged() // Observable 하며 과도한 방출을 방지
             .map { it.toStations() }

@@ -9,14 +9,14 @@ import com.soten.subway.domain.Subway
 fun StationWithSubwaysEntity.toStation() =
     Station(
         name = station.stationName,
-        isFavorited = station.isFavorite,
+        isFavorite = station.isFavorited,
         connectedSubways = subways.toSubways()
     )
 
 fun Station.toStationEntity() =
     StationEntity(
         stationName = name,
-        isFavorite = isFavorited,
+        isFavorited = isFavorite,
     )
 
 

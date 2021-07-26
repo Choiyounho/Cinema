@@ -6,5 +6,5 @@ import androidx.room.PrimaryKey
 @Entity
 data class StationEntity(
     @PrimaryKey val stationName: String,
-    val isFavorite: Boolean = false
+    val isFavorited: Boolean = false
 )

@@ -1,4 +1,4 @@
-package com.soten.deliverycheck.entity
+package com.soten.deliverycheck.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

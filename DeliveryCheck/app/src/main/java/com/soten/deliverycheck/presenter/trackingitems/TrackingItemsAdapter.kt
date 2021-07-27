@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.soten.deliverycheck.R
 import com.soten.deliverycheck.databinding.ItemTrackingBinding
-import com.soten.deliverycheck.entity.Level
-import com.soten.deliverycheck.entity.ShippingCompany
-import com.soten.deliverycheck.entity.TrackingInformation
-import com.soten.deliverycheck.entity.TrackingItem
+import com.soten.deliverycheck.data.entity.Level
+import com.soten.deliverycheck.data.entity.ShippingCompany
+import com.soten.deliverycheck.data.entity.TrackingInformation
+import com.soten.deliverycheck.data.entity.TrackingItem
 import com.soten.deliverycheck.extensions.setTextColorRes
 import com.soten.deliverycheck.extensions.toReadableDateString
 import java.util.*

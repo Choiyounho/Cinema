@@ -1,6 +1,6 @@
 package com.soten.deliverycheck.repository
 
-import com.soten.deliverycheck.entity.*
+import com.soten.deliverycheck.data.entity.*
 import kotlin.random.Random
 import kotlin.random.nextLong
 

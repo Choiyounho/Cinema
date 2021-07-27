@@ -1,7 +1,7 @@
 package com.soten.deliverycheck.presenter.trackingitems
 
-import com.soten.deliverycheck.entity.TrackingInformation
-import com.soten.deliverycheck.entity.TrackingItem
+import com.soten.deliverycheck.data.entity.TrackingInformation
+import com.soten.deliverycheck.data.entity.TrackingItem
 import com.soten.deliverycheck.repository.TrackingItemRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope

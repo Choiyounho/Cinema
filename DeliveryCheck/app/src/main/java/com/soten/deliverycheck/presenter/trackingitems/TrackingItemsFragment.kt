@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soten.deliverycheck.R
 import com.soten.deliverycheck.databinding.FragmentTrackingItemsBinding
-import com.soten.deliverycheck.entity.TrackingInformation
-import com.soten.deliverycheck.entity.TrackingItem
+import com.soten.deliverycheck.data.entity.TrackingInformation
+import com.soten.deliverycheck.data.entity.TrackingItem
 import org.koin.android.scope.ScopeFragment
 
 class TrackingItemsFragment : ScopeFragment(), TrackingItemsContract.View {

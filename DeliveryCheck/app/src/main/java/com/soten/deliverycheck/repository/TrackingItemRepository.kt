@@ -1,7 +1,7 @@
 package com.soten.deliverycheck.repository
 
-import com.soten.deliverycheck.entity.TrackingInformation
-import com.soten.deliverycheck.entity.TrackingItem
+import com.soten.deliverycheck.data.entity.TrackingInformation
+import com.soten.deliverycheck.data.entity.TrackingItem
 
 interface TrackingItemRepository {
 

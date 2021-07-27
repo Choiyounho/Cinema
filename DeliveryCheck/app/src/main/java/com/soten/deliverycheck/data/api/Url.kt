@@ -1,4 +1,4 @@
-package com.soten.deliverycheck.api
+package com.soten.deliverycheck.data.api
 
 object Url {
 

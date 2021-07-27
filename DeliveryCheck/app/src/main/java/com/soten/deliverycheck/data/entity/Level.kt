@@ -1,4 +1,4 @@
-package com.soten.deliverycheck.entity
+package com.soten.deliverycheck.data.entity
 
 import com.google.gson.annotations.SerializedName
 

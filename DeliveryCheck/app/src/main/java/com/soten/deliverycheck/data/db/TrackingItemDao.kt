@@ -1,10 +1,10 @@
-package com.soten.deliverycheck.db
+package com.soten.deliverycheck.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.soten.deliverycheck.entity.TrackingItem
+import com.soten.deliverycheck.data.entity.TrackingItem
 
 @Dao
 interface TrackingItemDao {

@@ -1,9 +1,9 @@
 package com.soten.deliverycheck.repository
 
-import com.soten.deliverycheck.api.SweetTrackerApi
-import com.soten.deliverycheck.db.TrackingItemDao
-import com.soten.deliverycheck.entity.TrackingInformation
-import com.soten.deliverycheck.entity.TrackingItem
+import com.soten.deliverycheck.data.api.SweetTrackerApi
+import com.soten.deliverycheck.data.db.TrackingItemDao
+import com.soten.deliverycheck.data.entity.TrackingInformation
+import com.soten.deliverycheck.data.entity.TrackingItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 

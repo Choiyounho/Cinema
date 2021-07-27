@@ -5,13 +5,19 @@ import com.soten.deliverycheck.data.db.TrackingItemDao
 import com.soten.deliverycheck.data.entity.TrackingInformation
 import com.soten.deliverycheck.data.entity.TrackingItem
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
+import java.lang.RuntimeException
 
 class TrackingRepositoryImpl(
     private val trackerApi: SweetTrackerApi,
     private val trackingItemDao: TrackingItemDao,
     private val dispatcher: CoroutineDispatcher
 ) : TrackingItemRepository {
+
+    override val trackingItems: Flow<List<TrackingItem>> =
+        trackingItemDao.allTrackingItems().distinctUntilChanged()
 
     override suspend fun getTrackingItemInformation(): List<Pair<TrackingItem, TrackingInformation>> =
         withContext(dispatcher) {
@@ -35,4 +41,17 @@ class TrackingRepositoryImpl(
                     )
                 )
         }
+
+    override suspend fun saveTrackingItem(trackingItem: TrackingItem) = withContext(dispatcher) {
+        val trackingInformation = trackerApi.getTrackingInformation(
+            trackingItem.company.code,
+            trackingItem.invoice
+        ).body()
+
+        if (!trackingInformation!!.errorMessage.isNullOrBlank()) {
+            throw RuntimeException(trackingInformation.errorMessage)
+        }
+
+        trackingItemDao.insert(trackingItem)
+    }
 }

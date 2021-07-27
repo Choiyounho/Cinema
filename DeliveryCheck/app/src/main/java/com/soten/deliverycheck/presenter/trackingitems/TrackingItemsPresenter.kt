@@ -5,6 +5,7 @@ import com.soten.deliverycheck.data.entity.TrackingItem
 import com.soten.deliverycheck.repository.TrackingItemRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class TrackingItemsPresenter(
@@ -12,17 +13,23 @@ class TrackingItemsPresenter(
     private val trackingItemRepository: TrackingItemRepository
 ) : TrackingItemsContract.Presenter {
 
+    override var trackingItemInformation: List<Pair<TrackingItem, TrackingInformation>> = emptyList()
+
     override val scope: CoroutineScope = MainScope()
 
-    override var trackingItemInformation: List<Pair<TrackingItem, TrackingInformation>> = emptyList()
+    init {
+        scope.launch {
+            trackingItemRepository
+                .trackingItems
+                .collect { refresh() } // 변경이 되면 목록 업데이트 Observable
+        }
+    }
 
     override fun onViewCreated() {
         fetchTrackingInformation()
     }
 
-    override fun onDestroyView() {
-
-    }
+    override fun onDestroyView() {}
 
     override fun refresh() {
         fetchTrackingInformation(true)

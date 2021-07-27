@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/trackingItemsFragment">
+
+    <fragment
+        android:id="@+id/trackingItemsFragment"
+        android:name="com.soten.deliverycheck.TrackingItemsFragment"
+        tools:layout="@layout/fragment_tracking_items"
+        android:label="택배 조회">
+        <action
+            android:id="@+id/to_addTrackingItemFragment"
+            app:destination="@id/addTrackingItemFragment" />
+        <action
+            android:id="@+id/to_trackingHistoryFragment"
+            app:destination="@id/trackingHistoryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addTrackingItemFragment"
+        android:name="com.soten.deliverycheck.AddTrackingItemFragment"
+        tools:layout="@layout/fragment_add_tracking_item"
+        android:label="운송장 추가" />
+
+    <fragment
+        android:id="@+id/trackingHistoryFragment"
+        tools:layout="@layout/fragment_tracking_history"
+        android:name="com.soten.deliverycheck.TrackingHistoryFragment"
+        android:label="배송 상세" />
+
+</navigation>

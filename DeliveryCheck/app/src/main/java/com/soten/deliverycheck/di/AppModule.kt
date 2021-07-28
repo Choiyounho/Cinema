@@ -19,6 +19,7 @@ import com.soten.deliverycheck.presenter.trackingitems.TrackingItemsContract
 import com.soten.deliverycheck.presenter.trackingitems.TrackingItemsFragment
 import com.soten.deliverycheck.presenter.trackingitems.TrackingItemsPresenter
 import com.soten.deliverycheck.repository.*
+import com.soten.deliverycheck.work.AppWorkerFactory
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -71,6 +72,10 @@ val appModule = module {
     // Stub 을 전달한다. Stub 에서도 인터페이스가 동일하게 구현돼 있어 프레젠터에서 차이를 못 느끼고 호출을 한다.
     // 실제 데이터가 없더라도 화면을 미리 구성할 수 있다
 //    single <TrackingItemRepository> { TrackingItemRepositoryStub() }
+
+
+    // Work
+    single { AppWorkerFactory(get(), get()) }
 
     // Presenter
     scope<TrackingItemsFragment> {

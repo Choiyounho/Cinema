@@ -1,9 +1,10 @@
-package com.soten.deliverycheck
+package com.soten.deliverycheck.presenter
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.soten.deliverycheck.R
 import com.soten.deliverycheck.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

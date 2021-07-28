@@ -27,7 +27,16 @@
     <fragment
         android:id="@+id/trackingHistoryFragment"
         tools:layout="@layout/fragment_tracking_history"
-        android:name="com.soten.deliverycheck.TrackingHistoryFragment"
-        android:label="배송 상세" />
+        android:name="com.soten.deliverycheck.presenter.trackinghistory.TrackingHistoryFragment"
+        android:label="배송 상세">
+
+        <argument
+            android:name="item"
+            app:argType="com.soten.deliverycheck.data.entity.TrackingItem" />
+
+        <argument
+            android:name="information"
+            app:argType="com.soten.deliverycheck.data.entity.TrackingInformation" />
+    </fragment>
 
 </navigation>

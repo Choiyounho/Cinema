@@ -5,11 +5,16 @@ import com.soten.deliverycheck.BuildConfig
 import com.soten.deliverycheck.data.api.SweetTrackerApi
 import com.soten.deliverycheck.data.api.Url
 import com.soten.deliverycheck.data.db.AppDatabase
+import com.soten.deliverycheck.data.entity.TrackingInformation
+import com.soten.deliverycheck.data.entity.TrackingItem
 import com.soten.deliverycheck.preference.PreferenceManager
 import com.soten.deliverycheck.preference.SharedPreferenceManager
 import com.soten.deliverycheck.presenter.addtrackingitem.AddTrackingItemContract
 import com.soten.deliverycheck.presenter.addtrackingitem.AddTrackingItemFragment
 import com.soten.deliverycheck.presenter.addtrackingitem.AddTrackingItemPresenter
+import com.soten.deliverycheck.presenter.trackinghistory.TrackingHistoryContract
+import com.soten.deliverycheck.presenter.trackinghistory.TrackingHistoryFragment
+import com.soten.deliverycheck.presenter.trackinghistory.TrackingHistoryPresenter
 import com.soten.deliverycheck.presenter.trackingitems.TrackingItemsContract
 import com.soten.deliverycheck.presenter.trackingitems.TrackingItemsFragment
 import com.soten.deliverycheck.presenter.trackingitems.TrackingItemsPresenter
@@ -73,5 +78,10 @@ val appModule = module {
     } // getSource()를 통해 Presenter 그 자체로 전달
     scope<AddTrackingItemFragment> {
         scoped<AddTrackingItemContract.Presenter> { AddTrackingItemPresenter(getSource(), get(), get()) }
+    }
+    scope<TrackingHistoryFragment> {
+        scoped<TrackingHistoryContract.Presenter> { (trackingItem: TrackingItem, trackingInformation: TrackingInformation) ->
+            TrackingHistoryPresenter(getSource(), get(), trackingItem, trackingInformation)
+        }
     }
 }

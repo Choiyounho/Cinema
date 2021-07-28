@@ -1,9 +1,6 @@
 package com.soten.deliverycheck.data.db
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.soten.deliverycheck.data.entity.TrackingItem
 import kotlinx.coroutines.flow.Flow
 
@@ -18,5 +15,8 @@ interface TrackingItemDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) // 프라이머리 키 기준 이미 겹치는 부분이 있다면(저장 되어 있다면) 새로 추가하지 않는다.
     suspend fun insert(item: TrackingItem)
+
+    @Delete
+    suspend fun delete(item: TrackingItem)
 
 }

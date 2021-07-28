@@ -8,9 +8,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soten.deliverycheck.R
-import com.soten.deliverycheck.databinding.FragmentTrackingItemsBinding
 import com.soten.deliverycheck.data.entity.TrackingInformation
 import com.soten.deliverycheck.data.entity.TrackingItem
+import com.soten.deliverycheck.databinding.FragmentTrackingItemsBinding
 import org.koin.android.scope.ScopeFragment
 
 class TrackingItemsFragment : ScopeFragment(), TrackingItemsContract.View {
@@ -52,6 +52,10 @@ class TrackingItemsFragment : ScopeFragment(), TrackingItemsContract.View {
         }
         addTrackingItemFloatingActionButton.setOnClickListener { _ ->
             findNavController().navigate(R.id.to_addTrackingItemFragment)
+        }
+        (binding.recyclerView.adapter as? TrackingItemsAdapter)?.onClickItemListener = { item, information ->
+            findNavController()
+                .navigate(TrackingItemsFragmentDirections.toTrackingHistoryFragment(item, information))
         }
     }
 

@@ -1,7 +1,10 @@
 package com.soten.deliverycheck.data.entity
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class TrackingDetail(
     @SerializedName("code")
     val code: String? = null,
@@ -25,4 +28,4 @@ data class TrackingDetail(
     val timeString: String? = null,
     @SerializedName("where")
     val `where`: String? = null
-)
+) : Parcelable

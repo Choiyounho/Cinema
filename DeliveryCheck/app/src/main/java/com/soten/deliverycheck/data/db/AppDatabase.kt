@@ -4,10 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.soten.deliverycheck.data.entity.ShippingCompany
 import com.soten.deliverycheck.data.entity.TrackingItem
 
 @Database(
-    entities = [TrackingItem::class, ShippingCompanyDao::class],
+    entities = [TrackingItem::class, ShippingCompany::class],
     version = 1,
     exportSchema = false
 )

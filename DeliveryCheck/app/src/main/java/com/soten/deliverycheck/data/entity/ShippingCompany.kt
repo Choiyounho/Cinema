@@ -2,9 +2,13 @@ package com.soten.deliverycheck.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 @Entity
 data class ShippingCompany(
-    @PrimaryKey val code: String,
+    @PrimaryKey
+    @SerializedName("Code")
+    val code: String,
+    @SerializedName("Name")
     val name: String
 )

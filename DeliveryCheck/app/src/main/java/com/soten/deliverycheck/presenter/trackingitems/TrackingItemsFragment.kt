@@ -33,6 +33,7 @@ class TrackingItemsFragment : ScopeFragment(), TrackingItemsContract.View {
 
         initViews()
         bindViews()
+        presenter.onViewCreated()
     }
 
     private fun initViews() {

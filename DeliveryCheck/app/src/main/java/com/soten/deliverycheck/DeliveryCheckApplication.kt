@@ -12,13 +12,13 @@ class DeliveryCheckApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            androidLogger(
-                if (BuildConfig.DEBUG) {
-                    Level.DEBUG
-                } else {
-                    Level.NONE
-                }
-            )
+//            androidLogger(
+//                if (BuildConfig.DEBUG) {
+//                    Level.DEBUG
+//                } else {
+//                    Level.NONE
+//                }
+//            )
             androidContext(this@DeliveryCheckApplication)
             modules(appModule)
         }

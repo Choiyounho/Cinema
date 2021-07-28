@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/addTrackingItemFragment"
-        android:name="com.soten.deliverycheck.AddTrackingItemFragment"
+        android:name="com.soten.deliverycheck.presenter.addtrackingitem.AddTrackingItemFragment"
         tools:layout="@layout/fragment_add_tracking_item"
         android:label="운송장 추가" />
 

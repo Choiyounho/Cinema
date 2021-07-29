@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MovieReview</string>
+    <string name="title_home">Home</string>
+    <string name="title_reviews">리뷰</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_my_page">내 페이지</string>
+</resources>

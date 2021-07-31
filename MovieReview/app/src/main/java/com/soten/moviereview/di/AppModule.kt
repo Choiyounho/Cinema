@@ -11,6 +11,7 @@ import com.soten.moviereview.data.repository.MovieRepositoryImpl
 import com.soten.moviereview.data.repository.ReviewRepository
 import com.soten.moviereview.data.repository.ReviewRepositoryImpl
 import com.soten.moviereview.domain.usecase.GetAllMoviesUseCase
+import com.soten.moviereview.domain.usecase.GetAllReviewsUseCase
 import com.soten.moviereview.domain.usecase.GetRandomFeaturedMovieUseCase
 import com.soten.moviereview.presenter.home.HomeContract
 import com.soten.moviereview.presenter.home.HomeFragment
@@ -38,6 +39,7 @@ val dataModule = module {
 val domainModule = module {
     factory { GetRandomFeaturedMovieUseCase(get(), get()) }
     factory { GetAllMoviesUseCase(get()) }
+    factory { GetAllReviewsUseCase(get()) }
 }
 
 val presenterModule = module {

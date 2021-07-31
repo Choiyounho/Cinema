@@ -31,6 +31,11 @@
         android:id="@+id/movie_reviews_dest"
         android:name="com.soten.moviereview.presenter.reviews.MovieReviewsFragment"
         android:label="@string/title_reviews"
-        tools:layout="@layout/fragment_reviews" />
+        tools:layout="@layout/fragment_reviews">
+
+        <argument
+            android:name="movie"
+            app:argType="com.soten.moviereview.domain.model.Movie" />
+    </fragment>
 
 </navigation>

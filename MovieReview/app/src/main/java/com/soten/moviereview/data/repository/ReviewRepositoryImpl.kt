@@ -17,4 +17,9 @@ class ReviewRepositoryImpl(
     override suspend fun getAllReviews(movieId: String): List<Review> = withContext(dispatchers) {
         reviewApi.getAllReviews(movieId)
     }
+
+    override suspend fun getAllUserReviews(userId: String): List<Review> = withContext(dispatchers) {
+        reviewApi.getAllUserReviews(userId)
+    }
+
 }

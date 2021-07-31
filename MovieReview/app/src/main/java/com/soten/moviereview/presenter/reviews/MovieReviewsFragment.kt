@@ -19,14 +19,15 @@ class MovieReviewsFragment : ScopeFragment(), MovieReviewsContract.View {
     override val presenter: MovieReviewsContract.Presenter by inject { parametersOf(arguments.movie) }
 
     private val arguments: MovieReviewsFragmentArgs by navArgs()
-    private var binding: FragmentMovieReviewsBinding? = null
+    private var _binding: FragmentMovieReviewsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = FragmentMovieReviewsBinding.inflate(inflater, container, false)
-        .also { binding = it }
+        .also { _binding = it }
         .root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,34 +42,34 @@ class MovieReviewsFragment : ScopeFragment(), MovieReviewsContract.View {
     }
 
     override fun showLoadingIndicator() {
-        binding?.progressBar?.isVisible = true
+        binding.progressBar.isVisible = true
     }
 
     override fun hideLoadingIndicator() {
-        binding?.progressBar?.isVisible = false
+        binding.progressBar.isVisible = false
     }
 
     override fun showErrorDescription(message: String) {
-        binding?.recyclerView?.isVisible = false
-        binding?.errorDescriptionTextView?.isVisible = true
-        binding?.errorDescriptionTextView?.text = message
+        binding.recyclerView.isVisible = false
+        binding.errorDescriptionTextView.isVisible = true
+        binding.errorDescriptionTextView.text = message
     }
 
     override fun showMovieInformation(movie: Movie) {
-        binding?.recyclerView?.adapter = MovieReviewsAdapter(movie)
+        binding.recyclerView.adapter = MovieReviewsAdapter(movie)
     }
 
     override fun showReviews(reviews: List<Review>) {
-        binding?.recyclerView?.isVisible = true
-        binding?.errorDescriptionTextView?.isVisible = false
-        (binding?.recyclerView?.adapter as? MovieReviewsAdapter)?.apply {
+        binding.recyclerView.isVisible = true
+        binding.errorDescriptionTextView.isVisible = false
+        (binding.recyclerView.adapter as MovieReviewsAdapter).apply {
             this.reviews = reviews
             notifyDataSetChanged()
         }
     }
 
     private fun initViews() {
-        binding?.recyclerView?.apply {
+        binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(
                 this.context,
                 RecyclerView.VERTICAL,

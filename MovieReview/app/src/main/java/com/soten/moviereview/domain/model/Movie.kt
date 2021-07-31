@@ -6,7 +6,7 @@ data class Movie(
     @DocumentId
     val id: String? = null,
 
-    @field:JvmField
+    @field:JvmField // 필드가 Boolean 일 경우 붙여주는 어노테이션
     val isFeatured: Boolean? = null,
 
     val title: String? = null,

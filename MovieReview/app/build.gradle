@@ -54,6 +54,7 @@ dependencies {
 
     // Coroutine
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.0'
 
     // Koin
     implementation 'org.koin:koin-core:2.2.2'

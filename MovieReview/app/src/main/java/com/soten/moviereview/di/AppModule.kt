@@ -12,6 +12,9 @@ import com.soten.moviereview.data.repository.ReviewRepository
 import com.soten.moviereview.data.repository.ReviewRepositoryImpl
 import com.soten.moviereview.domain.usecase.GetAllMoviesUseCase
 import com.soten.moviereview.domain.usecase.GetRandomFeaturedMovieUseCase
+import com.soten.moviereview.presenter.home.HomeContract
+import com.soten.moviereview.presenter.home.HomeFragment
+import com.soten.moviereview.presenter.home.HomePresenter
 import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module
 
@@ -38,5 +41,7 @@ val domainModule = module {
 }
 
 val presenterModule = module {
-
+    scope<HomeFragment> {
+        scoped<HomeContract.Presenter> { HomePresenter(getSource(), get(), get()) }
+    }
 }

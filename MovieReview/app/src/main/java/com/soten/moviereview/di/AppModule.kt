@@ -8,10 +8,7 @@ import com.soten.moviereview.data.preference.PreferenceManager
 import com.soten.moviereview.data.preference.SharedPreferenceManager
 import com.soten.moviereview.data.repository.*
 import com.soten.moviereview.domain.model.Movie
-import com.soten.moviereview.domain.usecase.GetAllMoviesUseCase
-import com.soten.moviereview.domain.usecase.GetAllMovieReviewsUseCase
-import com.soten.moviereview.domain.usecase.GetMyReviewedMoviesUseCase
-import com.soten.moviereview.domain.usecase.GetRandomFeaturedMovieUseCase
+import com.soten.moviereview.domain.usecase.*
 import com.soten.moviereview.presenter.home.HomeContract
 import com.soten.moviereview.presenter.home.HomeFragment
 import com.soten.moviereview.presenter.home.HomePresenter
@@ -50,8 +47,10 @@ val dataModule = module {
 val domainModule = module {
     factory { GetRandomFeaturedMovieUseCase(get(), get()) }
     factory { GetAllMoviesUseCase(get()) }
-    factory { GetAllMovieReviewsUseCase(get()) }
+    factory { GetAllMovieReviewsUseCase(get(), get()) }
     factory { GetMyReviewedMoviesUseCase(get(), get(), get()) }
+    factory { SubmitReviewUseCase(get(), get()) }
+    factory { DeleteReviewUseCase(get()) }
 }
 
 val presenterModule = module {
@@ -63,6 +62,8 @@ val presenterModule = module {
             MovieReviewsPresenter(
                 movie,
                 getSource(),
+                get(),
+                get(),
                 get()
             )
         }

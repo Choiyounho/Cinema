@@ -14,4 +14,7 @@ class MovieRepositoryImpl(
         movieApi.getAllMovies()
     }
 
+    override suspend fun getMovies(movieIds: List<String>): List<Movie> =
+        movieApi.getMovies(movieIds)
+
 }

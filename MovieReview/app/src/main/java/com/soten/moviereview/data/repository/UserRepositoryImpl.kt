@@ -1,6 +1,5 @@
 package com.soten.moviereview.data.repository
 
-import android.preference.PreferenceManager
 import com.soten.moviereview.data.api.UserApi
 import com.soten.moviereview.domain.model.User
 import kotlinx.coroutines.CoroutineDispatcher

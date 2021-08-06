@@ -2,4 +2,13 @@
     <string name="app_name">FoodDelivery</string>
     <string name="home">홈</string>
     <string name="my">My</string>
+
+    <string name="initialize">초기화</string>
+    <string name="fast_delivery">배달 빠른 순</string>
+    <string name="low_delivery_tip">배달팁 낮은 순</string>
+    <string name="default_order">기본순</string>
+    <string name="top_rate">별점 높은 순</string>
+    <string name="call">전화</string>
+    <string name="like">찜</string>
+    <string name="share">공유</string>
 </resources>

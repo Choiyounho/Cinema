@@ -3,6 +3,7 @@ package com.soten.fooddelivery
 import android.app.Application
 import android.content.Context
 import com.soten.fooddelivery.di.appModule
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class DeliveryApplication : Application() {
@@ -12,6 +13,7 @@ class DeliveryApplication : Application() {
         appContext = this
 
         startKoin {
+            androidContext(this@DeliveryApplication)
             modules(appModule)
         }
     }

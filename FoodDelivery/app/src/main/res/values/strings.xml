@@ -11,4 +11,20 @@
     <string name="call">전화</string>
     <string name="like">찜</string>
     <string name="share">공유</string>
+
+    <string name="delivery_expected_time">%1$d~%2$d분 소요 예정</string>
+    <string name="delivery_tip_range">%1$,d원 ~ %2$,d원</string>
+
+    <string name="empty_orders_text">주문 리스트가 존재하지 않습니다.</string>
+    <string name="order">주문하기</string>
+    <string name="logout">로그아웃</string>
+    <string name="google_login_required">구글로그인이 필요합니다.</string>
+    <string name="order_list_check">주문 확인</string>
+    <string name="do_order">주문하기</string>
+    <string name="clear_oder_menu">주문 취소</string>
+
+    <string name="grade_format">%1$,.1f</string>
+    <string name="review_count">(%1$d++)</string>
+    <string name="delivery_time">%1$d~%2$d분</string>
+    <string name="delivery_tip">배달팁 %1$,d원~%2$,d원</string>
 </resources>

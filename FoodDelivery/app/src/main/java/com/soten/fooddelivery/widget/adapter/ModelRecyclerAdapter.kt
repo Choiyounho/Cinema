@@ -7,6 +7,8 @@ import com.soten.fooddelivery.model.Model
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import com.soten.fooddelivery.util.mapper.ModelViewHolderMapper
 import com.soten.fooddelivery.util.provider.ResourceProvider
+import com.soten.fooddelivery.widget.adapter.listener.AdapterListener
+import com.soten.fooddelivery.widget.adapter.listener.RestaurantListListener
 import com.soten.fooddelivery.widget.adapter.viewholder.ModelViewHolder
 
 class ModelRecyclerAdapter<M: Model, VM: BaseViewModel>(
@@ -32,7 +34,7 @@ class ModelRecyclerAdapter<M: Model, VM: BaseViewModel>(
         }
     }
 
-    override fun submitList(list: MutableList<Model>?) {
+    override fun submitList(list: List<Model>?) {
         list?.let { modelList = it }
         super.submitList(list)
     }

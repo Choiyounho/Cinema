@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.soten.fooddelivery.data.entity.RestaurantEntity
 import com.soten.fooddelivery.data.repository.RestaurantRepository
+import com.soten.fooddelivery.model.RestaurantModel
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -14,12 +15,24 @@ class RestaurantListViewModel(
     private val restaurantRepository: RestaurantRepository
 ): BaseViewModel() {
 
-    private val _restaurantListLiveData = MutableLiveData<List<RestaurantEntity>>()
-    val restaurantListLiveData: LiveData<List<RestaurantEntity>> = _restaurantListLiveData
+    private val _restaurantListLiveData = MutableLiveData<List<RestaurantModel>>()
+    val restaurantListLiveData: LiveData<List<RestaurantModel>> = _restaurantListLiveData
 
     override fun fetchData(): Job = viewModelScope.launch {
         val restaurantList = restaurantRepository.getList(restaurantCategory)
-        _restaurantListLiveData.value = restaurantList
+        _restaurantListLiveData.value = restaurantList.map {
+            RestaurantModel(
+                id = it.id,
+                restaurantInfoId = it.restaurantInfoId,
+                restaurantCategory = it.restaurantCategory,
+                restaurantTitle = it.restaurantTitle,
+                restaurantImageUrl = it.restaurantImageUrl,
+                grade = it.grade,
+                reviewCount = it.reviewCount,
+                deliveryTimeRange = it.deliveryTimeRange,
+                deliveryTipRange = it.deliveryTipRange
+            )
+        }
     }
 
 }

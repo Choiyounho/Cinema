@@ -2,6 +2,7 @@ package com.soten.fooddelivery.model
 
 enum class CellType {
 
-    EMPTY_CELL
+    EMPTY_CELL,
+    RESTAURANT_CELL
 
 }

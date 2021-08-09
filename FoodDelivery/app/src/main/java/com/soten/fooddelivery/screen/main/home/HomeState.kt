@@ -1,11 +1,19 @@
 package com.soten.fooddelivery.screen.main.home
 
+import androidx.annotation.StringRes
+import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
+
 sealed class HomeState {
 
     object Uninitialized: HomeState()
 
     object Loading: HomeState()
 
-    object Success: HomeState()
+    data class Success(
+        val mapSearchInformationEntity: MapSearchInformationEntity
+    ) : HomeState()
 
+    data class Error(
+        @StringRes val messageId: Int
+    ) : HomeState()
 }

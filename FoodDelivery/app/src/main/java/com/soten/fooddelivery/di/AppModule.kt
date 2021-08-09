@@ -1,7 +1,9 @@
 package com.soten.fooddelivery.di
 
-import com.soten.fooddelivery.data.repository.RestaurantRepository
-import com.soten.fooddelivery.data.repository.RestaurantRepositoryImpl
+import com.soten.fooddelivery.data.repository.map.MapRepository
+import com.soten.fooddelivery.data.repository.map.MapRepositoryImpl
+import com.soten.fooddelivery.data.repository.restaurant.RestaurantRepository
+import com.soten.fooddelivery.data.repository.restaurant.RestaurantRepositoryImpl
 import com.soten.fooddelivery.screen.main.home.HomeViewModel
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantCategory
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantListViewModel
@@ -15,16 +17,18 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel { HomeViewModel() }
+    viewModel { HomeViewModel(get()) }
     viewModel { MyViewModel() }
     viewModel { (restaurantCategory: RestaurantCategory) -> RestaurantListViewModel(restaurantCategory, get()) }
 
     single<RestaurantRepository> { RestaurantRepositoryImpl(get(), get()) }
+    single<MapRepository> { MapRepositoryImpl(get(), get()) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }
 
-    single { provideRetrofit(get(), get()) }
+    single { provideMapRetrofit(get(), get()) }
+    single { provideMapAipService(get()) }
 
     single<ResourceProvider> { ResourceProviderImpl(androidApplication()) }
 

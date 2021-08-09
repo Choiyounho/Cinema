@@ -1,4 +1,4 @@
-package com.soten.fooddelivery.data.repository
+package com.soten.fooddelivery.data.repository.restaurant
 
 import com.soten.fooddelivery.data.entity.RestaurantEntity
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantCategory

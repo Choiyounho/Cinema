@@ -8,8 +8,11 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
 import com.soten.fooddelivery.R
+import com.soten.fooddelivery.data.entity.LocationLatLngEntity
 import com.soten.fooddelivery.databinding.FragmentHomeBinding
 import com.soten.fooddelivery.screen.base.BaseFragment
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantCategory
@@ -49,12 +52,7 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             }
         }
 
-    override fun initViews() {
-        super.initViews()
-        initViewPager()
-    }
-
-    private fun initViewPager() = with(binding) {
+    private fun initViewPager(locationLatLngEntity: LocationLatLngEntity) = with(binding) {
         val restaurantCategories = RestaurantCategory.values()
 
         if (::viewPagerAdapter.isInitialized.not()) {
@@ -76,9 +74,29 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         }.attach()
     }
 
-    override fun observeData() = viewModel.homeStateLiveData.observe(viewLifecycleOwner) {
-        when (it) {
-            HomeState.Uninitialized -> getMyLocation()
+    override fun observeData() = viewModel.homeStateLiveData.observe(viewLifecycleOwner) { state ->
+        when (state) {
+            is HomeState.Uninitialized -> getMyLocation()
+            is HomeState.Loading -> {
+                binding.locationLoading.isVisible = true
+                binding.locationTitleTextView.text = getString(R.string.loading)
+            }
+            is HomeState.Success -> {
+                binding.locationLoading.isGone = true
+                binding.locationTitleTextView.text = state.mapSearchInformationEntity.fullAddress
+                binding.tabLayout.isVisible = true
+                binding.filterScrollView.isVisible = true
+                binding.viewPager.isVisible = true
+                initViewPager(state.mapSearchInformationEntity.locationLatLngEntity)
+            }
+            is HomeState.Error -> {
+                binding.locationTitleTextView.text = getString(R.string.cannot_load_address)
+                binding.locationLoading.isGone = true
+                binding.locationTitleTextView.setOnClickListener {
+                    getMyLocation()
+                }
+                Toast.makeText(requireContext(), state.messageId, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -132,7 +150,13 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
     inner class MyLocationListener : LocationListener {
         override fun onLocationChanged(location: Location) {
-            binding.locationTitleTextView.text = "${location.latitude}, ${location.longitude}"
+            viewModel.loadReverseGeoInformation(
+                LocationLatLngEntity(
+                    location.latitude,
+                    location.longitude
+                )
+            )
+            removeLocationListener()
         }
     }
 }

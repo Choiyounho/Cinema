@@ -35,9 +35,11 @@
         android:id="@+id/tabLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:visibility="visible" />
 
     <View
         android:layout_width="0dp"
@@ -48,6 +50,8 @@
         app:layout_constraintTop_toBottomOf="@id/tabLayout" />
 
     <HorizontalScrollView
+        android:visibility="gone"
+        tools:visibility="visible"
         android:id="@+id/filterScrollView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -66,8 +70,7 @@
             app:chipSpacingVertical="6dp"
             app:selectionRequired="true"
             app:singleLine="true"
-            app:singleSelection="true"
-            tools:visibility="visible">
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipInitialize"
@@ -121,6 +124,8 @@
     </HorizontalScrollView>
 
     <androidx.viewpager2.widget.ViewPager2
+        android:visibility="gone"
+        tools:visibility="visible"
         android:id="@+id/viewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -150,9 +155,10 @@
             android:id="@+id/basketCountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="16dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:elevation="16dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/basketButton"
             app:layout_constraintEnd_toEndOf="@id/basketButton"
@@ -160,7 +166,6 @@
             app:layout_constraintStart_toStartOf="@id/basketButton"
             app:layout_constraintTop_toTopOf="@id/basketButton"
             app:layout_constraintVertical_bias="0.5"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             tools:text="+1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

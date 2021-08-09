@@ -1,11 +1,11 @@
 package com.soten.fooddelivery.screen.main.home.restaurant
 
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import com.soten.fooddelivery.data.entity.LocationLatLngEntity
 import com.soten.fooddelivery.databinding.FragmentRestaurantListBinding
 import com.soten.fooddelivery.model.RestaurantModel
 import com.soten.fooddelivery.screen.base.BaseFragment
+import com.soten.fooddelivery.screen.main.home.restaurant.detail.RestaurantDetailActivity
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.widget.adapter.ModelRecyclerAdapter
 import com.soten.fooddelivery.widget.adapter.listener.AdapterListener
@@ -39,7 +39,12 @@ class RestaurantListFragment :
             resourceProvider,
             object : RestaurantListListener, AdapterListener {
                 override fun onClickItem(model: RestaurantModel) {
-                    Toast.makeText(requireContext(), "$model", Toast.LENGTH_SHORT).show()
+                    startActivity(
+                        RestaurantDetailActivity.newIntent(
+                            requireContext(),
+                            model.toEntity()
+                        )
+                    )
                 }
             })
     }
@@ -54,7 +59,8 @@ class RestaurantListFragment :
 
     companion object {
         const val RESTAURANT_CATEGORY_KEY = "restaurantCategory"
-        const val LOCATION_KEY ="location"
+        const val LOCATION_KEY = "location"
+        const val RESTAURANT_KEY = "RESTAURANT_KEY"
 
         fun newInstance(
             restaurantCategory: RestaurantCategory,

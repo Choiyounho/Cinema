@@ -16,6 +16,8 @@
         <item name="android:background">@color/white</item>
     </style>
 
+
+
     <style name="Widget.Soten.Chip" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipStrokeColor">@color/brown</item>
         <item name="chipStrokeWidth">1dp</item>

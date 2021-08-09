@@ -29,7 +29,7 @@ interface MapApiService {
 //        @Query("centerLon") centerLon: String? = null,
 //        @Query("centerLat") centerLat: String? = null
 //    ): Response<SearchResponse>
-//
+
     @GET(Url.GET_TMAP_POIS_AROUND)
     suspend fun getSearchLocationAround(
         @Header("appKey") appKey: String = Key.TMAP_API,

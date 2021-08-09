@@ -36,4 +36,5 @@
     <string name="set_this_location">이 위치로 주소 설정</string>
 
     <string name="please_set_your_current_location">위치가 맞는 지 확인해주세요!</string>
+    <string name="nonexistent_tel_number">번호가 없습니다.</string>
 </resources>

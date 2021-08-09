@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.entity.LocationLatLngEntity
+import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
 import com.soten.fooddelivery.data.repository.map.MapRepository
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -31,5 +32,19 @@ class HomeViewModel(
                 )
             }
         }
+
+    fun getMapSearchInformation(): MapSearchInformationEntity? {
+        when (val data = _homeStateLiveData.value) {
+            is HomeState.Success -> {
+                return data.mapSearchInformationEntity
+            }
+        }
+
+        return null
+    }
+
+    companion object {
+        const val MY_LOCATION_KEY = "MY_LOCATION_KEY"
+    }
 }
 

@@ -42,7 +42,6 @@ class RestaurantListFragment :
     }
 
     override fun observeData() = viewModel.restaurantListLiveData.observe(viewLifecycleOwner) {
-//        Log.d("TestT", it.toString())
         adapter.submitList(it)
     }
 

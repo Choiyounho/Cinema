@@ -2,6 +2,7 @@ package com.soten.fooddelivery.screen.main.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.location.Location
 import android.location.LocationListener
@@ -13,10 +14,12 @@ import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
 import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.entity.LocationLatLngEntity
+import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
 import com.soten.fooddelivery.databinding.FragmentHomeBinding
 import com.soten.fooddelivery.screen.base.BaseFragment
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantCategory
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantListFragment
+import com.soten.fooddelivery.screen.mylocation.MyLocationActivity
 import com.soten.fooddelivery.widget.adapter.RestaurantListFragmentPagerAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -31,6 +34,16 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     private lateinit var locationManager: LocationManager
 
     private lateinit var myLocationListener: LocationListener
+
+    private val changeLocationLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.getParcelableExtra<MapSearchInformationEntity>(HomeViewModel.MY_LOCATION_KEY)
+                    ?.let { myLocationInformation ->
+                        viewModel.loadReverseGeoInformation(myLocationInformation.locationLatLngEntity)
+                    }
+            }
+        }
 
     private val locationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -48,9 +61,23 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                         getMyLocation()
                     }
                 }
-                Toast.makeText(requireContext(), getString(R.string.cannot_assigned_permission), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.cannot_assigned_permission),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
+
+    override fun initViews() = with(binding) {
+        locationTitleTextView.setOnClickListener {
+            viewModel.getMapSearchInformation()?.let { mapInformation ->
+                changeLocationLauncher.launch(
+                    MyLocationActivity.newIntent(requireContext(), mapInformation)
+                )
+            }
+        }
+    }
 
     private fun initViewPager(locationLatLngEntity: LocationLatLngEntity) = with(binding) {
         val restaurantCategories = RestaurantCategory.values()

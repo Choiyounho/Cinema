@@ -1,5 +1,6 @@
 package com.soten.fooddelivery.di
 
+import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
 import com.soten.fooddelivery.data.repository.map.MapRepository
 import com.soten.fooddelivery.data.repository.map.MapRepositoryImpl
 import com.soten.fooddelivery.data.repository.restaurant.RestaurantRepository
@@ -8,6 +9,7 @@ import com.soten.fooddelivery.screen.main.home.HomeViewModel
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantCategory
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantListViewModel
 import com.soten.fooddelivery.screen.main.my.MyViewModel
+import com.soten.fooddelivery.screen.mylocation.MyLocationViewModel
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.util.provider.ResourceProviderImpl
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,7 @@ val appModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { MyViewModel() }
     viewModel { (restaurantCategory: RestaurantCategory) -> RestaurantListViewModel(restaurantCategory, get()) }
+    viewModel { (mapSearchInformationEntity: MapSearchInformationEntity) -> MyLocationViewModel(mapSearchInformationEntity, get()) }
 
     single<RestaurantRepository> { RestaurantRepositoryImpl(get(), get()) }
     single<MapRepository> { MapRepositoryImpl(get(), get()) }

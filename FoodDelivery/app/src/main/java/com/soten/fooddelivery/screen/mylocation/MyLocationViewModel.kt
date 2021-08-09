@@ -40,5 +40,15 @@ class MyLocationViewModel(
             )
         }
     }
+
+    fun confirmSelectLocation() = viewModelScope.launch {
+        when (val data = _myLocationStateLiveData.value) {
+            is MyLocationState.Success -> {
+                _myLocationStateLiveData.value = MyLocationState.Confirm(
+                    data.mapSearchInformationEntity
+                )
+            }
+        }
+    }
    
 }

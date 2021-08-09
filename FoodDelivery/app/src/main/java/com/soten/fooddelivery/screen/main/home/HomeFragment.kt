@@ -84,21 +84,29 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
         if (::viewPagerAdapter.isInitialized.not()) {
             val restaurantListFragmentList = restaurantCategories.map {
-                RestaurantListFragment.newInstance(it)
+                RestaurantListFragment.newInstance(it, locationLatLngEntity)
             }
             viewPagerAdapter = RestaurantListFragmentPagerAdapter(
                 this@HomeFragment,
-                restaurantListFragmentList
+                restaurantListFragmentList,
+                locationLatLngEntity
             )
             viewPager.adapter = viewPagerAdapter
-        }
-        // 매번 페이지가 바뀔 때 마다 프래그먼트를 다시 만드는 것이 아니라 프래그먼트를 다시 쓸 수 있도록 하는 기능
-        viewPager.offscreenPageLimit = restaurantCategories.size
+            // 매번 페이지가 바뀔 때 마다 프래그먼트를 다시 만드는 것이 아니라 프래그먼트를 다시 쓸 수 있도록 하는 기능
+            viewPager.offscreenPageLimit = restaurantCategories.size
 
-        // 탭 레이아웃에 인플레이트
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.setText(restaurantCategories[position].categoryNameId)
-        }.attach()
+            // 탭 레이아웃에 인플레이트
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.setText(restaurantCategories[position].categoryNameId)
+            }.attach()
+        }
+
+        if (locationLatLngEntity != viewPagerAdapter.locationLatLngEntity) {
+            viewPagerAdapter.locationLatLngEntity = locationLatLngEntity
+            viewPagerAdapter.fragmentList.forEach {
+                it.viewModel.setLocationLatLng(locationLatLngEntity)
+            }
+        }
     }
 
     override fun observeData() = viewModel.homeStateLiveData.observe(viewLifecycleOwner) { state ->

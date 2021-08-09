@@ -1,5 +1,6 @@
 package com.soten.fooddelivery.screen.mylocation
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -56,7 +57,7 @@ class MyLocationActivity : BaseActivity<MyLocationViewModel, ActivityMyLocationB
             finish()
         }
         confirmButton.setOnClickListener {
-
+            viewModel.confirmSelectLocation()
         }
         setUpGoogleMap()
     }
@@ -72,7 +73,10 @@ class MyLocationActivity : BaseActivity<MyLocationViewModel, ActivityMyLocationB
                 }
             }
             is MyLocationState.Confirm -> {
-
+                setResult(Activity.RESULT_OK, Intent().apply {
+                    putExtra(HomeViewModel.MY_LOCATION_KEY, state.mapSearchInformationEntity)
+                })
+                finish()
             }
             is MyLocationState.Error -> {
                 Toast.makeText(this, state.messageId, Toast.LENGTH_SHORT).show()

@@ -1,5 +1,6 @@
 package com.soten.fooddelivery.di
 
+import com.soten.fooddelivery.data.entity.LocationLatLngEntity
 import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
 import com.soten.fooddelivery.data.repository.map.MapRepository
 import com.soten.fooddelivery.data.repository.map.MapRepositoryImpl
@@ -21,10 +22,19 @@ val appModule = module {
 
     viewModel { HomeViewModel(get()) }
     viewModel { MyViewModel() }
-    viewModel { (restaurantCategory: RestaurantCategory) -> RestaurantListViewModel(restaurantCategory, get()) }
-    viewModel { (mapSearchInformationEntity: MapSearchInformationEntity) -> MyLocationViewModel(mapSearchInformationEntity, get()) }
+    viewModel { (restaurantCategory: RestaurantCategory,
+                    locationLatLngEntity: LocationLatLngEntity) ->
+        RestaurantListViewModel(
+            restaurantCategory,
+            locationLatLngEntity,
+            get()
+        )
+    }
+    viewModel { (mapSearchInformationEntity: MapSearchInformationEntity) ->
+        MyLocationViewModel(mapSearchInformationEntity, get())
+    }
 
-    single<RestaurantRepository> { RestaurantRepositoryImpl(get(), get()) }
+    single<RestaurantRepository> { RestaurantRepositoryImpl(get(), get(), get()) }
     single<MapRepository> { MapRepositoryImpl(get(), get()) }
 
     single { provideGsonConvertFactory() }

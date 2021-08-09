@@ -34,4 +34,6 @@
     <string name="cannot_assigned_permission">권한을 받지 못했습니다.</string>
     <string name="cannot_load_address">위치 정보를 받지 못했습니다.</string>
     <string name="set_this_location">이 위치로 주소 설정</string>
+
+    <string name="please_set_your_current_location">위치가 맞는 지 확인해주세요!</string>
 </resources>

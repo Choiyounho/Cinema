@@ -7,6 +7,7 @@ import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.entity.LocationLatLngEntity
 import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
 import com.soten.fooddelivery.data.repository.map.MapRepository
+import com.soten.fooddelivery.data.repository.user.UserRepository
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import com.soten.fooddelivery.screen.main.home.HomeState
 import kotlinx.coroutines.Job
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 
 class MyLocationViewModel(
     private val mapSearchInformationEntity: MapSearchInformationEntity,
-    private val mapRepository: MapRepository
+    private val mapRepository: MapRepository,
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
 
     private val _myLocationStateLiveData =
@@ -44,6 +46,7 @@ class MyLocationViewModel(
     fun confirmSelectLocation() = viewModelScope.launch {
         when (val data = _myLocationStateLiveData.value) {
             is MyLocationState.Success -> {
+                userRepository.insertUserLocation(data.mapSearchInformationEntity.locationLatLngEntity)
                 _myLocationStateLiveData.value = MyLocationState.Confirm(
                     data.mapSearchInformationEntity
                 )

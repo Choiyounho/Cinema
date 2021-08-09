@@ -123,6 +123,9 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 binding.filterScrollView.isVisible = true
                 binding.viewPager.isVisible = true
                 initViewPager(state.mapSearchInformationEntity.locationLatLngEntity)
+                if (state.isLocationSame.not()) {
+                    Toast.makeText(requireContext(), R.string.please_set_your_current_location, Toast.LENGTH_SHORT).show()
+                }
             }
             is HomeState.Error -> {
                 binding.locationTitleTextView.text = getString(R.string.cannot_load_address)
@@ -187,8 +190,8 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         override fun onLocationChanged(location: Location) {
             viewModel.loadReverseGeoInformation(
                 LocationLatLngEntity(
-                    location.latitude,
-                    location.longitude
+                    latitude = location.latitude,
+                    longitude = location.longitude
                 )
             )
             removeLocationListener()

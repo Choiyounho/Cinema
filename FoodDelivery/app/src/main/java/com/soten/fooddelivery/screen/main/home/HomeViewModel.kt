@@ -7,11 +7,13 @@ import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.entity.LocationLatLngEntity
 import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
 import com.soten.fooddelivery.data.repository.map.MapRepository
+import com.soten.fooddelivery.data.repository.user.UserRepository
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val mapRepository: MapRepository
+    private val mapRepository: MapRepository,
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
 
     private val _homeStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
@@ -21,10 +23,14 @@ class HomeViewModel(
     fun loadReverseGeoInformation(locationLatLngEntity: LocationLatLngEntity) =
         viewModelScope.launch {
             _homeStateLiveData.value = HomeState.Loading
-            val addressInfo = mapRepository.getReverseGeoInformation(locationLatLngEntity)
+            val userLocation = userRepository.getUserLocation()
+            val currentLocation = userLocation ?: locationLatLngEntity
+
+            val addressInfo = mapRepository.getReverseGeoInformation(currentLocation)
             addressInfo?.let { information ->
                 _homeStateLiveData.value = HomeState.Success(
-                    information.toSearchInfoEntity(locationLatLngEntity)
+                    information.toSearchInfoEntity(locationLatLngEntity),
+                    currentLocation == locationLatLngEntity
                 )
             } ?: run {
                 _homeStateLiveData.value = HomeState.Error(

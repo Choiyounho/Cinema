@@ -110,8 +110,8 @@ class MyLocationActivity : BaseActivity<MyLocationViewModel, ActivityMyLocationB
                         val cameraLatLng = map.cameraPosition.target
                         viewModel.changeLocationInformation(
                             LocationLatLngEntity(
-                                cameraLatLng.latitude,
-                                cameraLatLng.longitude
+                                latitude = cameraLatLng.latitude,
+                                longitude = cameraLatLng.longitude
                             )
                         )
                         isChangeLocation = false

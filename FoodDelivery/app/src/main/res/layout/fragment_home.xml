@@ -39,6 +39,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:tabGravity="fill"
+        app:tabIndicatorFullWidth="false"
+        app:tabMaxWidth="0dp"
+        app:tabMode="auto"
+        app:tabRippleColor="@null"
         tools:visibility="visible" />
 
     <View
@@ -50,15 +55,15 @@
         app:layout_constraintTop_toBottomOf="@id/tabLayout" />
 
     <HorizontalScrollView
-        android:visibility="gone"
-        tools:visibility="visible"
         android:id="@+id/filterScrollView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:scrollbars="none"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tabLayout">
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        tools:visibility="visible">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/filterChipGroup"
@@ -124,15 +129,15 @@
     </HorizontalScrollView>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:visibility="gone"
-        tools:visibility="visible"
         android:id="@+id/viewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filterScrollView" />
+        app:layout_constraintTop_toBottomOf="@id/filterScrollView"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/basketButtonContainer"

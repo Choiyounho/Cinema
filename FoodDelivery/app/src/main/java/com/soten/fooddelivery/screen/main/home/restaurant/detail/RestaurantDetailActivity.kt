@@ -1,5 +1,6 @@
 package com.soten.fooddelivery.screen.main.home.restaurant.detail
 
+import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -53,9 +54,13 @@ class RestaurantDetailActivity :
         })
         toolbar.setNavigationOnClickListener { finish() }
         callButton.setOnClickListener {
-            viewModel.getRestaurantPhoneNumber()?.let { telNumber ->
+            viewModel.getRestaurantTelNumber()?.let { telNumber ->
                 if (telNumber.length < 3) {
-                    Toast.makeText(applicationContext, getString(R.string.nonexistent_tel_number), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.nonexistent_tel_number),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@setOnClickListener
                 }
                 startActivity(
@@ -67,7 +72,20 @@ class RestaurantDetailActivity :
             viewModel.toggleLikeRestaurant()
         }
         shareButton.setOnClickListener {
-
+            viewModel.getRestaurantInformation()?.let { restaurantInformation ->
+                startActivity(
+                    Intent(Intent.ACTION_SEND).apply {
+                        type = MIMETYPE_TEXT_PLAIN
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            "맛있는 음식점 : ${restaurantInformation.restaurantTitle}" +
+                                    "\n평점 : ${restaurantInformation.grade}" +
+                                    "\n연락처 : ${restaurantInformation.restaurantTelNumber}"
+                        )
+                        Intent.createChooser(this, "친구에게 공유하기")
+                    }
+                )
+            }
         }
     }
 

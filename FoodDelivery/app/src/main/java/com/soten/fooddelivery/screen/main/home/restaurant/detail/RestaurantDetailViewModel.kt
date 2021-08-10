@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.soten.fooddelivery.data.entity.RestaurantEntity
+import com.soten.fooddelivery.data.repository.user.UserRepository
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class RestaurantDetailViewModel(
-    private val restaurantEntity: RestaurantEntity
+    private val restaurantEntity: RestaurantEntity,
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
 
     private val _restaurantDetailStateLiveData = MutableLiveData<RestaurantDetailState>(RestaurantDetailState.Uninitialized)
@@ -18,6 +20,12 @@ class RestaurantDetailViewModel(
     override fun fetchData(): Job = viewModelScope.launch {
         _restaurantDetailStateLiveData.value = RestaurantDetailState.Success(
             restaurantEntity = restaurantEntity
+        )
+        _restaurantDetailStateLiveData.value = RestaurantDetailState.Loading
+        val isLiked = userRepository.getUserLikedRestaurant(restaurantEntity.restaurantTitle) != null
+        _restaurantDetailStateLiveData.value = RestaurantDetailState.Success(
+            restaurantEntity = restaurantEntity,
+            isLiked = isLiked
         )
     }
 
@@ -30,5 +38,22 @@ class RestaurantDetailViewModel(
         }
     }
 
+    fun toggleLikeRestaurant() = viewModelScope.launch {
+        when (val data = _restaurantDetailStateLiveData.value) {
+            is RestaurantDetailState.Success -> {
+                userRepository.getUserLikedRestaurant(restaurantEntity.restaurantTitle)?.let {
+                    userRepository.deleteUserLikedRestaurant(it.restaurantTitle)
+                    _restaurantDetailStateLiveData.value = data.copy(
+                        isLiked = false
+                    )
+                } ?: run {
+                    userRepository.insertUserLikedRestaurant(restaurantEntity)
+                    _restaurantDetailStateLiveData.value = data.copy(
+                        isLiked = true
+                    )
+                }
+            }
+        }
+    }
 
 }

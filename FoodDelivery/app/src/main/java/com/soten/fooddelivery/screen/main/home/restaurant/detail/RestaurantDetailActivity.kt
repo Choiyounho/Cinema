@@ -62,7 +62,9 @@ class RestaurantDetailActivity :
                     Intent(Intent.ACTION_DIAL, Uri.parse("tel:$telNumber"))
                 )
             }
-
+        }
+        likeButton.setOnClickListener {
+            viewModel.toggleLikeRestaurant()
         }
         shareButton.setOnClickListener {
 

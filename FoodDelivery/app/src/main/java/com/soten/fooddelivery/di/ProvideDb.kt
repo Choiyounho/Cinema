@@ -9,3 +9,5 @@ fun provideDb(context: Context): ApplicationDatabase =
         .build()
 
 fun provideLocationDao(database: ApplicationDatabase) = database.LocationDao()
+
+fun provideRestaurantDao(database: ApplicationDatabase) = database.RestaurantDao()

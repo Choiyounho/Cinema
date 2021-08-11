@@ -102,7 +102,8 @@ class RestaurantDetailActivity :
             is RestaurantDetailState.Success -> {
                 handleSuccess(state)
             }
-            else -> {}
+            else -> {
+            }
         }
     }
 
@@ -146,12 +147,17 @@ class RestaurantDetailActivity :
         )
 
         if (::viewPagerAdapter.isInitialized.not()) {
-            initViewPager(state.restaurantEntity.restaurantInfoId, state.restaurantFoodList)
+            initViewPager(
+                state.restaurantEntity.restaurantInfoId,
+                state.restaurantEntity.restaurantTitle,
+                state.restaurantFoodList
+            )
         }
     }
 
     private fun initViewPager(
         restaurantInfoId: Long,
+        restaurantTitle: String,
         restaurantFoodList: List<RestaurantFoodEntity>?
     ) {
         viewPagerAdapter = RestaurantDetailListFragmentPagerAdapter(
@@ -162,7 +168,7 @@ class RestaurantDetailActivity :
                     ArrayList(restaurantFoodList ?: listOf())
                 ),
                 RestaurantReviewListFragment.newInstance(
-                    restaurantInfoId
+                    restaurantTitle
                 )
             )
         )

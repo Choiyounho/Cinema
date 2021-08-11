@@ -10,6 +10,8 @@ import com.soten.fooddelivery.data.repository.restaurant.RestaurantRepository
 import com.soten.fooddelivery.data.repository.restaurant.RestaurantRepositoryImpl
 import com.soten.fooddelivery.data.repository.restaurant.food.RestaurantFoodRepository
 import com.soten.fooddelivery.data.repository.restaurant.food.RestaurantFoodRepositoryImpl
+import com.soten.fooddelivery.data.repository.restaurant.review.RestaurantReviewRepository
+import com.soten.fooddelivery.data.repository.restaurant.review.RestaurantReviewRepositoryImpl
 import com.soten.fooddelivery.data.repository.user.UserRepository
 import com.soten.fooddelivery.data.repository.user.UserRepositoryImpl
 import com.soten.fooddelivery.screen.main.home.HomeViewModel
@@ -56,12 +58,13 @@ val appModule = module {
             restaurantFoodList
         )
     }
-    viewModel { RestaurantReviewListViewModel() }
+    viewModel { (restaurantTitle: String) -> RestaurantReviewListViewModel(restaurantTitle, get()) }
 
     single<RestaurantRepository> { RestaurantRepositoryImpl(get(), get(), get()) }
     single<MapRepository> { MapRepositoryImpl(get(), get()) }
     single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
     single<RestaurantFoodRepository> { RestaurantFoodRepositoryImpl(get(), get()) }
+    single<RestaurantReviewRepository> { RestaurantReviewRepositoryImpl(get()) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }

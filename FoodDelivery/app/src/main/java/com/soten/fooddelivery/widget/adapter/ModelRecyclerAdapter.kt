@@ -8,7 +8,6 @@ import com.soten.fooddelivery.screen.base.BaseViewModel
 import com.soten.fooddelivery.util.mapper.ModelViewHolderMapper
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.widget.adapter.listener.AdapterListener
-import com.soten.fooddelivery.widget.adapter.listener.RestaurantListListener
 import com.soten.fooddelivery.widget.adapter.viewholder.ModelViewHolder
 
 class ModelRecyclerAdapter<M: Model, VM: BaseViewModel>(

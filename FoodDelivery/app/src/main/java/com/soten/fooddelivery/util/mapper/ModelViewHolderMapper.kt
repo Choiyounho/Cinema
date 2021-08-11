@@ -2,7 +2,7 @@ package com.soten.fooddelivery.util.mapper
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.soten.fooddelivery.databinding.VeiwholderEmptyBinding
+import com.soten.fooddelivery.databinding.ViewholderEmptyBinding
 import com.soten.fooddelivery.databinding.ViewholderFoodMenuBinding
 import com.soten.fooddelivery.databinding.ViewholderRestaurantBinding
 import com.soten.fooddelivery.model.CellType
@@ -26,7 +26,7 @@ object ModelViewHolderMapper {
         val inflater = LayoutInflater.from(parent.context)
         val viewHolder = when (type) {
             CellType.EMPTY_CELL -> EmptyViewHolder(
-                VeiwholderEmptyBinding.inflate(inflater, parent, false),
+                ViewholderEmptyBinding.inflate(inflater, parent, false),
                 viewModel,
                 resourceProvider
             )

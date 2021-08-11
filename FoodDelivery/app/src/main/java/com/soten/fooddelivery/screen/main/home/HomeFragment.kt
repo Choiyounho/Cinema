@@ -140,31 +140,51 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         }
     }
 
-    override fun observeData() = viewModel.homeStateLiveData.observe(viewLifecycleOwner) { state ->
-        when (state) {
-            is HomeState.Uninitialized -> getMyLocation()
-            is HomeState.Loading -> {
-                binding.locationLoading.isVisible = true
-                binding.locationTitleTextView.text = getString(R.string.loading)
-            }
-            is HomeState.Success -> {
-                binding.locationLoading.isGone = true
-                binding.locationTitleTextView.text = state.mapSearchInformationEntity.fullAddress
-                binding.tabLayout.isVisible = true
-                binding.filterScrollView.isVisible = true
-                binding.viewPager.isVisible = true
-                initViewPager(state.mapSearchInformationEntity.locationLatLngEntity)
-                if (state.isLocationSame.not()) {
-                    Toast.makeText(requireContext(), R.string.please_set_your_current_location, Toast.LENGTH_SHORT).show()
+    override fun observeData() {
+        viewModel.homeStateLiveData.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is HomeState.Uninitialized -> getMyLocation()
+                is HomeState.Loading -> {
+                    binding.locationLoading.isVisible = true
+                    binding.locationTitleTextView.text = getString(R.string.loading)
+                }
+                is HomeState.Success -> {
+                    binding.locationLoading.isGone = true
+                    binding.locationTitleTextView.text =
+                        state.mapSearchInformationEntity.fullAddress
+                    binding.tabLayout.isVisible = true
+                    binding.filterScrollView.isVisible = true
+                    binding.viewPager.isVisible = true
+                    initViewPager(state.mapSearchInformationEntity.locationLatLngEntity)
+                    if (state.isLocationSame.not()) {
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.please_set_your_current_location,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                is HomeState.Error -> {
+                    binding.locationTitleTextView.text = getString(R.string.cannot_load_address)
+                    binding.locationLoading.isGone = true
+                    binding.locationTitleTextView.setOnClickListener {
+                        getMyLocation()
+                    }
+                    Toast.makeText(requireContext(), state.messageId, Toast.LENGTH_SHORT).show()
                 }
             }
-            is HomeState.Error -> {
-                binding.locationTitleTextView.text = getString(R.string.cannot_load_address)
-                binding.locationLoading.isGone = true
-                binding.locationTitleTextView.setOnClickListener {
-                    getMyLocation()
+        }
+        viewModel.foodMenuLiveData.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                binding.basketButtonContainer.isVisible = true
+                binding.basketButton.setOnClickListener {
+                    // TODO 주문하기 화면으로 이동 또는 로그인
                 }
-                Toast.makeText(requireContext(), state.messageId, Toast.LENGTH_SHORT).show()
+                binding.basketCountTextView.text =
+                    getString(R.string.basket_count, it.size)
+            } else {
+                binding.basketButtonContainer.isGone = true
+                binding.basketButton.setOnClickListener(null)
             }
         }
     }
@@ -204,6 +224,11 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         if (::locationManager.isInitialized && ::myLocationListener.isInitialized) {
             locationManager.removeUpdates(myLocationListener)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.checkMyBasket()
     }
 
     companion object {

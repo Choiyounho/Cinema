@@ -6,19 +6,24 @@ import androidx.lifecycle.viewModelScope
 import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.entity.LocationLatLngEntity
 import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
+import com.soten.fooddelivery.data.entity.RestaurantFoodEntity
 import com.soten.fooddelivery.data.repository.map.MapRepository
+import com.soten.fooddelivery.data.repository.restaurant.food.RestaurantFoodRepository
 import com.soten.fooddelivery.data.repository.user.UserRepository
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val mapRepository: MapRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val restaurantFoodRepository: RestaurantFoodRepository
 ) : BaseViewModel() {
 
     private val _homeStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
-
     val homeStateLiveData: LiveData<HomeState> = _homeStateLiveData
+
+    private val _foodMenuLiveData = MutableLiveData<List<RestaurantFoodEntity>>()
+    val foodMenuLiveData: LiveData<List<RestaurantFoodEntity>> = _foodMenuLiveData
 
     fun loadReverseGeoInformation(locationLatLngEntity: LocationLatLngEntity) =
         viewModelScope.launch {
@@ -47,6 +52,10 @@ class HomeViewModel(
         }
 
         return null
+    }
+
+    fun checkMyBasket() = viewModelScope.launch {
+        _foodMenuLiveData.value = restaurantFoodRepository.getAllFoodMenuListInBasket()
     }
 
     companion object {

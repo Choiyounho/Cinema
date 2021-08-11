@@ -1,16 +1,14 @@
 package com.soten.fooddelivery.widget.adapter.viewholder.restaurant
 
 import com.soten.fooddelivery.R
-import com.soten.fooddelivery.databinding.VeiwholderEmptyBinding
 import com.soten.fooddelivery.databinding.ViewholderRestaurantBinding
 import com.soten.fooddelivery.extensions.clear
 import com.soten.fooddelivery.extensions.load
-import com.soten.fooddelivery.model.Model
 import com.soten.fooddelivery.model.RestaurantModel
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.widget.adapter.listener.AdapterListener
-import com.soten.fooddelivery.widget.adapter.listener.RestaurantListListener
+import com.soten.fooddelivery.widget.adapter.listener.restaurant.RestaurantListListener
 import com.soten.fooddelivery.widget.adapter.viewholder.ModelViewHolder
 
 class RestaurantViewHolder(

@@ -1,5 +1,6 @@
 package com.soten.fooddelivery.model.food
 
+import com.soten.fooddelivery.data.entity.RestaurantFoodEntity
 import com.soten.fooddelivery.model.CellType
 import com.soten.fooddelivery.model.Model
 
@@ -10,5 +11,12 @@ data class FoodModel(
     val description: String,
     val price: Int,
     val imageUrl: String,
-    val restaurantId: Long
-) : Model(id, type)
+    val restaurantId: Long,
+    val foodId: String
+) : Model(id, type) {
+
+    fun toEntity(basketIndex: Int) = RestaurantFoodEntity(
+        "${foodId}_${basketIndex}", title, description, price, imageUrl, restaurantId
+    )
+
+}

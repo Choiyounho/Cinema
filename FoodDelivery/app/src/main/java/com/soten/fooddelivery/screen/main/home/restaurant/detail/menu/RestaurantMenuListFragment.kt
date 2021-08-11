@@ -1,14 +1,17 @@
 package com.soten.fooddelivery.screen.main.home.restaurant.detail.menu
 
 import android.os.Bundle
+import android.widget.Toast
 import com.soten.fooddelivery.data.entity.RestaurantFoodEntity
 import com.soten.fooddelivery.databinding.FragmentListBinding
 import com.soten.fooddelivery.model.food.FoodModel
 import com.soten.fooddelivery.screen.base.BaseFragment
+import com.soten.fooddelivery.screen.main.home.restaurant.detail.RestaurantDetailViewModel
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.widget.adapter.ModelRecyclerAdapter
-import com.soten.fooddelivery.widget.adapter.listener.AdapterListener
+import com.soten.fooddelivery.widget.adapter.listener.restaurant.FoodMenuListListener
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -29,6 +32,8 @@ class RestaurantMenuListFragment :
         )
     }
 
+    private val restaurantDetailViewModel by sharedViewModel<RestaurantDetailViewModel>()
+
     private val resourceProvider by inject<ResourceProvider>()
 
     private val adapter by lazy {
@@ -36,7 +41,11 @@ class RestaurantMenuListFragment :
             listOf(),
             viewModel,
             resourceProvider,
-            object : AdapterListener {}
+            adapterListener = object : FoodMenuListListener {
+                override fun onClickItem(model: FoodModel) {
+                    viewModel.insertMenuInBasket(model)
+                }
+            }
         )
     }
 
@@ -46,8 +55,21 @@ class RestaurantMenuListFragment :
         binding.menuRecyclerView.adapter = adapter
     }
 
-    override fun observeData() = viewModel.restaurantFoodListLiveData.observe(viewLifecycleOwner) {
-        adapter.submitList(it)
+    override fun observeData() {
+        viewModel.restaurantFoodListLiveData.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
+        viewModel.menuBasketLiveData.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "장바구니에 담겼습니다. 메뉴 : ${it.title}", Toast.LENGTH_SHORT).show()
+            restaurantDetailViewModel.notifyFoodMenuListInBasket(it)
+        }
+
+        viewModel.isClearNeedInBasketLiveData.observe(viewLifecycleOwner) { (isClearNeed, afterAction) ->
+            if (isClearNeed) {
+                restaurantDetailViewModel.notifyClearNeedAlertInBasket(isClearNeed, afterAction)
+            }
+        }
     }
 
     companion object {

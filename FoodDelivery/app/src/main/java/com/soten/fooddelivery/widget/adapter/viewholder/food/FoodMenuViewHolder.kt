@@ -9,6 +9,7 @@ import com.soten.fooddelivery.model.food.FoodModel
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.widget.adapter.listener.AdapterListener
+import com.soten.fooddelivery.widget.adapter.listener.restaurant.FoodMenuListListener
 import com.soten.fooddelivery.widget.adapter.viewholder.ModelViewHolder
 
 class FoodMenuViewHolder(
@@ -32,6 +33,10 @@ class FoodMenuViewHolder(
     }
 
     override fun bindViews(model: FoodModel, adapterListener: AdapterListener) {
-        // 장바구니 담을 형태로 구현 예정
+        if (adapterListener is FoodMenuListListener) {
+            binding.root.setOnClickListener {
+                adapterListener.onClickItem(model)
+            }
+        }
     }
 }

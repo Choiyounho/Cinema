@@ -32,7 +32,7 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel { HomeViewModel(get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { MyViewModel() }
     viewModel { (restaurantCategory: RestaurantCategory,
                     locationLatLngEntity: LocationLatLngEntity) ->
@@ -55,7 +55,8 @@ val appModule = module {
     viewModel { (restaurantId: Long, restaurantFoodList: List<RestaurantFoodEntity>) ->
         RestaurantMenuListViewModel(
             restaurantId,
-            restaurantFoodList
+            restaurantFoodList,
+            get()
         )
     }
     viewModel { (restaurantTitle: String) -> RestaurantReviewListViewModel(restaurantTitle, get()) }
@@ -63,7 +64,7 @@ val appModule = module {
     single<RestaurantRepository> { RestaurantRepositoryImpl(get(), get(), get()) }
     single<MapRepository> { MapRepositoryImpl(get(), get()) }
     single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
-    single<RestaurantFoodRepository> { RestaurantFoodRepositoryImpl(get(), get()) }
+    single<RestaurantFoodRepository> { RestaurantFoodRepositoryImpl(get(), get(), get()) }
     single<RestaurantReviewRepository> { RestaurantReviewRepositoryImpl(get()) }
 
     single { provideGsonConvertFactory() }
@@ -78,6 +79,7 @@ val appModule = module {
     single { provideDb(androidApplication()) }
     single { provideLocationDao(get()) }
     single { provideRestaurantDao(get()) }
+    single { provideFoodMenuBasketDao(get()) }
 
     single<ResourceProvider> { ResourceProviderImpl(androidApplication()) }
 

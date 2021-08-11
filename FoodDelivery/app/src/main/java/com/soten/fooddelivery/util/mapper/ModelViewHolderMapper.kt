@@ -3,6 +3,7 @@ package com.soten.fooddelivery.util.mapper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.soten.fooddelivery.databinding.VeiwholderEmptyBinding
+import com.soten.fooddelivery.databinding.ViewholderFoodMenuBinding
 import com.soten.fooddelivery.databinding.ViewholderRestaurantBinding
 import com.soten.fooddelivery.model.CellType
 import com.soten.fooddelivery.model.Model
@@ -10,6 +11,7 @@ import com.soten.fooddelivery.screen.base.BaseViewModel
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.widget.adapter.viewholder.EmptyViewHolder
 import com.soten.fooddelivery.widget.adapter.viewholder.ModelViewHolder
+import com.soten.fooddelivery.widget.adapter.viewholder.food.FoodMenuViewHolder
 import com.soten.fooddelivery.widget.adapter.viewholder.restaurant.RestaurantViewHolder
 
 object ModelViewHolderMapper {
@@ -30,6 +32,11 @@ object ModelViewHolderMapper {
             )
             CellType.RESTAURANT_CELL -> RestaurantViewHolder(
                 ViewholderRestaurantBinding.inflate(inflater, parent, false),
+                viewModel,
+                resourceProvider
+            )
+            CellType.FOOD_CELL -> FoodMenuViewHolder(
+                ViewholderFoodMenuBinding.inflate(inflater, parent, false),
                 viewModel,
                 resourceProvider
             )

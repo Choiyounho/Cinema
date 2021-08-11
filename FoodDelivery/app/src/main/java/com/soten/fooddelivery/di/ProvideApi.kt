@@ -10,12 +10,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-fun provideFoodApiService(retrofit: Retrofit): FoodApiService {
-    return retrofit.create(FoodApiService::class.java)
-}
-
 fun provideMapAipService(retrofit: Retrofit): MapApiService {
     return retrofit.create(MapApiService::class.java)
+}
+
+fun provideFoodApiService(retrofit: Retrofit): FoodApiService {
+    return retrofit.create(FoodApiService::class.java)
 }
 
 fun provideMapRetrofit(
@@ -34,7 +34,7 @@ fun provideFoodRetrofit(
     gsonConverterFactory: GsonConverterFactory
 ): Retrofit {
     return Retrofit.Builder()
-        .baseUrl(Url.MY_FOOD_URL)
+        .baseUrl(Url.FOOD_URL)
         .addConverterFactory(gsonConverterFactory)
         .client(okHttpClient)
         .build()

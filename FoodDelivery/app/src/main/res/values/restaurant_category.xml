@@ -2,6 +2,10 @@
 <resources>
 
     <string name="all">전체</string>
+
+    <string name="menu">메뉴</string>
+    <string name="review">리뷰</string>
+
     <string name="korean_food">한식</string>
     <string name="dumpling_food">분식</string>
     <string name="cafe_dessert">카페 디저트</string>

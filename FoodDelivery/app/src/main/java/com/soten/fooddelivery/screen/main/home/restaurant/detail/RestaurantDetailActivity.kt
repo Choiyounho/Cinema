@@ -8,13 +8,18 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.entity.RestaurantEntity
+import com.soten.fooddelivery.data.entity.RestaurantFoodEntity
 import com.soten.fooddelivery.databinding.ActivityRestaurantDetailBinding
 import com.soten.fooddelivery.extensions.fromDpToPx
 import com.soten.fooddelivery.extensions.load
 import com.soten.fooddelivery.screen.base.BaseActivity
-import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantListFragment.Companion.RESTAURANT_KEY
+import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantListFragment
+import com.soten.fooddelivery.screen.main.home.restaurant.detail.menu.RestaurantMenuListFragment
+import com.soten.fooddelivery.screen.main.home.restaurant.detail.review.RestaurantReviewListFragment
+import com.soten.fooddelivery.widget.adapter.RestaurantDetailListFragmentPagerAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.lang.Math.abs
@@ -24,7 +29,7 @@ class RestaurantDetailActivity :
 
     override val viewModel by viewModel<RestaurantDetailViewModel> {
         parametersOf(
-            intent.getParcelableExtra<RestaurantEntity>(RESTAURANT_KEY)
+            intent.getParcelableExtra<RestaurantEntity>(RestaurantListFragment.RESTAURANT_KEY)
         )
     }
 
@@ -33,6 +38,8 @@ class RestaurantDetailActivity :
     override fun initViews() {
         initAppBar()
     }
+
+    private lateinit var viewPagerAdapter: RestaurantDetailListFragmentPagerAdapter
 
     private fun initAppBar() = with(binding) {
         appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
@@ -91,13 +98,21 @@ class RestaurantDetailActivity :
 
     override fun observeData() = viewModel.restaurantDetailStateLiveData.observe(this) { state ->
         when (state) {
+            is RestaurantDetailState.Loading -> handleLoading()
             is RestaurantDetailState.Success -> {
                 handleSuccess(state)
             }
+            else -> {}
         }
     }
 
+    private fun handleLoading() {
+        binding.progressBar.isGone = true
+    }
+
     private fun handleSuccess(state: RestaurantDetailState.Success) = with(binding) {
+        progressBar.isGone = true
+
         val restaurantEntity = state.restaurantEntity
 
         callButton.isGone = restaurantEntity.restaurantTelNumber == null
@@ -129,13 +144,42 @@ class RestaurantDetailActivity :
             ),
             null, null, null
         )
+
+        if (::viewPagerAdapter.isInitialized.not()) {
+            initViewPager(state.restaurantEntity.restaurantInfoId, state.restaurantFoodList)
+        }
+    }
+
+    private fun initViewPager(
+        restaurantInfoId: Long,
+        restaurantFoodList: List<RestaurantFoodEntity>?
+    ) {
+        viewPagerAdapter = RestaurantDetailListFragmentPagerAdapter(
+            this,
+            listOf(
+                RestaurantMenuListFragment.newInstance(
+                    restaurantInfoId,
+                    ArrayList(restaurantFoodList ?: listOf())
+                ),
+                RestaurantReviewListFragment.newInstance(
+                    restaurantInfoId
+                )
+            )
+        )
+        binding.menuAndReviewViewPager.adapter = viewPagerAdapter
+        TabLayoutMediator(
+            binding.menuAndReviewTabLayout,
+            binding.menuAndReviewViewPager
+        ) { tab, position ->
+            tab.setText(RestaurantDetailCategory.values()[position].categoryNameId)
+        }.attach()
     }
 
     companion object {
 
         fun newIntent(context: Context, restaurantEntity: RestaurantEntity) =
             Intent(context, RestaurantDetailActivity::class.java).apply {
-                putExtra(RESTAURANT_KEY, restaurantEntity)
+                putExtra(RestaurantListFragment.RESTAURANT_KEY, restaurantEntity)
             }
     }
 }

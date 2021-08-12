@@ -4,6 +4,7 @@ import com.soten.fooddelivery.data.entity.LocationLatLngEntity
 import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
 import com.soten.fooddelivery.data.entity.RestaurantEntity
 import com.soten.fooddelivery.data.entity.RestaurantFoodEntity
+import com.soten.fooddelivery.data.preference.AppPreferenceManager
 import com.soten.fooddelivery.data.repository.map.MapRepository
 import com.soten.fooddelivery.data.repository.map.MapRepositoryImpl
 import com.soten.fooddelivery.data.repository.restaurant.RestaurantRepository
@@ -26,6 +27,7 @@ import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.util.provider.ResourceProviderImpl
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -33,7 +35,7 @@ import org.koin.dsl.module
 val appModule = module {
 
     viewModel { HomeViewModel(get(), get(), get()) }
-    viewModel { MyViewModel() }
+    viewModel { MyViewModel(get()) }
     viewModel { (restaurantCategory: RestaurantCategory,
                     locationLatLngEntity: LocationLatLngEntity) ->
         RestaurantListViewModel(
@@ -80,6 +82,7 @@ val appModule = module {
     single { provideLocationDao(get()) }
     single { provideRestaurantDao(get()) }
     single { provideFoodMenuBasketDao(get()) }
+    single { AppPreferenceManager(androidApplication()) }
 
     single<ResourceProvider> { ResourceProviderImpl(androidApplication()) }
 

@@ -21,6 +21,7 @@ import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantListViewMode
 import com.soten.fooddelivery.screen.main.home.restaurant.detail.RestaurantDetailViewModel
 import com.soten.fooddelivery.screen.main.home.restaurant.detail.menu.RestaurantMenuListViewModel
 import com.soten.fooddelivery.screen.main.home.restaurant.detail.review.RestaurantReviewListViewModel
+import com.soten.fooddelivery.screen.main.like.RestaurantLikeListViewModel
 import com.soten.fooddelivery.screen.main.my.MyViewModel
 import com.soten.fooddelivery.screen.mylocation.MyLocationViewModel
 import com.soten.fooddelivery.util.provider.ResourceProvider
@@ -62,6 +63,7 @@ val appModule = module {
         )
     }
     viewModel { (restaurantTitle: String) -> RestaurantReviewListViewModel(restaurantTitle, get()) }
+    viewModel { RestaurantLikeListViewModel(get()) }
 
     single<RestaurantRepository> { RestaurantRepositoryImpl(get(), get(), get()) }
     single<MapRepository> { MapRepositoryImpl(get(), get()) }

@@ -203,7 +203,7 @@
                                     android:clickable="false"
                                     android:drawablePadding="8dp"
                                     android:elevation="16dp"
-                                    android:text="@string/like"
+                                    android:text="@string/menu_like"
                                     android:textColor="@color/black"
                                     android:textSize="16sp"
                                     app:layout_constraintBottom_toBottomOf="parent"

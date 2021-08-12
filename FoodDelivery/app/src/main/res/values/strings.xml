@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FoodDelivery</string>
-    <string name="home">홈</string>
-    <string name="my">My</string>
+    <string name="menu_home">홈</string>
+    <string name="menu_my">My</string>
 
     <string name="initialize">초기화</string>
     <string name="fast_delivery">배달 빠른 순</string>
@@ -9,7 +9,7 @@
     <string name="default_order">기본순</string>
     <string name="top_rate">별점 높은 순</string>
     <string name="call">전화</string>
-    <string name="like">찜</string>
+    <string name="menu_like">찜</string>
     <string name="share">공유</string>
 
     <string name="delivery_expected_time">%1$d~%2$d분 소요 예정</string>
@@ -41,4 +41,6 @@
     <string name="price">%,d원</string>
 
     <string name="basket_count">+%d</string>
+    <string name="restaurant_like_list">찜 리스트</string>
+    <string name="empty_like_text">찜한 내역이 존재하지 않습니다</string>
 </resources>

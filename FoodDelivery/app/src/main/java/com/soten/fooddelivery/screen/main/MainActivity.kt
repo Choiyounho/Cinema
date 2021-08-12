@@ -8,6 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.soten.fooddelivery.R
 import com.soten.fooddelivery.databinding.ActivityMainBinding
 import com.soten.fooddelivery.screen.main.home.HomeFragment
+import com.soten.fooddelivery.screen.main.like.RestaurantLikeListFragment
 import com.soten.fooddelivery.screen.main.my.MyFragment
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
             R.id.menu_my -> {
                 showFragment(MyFragment.newInstance(), MyFragment.TAG)
+                true
+            }
+            R.id.menu_like -> {
+                showFragment(RestaurantLikeListFragment.newInstance(), RestaurantLikeListFragment.TAG)
                 true
             }
             else -> false

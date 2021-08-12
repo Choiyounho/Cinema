@@ -9,18 +9,24 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.entity.LocationLatLngEntity
 import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
 import com.soten.fooddelivery.databinding.FragmentHomeBinding
 import com.soten.fooddelivery.screen.base.BaseFragment
+import com.soten.fooddelivery.screen.main.MainActivity
+import com.soten.fooddelivery.screen.main.MainTabMenu
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantCategory
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantListFragment
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantOrder
 import com.soten.fooddelivery.screen.mylocation.MyLocationActivity
+import com.soten.fooddelivery.screen.order.OrderMenuListActivity
 import com.soten.fooddelivery.widget.adapter.RestaurantListFragmentPagerAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -35,6 +41,8 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     private lateinit var locationManager: LocationManager
 
     private lateinit var myLocationListener: LocationListener
+
+    private val auth by lazy { Firebase.auth }
 
     private val changeLocationLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -178,7 +186,15 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             if (it.isNotEmpty()) {
                 binding.basketButtonContainer.isVisible = true
                 binding.basketButton.setOnClickListener {
-                    // TODO 주문하기 화면으로 이동 또는 로그인
+                    if (auth.currentUser == null) {
+                        alertLoginNeed {
+                            (requireActivity() as MainActivity).goToTab(MainTabMenu.MY)
+                        }
+                    } else {
+                        startActivity(
+                            OrderMenuListActivity.newIntent(requireContext())
+                        )
+                    }
                 }
                 binding.basketCountTextView.text =
                     getString(R.string.basket_count, it.size)
@@ -187,6 +203,21 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 binding.basketButton.setOnClickListener(null)
             }
         }
+    }
+
+    private fun alertLoginNeed(action: () -> Unit) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("로그인이 필요합니다.")
+            .setMessage("주문하려면 로그인이 필요합니다. My탭으로 이동하시겠습니까?")
+            .setPositiveButton("이동") { dialog, _ ->
+                action()
+                dialog.dismiss()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 
     private fun getMyLocation() {

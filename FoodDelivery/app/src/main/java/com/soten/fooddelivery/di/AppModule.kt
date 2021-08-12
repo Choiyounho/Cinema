@@ -24,6 +24,8 @@ import com.soten.fooddelivery.screen.main.home.restaurant.detail.review.Restaura
 import com.soten.fooddelivery.screen.main.like.RestaurantLikeListViewModel
 import com.soten.fooddelivery.screen.main.my.MyViewModel
 import com.soten.fooddelivery.screen.mylocation.MyLocationViewModel
+import com.soten.fooddelivery.screen.order.OrderMenuListViewModel
+import com.soten.fooddelivery.util.event.MenuChangeEventBus
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.util.provider.ResourceProviderImpl
 import kotlinx.coroutines.Dispatchers
@@ -64,6 +66,7 @@ val appModule = module {
     }
     viewModel { (restaurantTitle: String) -> RestaurantReviewListViewModel(restaurantTitle, get()) }
     viewModel { RestaurantLikeListViewModel(get()) }
+    viewModel { OrderMenuListViewModel(get()) }
 
     single<RestaurantRepository> { RestaurantRepositoryImpl(get(), get(), get()) }
     single<MapRepository> { MapRepositoryImpl(get(), get()) }
@@ -92,4 +95,5 @@ val appModule = module {
     single { Dispatchers.IO }
     single { Dispatchers.Main }
 
+    single { MenuChangeEventBus() }
 }

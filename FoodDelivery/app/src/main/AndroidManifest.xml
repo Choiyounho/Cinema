@@ -15,10 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodDelivery"
         android:usesCleartextTraffic="true">
+        <activity android:name=".screen.order.OrderMenuListActivity"></activity>
         <activity android:name=".screen.main.home.restaurant.detail.RestaurantDetailActivity" />
         <activity android:name=".screen.mylocation.MyLocationActivity" />
-        <activity
-            android:name=".screen.main.MainActivity">
+        <activity android:name=".screen.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

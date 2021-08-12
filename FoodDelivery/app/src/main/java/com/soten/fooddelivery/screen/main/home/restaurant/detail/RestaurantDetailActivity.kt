@@ -8,8 +8,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.entity.RestaurantEntity
 import com.soten.fooddelivery.data.entity.RestaurantFoodEntity
@@ -17,10 +20,16 @@ import com.soten.fooddelivery.databinding.ActivityRestaurantDetailBinding
 import com.soten.fooddelivery.extensions.fromDpToPx
 import com.soten.fooddelivery.extensions.load
 import com.soten.fooddelivery.screen.base.BaseActivity
+import com.soten.fooddelivery.screen.main.MainActivity
+import com.soten.fooddelivery.screen.main.MainTabMenu
 import com.soten.fooddelivery.screen.main.home.restaurant.RestaurantListFragment
 import com.soten.fooddelivery.screen.main.home.restaurant.detail.menu.RestaurantMenuListFragment
 import com.soten.fooddelivery.screen.main.home.restaurant.detail.review.RestaurantReviewListFragment
+import com.soten.fooddelivery.screen.order.OrderMenuListActivity
+import com.soten.fooddelivery.util.event.MenuChangeEventBus
 import com.soten.fooddelivery.widget.adapter.RestaurantDetailListFragmentPagerAdapter
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.lang.Math.abs
@@ -39,6 +48,10 @@ class RestaurantDetailActivity :
     override fun initViews() {
         initAppBar()
     }
+
+    private val auth by lazy { Firebase.auth }
+
+    private val menuChangeEventBus by inject<MenuChangeEventBus>()
 
     private lateinit var viewPagerAdapter: RestaurantDetailListFragmentPagerAdapter
 
@@ -196,16 +209,27 @@ class RestaurantDetailActivity :
             getString(R.string.basket_count, foodMenuListInBasket.size)
         }
         basketButton.setOnClickListener {
-            // TODO 주문하기 화면으로 이동 또는 로그인
+            if (auth.currentUser == null) {
+                alertLoginNeed {
+                    lifecycleScope.launch {
+                        menuChangeEventBus.changeMenu(MainTabMenu.MY)
+                        finish()
+                    }
+                }
+            } else {
+                startActivity(
+                    OrderMenuListActivity.newIntent(this@RestaurantDetailActivity)
+                )
+            }
         }
     }
 
-    private fun alertLoginNeed(afterAction: () -> Unit) {
+    private fun alertLoginNeed(action: () -> Unit) {
         AlertDialog.Builder(this)
             .setTitle("로그인이 필요합니다.")
             .setMessage("주문하려면 로그인이 필요합니다. My탭으로 이동하시겠습니까?")
             .setPositiveButton("이동") { dialog, _ ->
-                afterAction()
+                action()
                 dialog.dismiss()
             }
             .setNegativeButton("취소") { dialog, _ ->

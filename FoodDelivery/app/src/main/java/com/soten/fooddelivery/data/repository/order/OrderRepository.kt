@@ -8,6 +8,10 @@ interface OrderRepository {
         userId: String,
         restaurantId: Long,
         foodMenuList: List<RestaurantFoodEntity>
-    ): OrderRepositoryImpl.Result
+    ): OrderResult
+
+    suspend fun getAllOrderMenus(
+        userId: String
+    ): OrderResult
 
 }

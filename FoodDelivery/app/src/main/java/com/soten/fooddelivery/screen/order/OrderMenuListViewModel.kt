@@ -8,6 +8,7 @@ import com.google.firebase.ktx.Firebase
 import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.repository.order.OrderRepository
 import com.soten.fooddelivery.data.repository.order.OrderRepositoryImpl
+import com.soten.fooddelivery.data.repository.order.OrderResult
 import com.soten.fooddelivery.data.repository.restaurant.food.RestaurantFoodRepository
 import com.soten.fooddelivery.model.CellType
 import com.soten.fooddelivery.model.food.FoodModel
@@ -50,11 +51,11 @@ class OrderMenuListViewModel(
             val restaurantId = foodMenuList.first().restaurantId
             auth.currentUser?.let { user ->
                 when(val data = orderRepository.orderMenu(user.uid, restaurantId, foodMenuList)) {
-                    is OrderRepositoryImpl.Result.Success<*> -> {
+                    is OrderResult.Success<*> -> {
                         restaurantFoodRepository.clearFoodMenuListInBasket()
                         _orderMenuStateLiveData.value = OrderMenuState.Order
                     }
-                    is OrderRepositoryImpl.Result.Error -> {
+                    is OrderResult.Error -> {
                         _orderMenuStateLiveData.value = OrderMenuState.Error(
                             R.string.error_message, data.e
                         )

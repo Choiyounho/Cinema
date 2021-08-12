@@ -1,6 +1,6 @@
 package com.soten.fooddelivery.screen.main.home.restaurant.detail.review
 
-import com.soten.fooddelivery.data.entity.RestaurantReviewEntity
+import com.soten.fooddelivery.model.review.RestaurantReviewModel
 
 sealed class RestaurantReviewState {
 
@@ -9,7 +9,7 @@ sealed class RestaurantReviewState {
     object Loading: RestaurantReviewState()
 
     data class Success(
-        val reviewList: List<RestaurantReviewEntity>
+        val reviewList: List<RestaurantReviewModel>
     ): RestaurantReviewState()
 
 }

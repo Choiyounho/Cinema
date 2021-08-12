@@ -38,7 +38,7 @@
     <string name="please_set_your_current_location">위치가 맞는 지 확인해주세요!</string>
     <string name="nonexistent_tel_number">번호가 없습니다.</string>
 
-    <string name="price">%d,원</string>
+    <string name="price">%,d원</string>
 
     <string name="basket_count">+%d</string>
 </resources>

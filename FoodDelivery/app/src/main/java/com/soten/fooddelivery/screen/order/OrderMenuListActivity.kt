@@ -2,9 +2,12 @@ package com.soten.fooddelivery.screen.order
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
+import com.soten.fooddelivery.R
+import com.soten.fooddelivery.databinding.ActivityMainBinding
 import com.soten.fooddelivery.databinding.ActivityOrderMenuListBinding
 import com.soten.fooddelivery.model.food.FoodModel
 import com.soten.fooddelivery.screen.base.BaseActivity
@@ -49,10 +52,8 @@ class OrderMenuListActivity : BaseActivity<OrderMenuListViewModel, ActivityOrder
         when (state) {
             is OrderMenuState.Loading -> handleLoading()
             is OrderMenuState.Success -> handleSuccess(state)
-            is OrderMenuState.Order -> {
-            }
-            is OrderMenuState.Error -> {
-            }
+            is OrderMenuState.Order -> handleOrderState()
+            is OrderMenuState.Error -> handleErrorState(state)
             else -> {
             }
         }
@@ -66,11 +67,21 @@ class OrderMenuListActivity : BaseActivity<OrderMenuListViewModel, ActivityOrder
         progressBar.isGone = true
         val menuOrderIsEmpty = state.restaurantFoodModelList.isNullOrEmpty()
         confirmButton.isEnabled = menuOrderIsEmpty.not()
+        adapter.submitList(state.restaurantFoodModelList)
         if (menuOrderIsEmpty) {
-            Snackbar.make(binding.root, "주문 메뉴가 없어 화면이 종료됩니다.", Snackbar.LENGTH_SHORT).show()
+            Toast.makeText(this@OrderMenuListActivity, "주문 메뉴가 없어 화면이 종료됩니다.", Toast.LENGTH_SHORT).show()
             finish()
         }
-        adapter.submitList(state.restaurantFoodModelList)
+    }
+
+    private fun handleOrderState() {
+        Toast.makeText(this, "성공적으로 주문을 완료했습니다.", Toast.LENGTH_SHORT).show()
+        finish()
+    }
+
+    private fun handleErrorState(state: OrderMenuState.Error) {
+        Toast.makeText(this, getString(state.messageId), Toast.LENGTH_SHORT).show()
+        finish()
     }
 
     companion object {

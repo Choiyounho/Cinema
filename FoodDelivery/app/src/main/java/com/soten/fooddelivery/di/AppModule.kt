@@ -1,5 +1,7 @@
 package com.soten.fooddelivery.di
 
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.soten.fooddelivery.data.entity.LocationLatLngEntity
 import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
 import com.soten.fooddelivery.data.entity.RestaurantEntity
@@ -7,6 +9,8 @@ import com.soten.fooddelivery.data.entity.RestaurantFoodEntity
 import com.soten.fooddelivery.data.preference.AppPreferenceManager
 import com.soten.fooddelivery.data.repository.map.MapRepository
 import com.soten.fooddelivery.data.repository.map.MapRepositoryImpl
+import com.soten.fooddelivery.data.repository.order.OrderRepository
+import com.soten.fooddelivery.data.repository.order.OrderRepositoryImpl
 import com.soten.fooddelivery.data.repository.restaurant.RestaurantRepository
 import com.soten.fooddelivery.data.repository.restaurant.RestaurantRepositoryImpl
 import com.soten.fooddelivery.data.repository.restaurant.food.RestaurantFoodRepository
@@ -66,13 +70,14 @@ val appModule = module {
     }
     viewModel { (restaurantTitle: String) -> RestaurantReviewListViewModel(restaurantTitle, get()) }
     viewModel { RestaurantLikeListViewModel(get()) }
-    viewModel { OrderMenuListViewModel(get()) }
+    viewModel { OrderMenuListViewModel(get(), get()) }
 
     single<RestaurantRepository> { RestaurantRepositoryImpl(get(), get(), get()) }
     single<MapRepository> { MapRepositoryImpl(get(), get()) }
     single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
     single<RestaurantFoodRepository> { RestaurantFoodRepositoryImpl(get(), get(), get()) }
     single<RestaurantReviewRepository> { RestaurantReviewRepositoryImpl(get()) }
+    single<OrderRepository> { OrderRepositoryImpl(get(), get()) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }
@@ -96,4 +101,6 @@ val appModule = module {
     single { Dispatchers.Main }
 
     single { MenuChangeEventBus() }
+
+    single { Firebase.firestore }
 }

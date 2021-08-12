@@ -43,4 +43,8 @@
     <string name="basket_count">+%d</string>
     <string name="restaurant_like_list">찜 리스트</string>
     <string name="empty_like_text">찜한 내역이 존재하지 않습니다</string>
+
+
+    <string name="error_message">예상치 못한 오류가 발생했습니다. : %s</string>
+    <string name="user_id_not_found">유저 ID가 존재하지 않습니다.</string>
 </resources>

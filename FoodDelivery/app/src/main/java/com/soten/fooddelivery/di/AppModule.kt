@@ -81,7 +81,7 @@ val appModule = module {
     single<MapRepository> { MapRepositoryImpl(get(), get()) }
     single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
     single<RestaurantFoodRepository> { RestaurantFoodRepositoryImpl(get(), get(), get()) }
-    single<RestaurantReviewRepository> { RestaurantReviewRepositoryImpl(get()) }
+    single<RestaurantReviewRepository> { RestaurantReviewRepositoryImpl(get(), get()) }
     single<OrderRepository> { OrderRepositoryImpl(get(), get()) }
     single { GalleryPhotoRepository(androidApplication()) }
 

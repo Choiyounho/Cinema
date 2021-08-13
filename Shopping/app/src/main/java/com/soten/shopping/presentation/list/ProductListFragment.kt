@@ -37,18 +37,10 @@ internal class ProductListFragment: BaseFragment<ProductListViewModel, FragmentP
     override fun observeData() {
         viewModel.productListStateLiveData.observe(this) {
             when (it) {
-                is ProductListState.UnInitialized -> {
-                    initViews(binding)
-                }
-                is ProductListState.Loading -> {
-                    handleLoadingState()
-                }
-                is ProductListState.Success -> {
-                    handleSuccessState(it)
-                }
-                is ProductListState.Error -> {
-                    handleErrorState()
-                }
+                is ProductListState.UnInitialized -> initViews(binding)
+                is ProductListState.Loading -> handleLoadingState()
+                is ProductListState.Success -> handleSuccessState(it)
+                is ProductListState.Error -> handleErrorState()
             }
         }
     }
@@ -58,7 +50,7 @@ internal class ProductListFragment: BaseFragment<ProductListViewModel, FragmentP
     }
 
     private fun handleSuccessState(state: ProductListState.Success) = with(binding) {
-//        refreshLayout.isEnabled = state.productList.isNotEmpty()
+        refreshLayout.isEnabled = state.productList.isNotEmpty()
         refreshLayout.isRefreshing = false
 
         if (state.productList.isEmpty()) {

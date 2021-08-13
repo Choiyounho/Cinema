@@ -13,10 +13,10 @@ interface ProductDao {
     suspend fun getById(id: Long): ProductEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(ProductEntity: ProductEntity): Long
+    suspend fun insert(productEntity: ProductEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(ProductEntityList: List<ProductEntity>)
+    suspend fun insert(productEntityList: List<ProductEntity>)
 
     @Query("DELETE FROM ProductEntity WHERE id=:id")
     suspend fun delete(id: Long)

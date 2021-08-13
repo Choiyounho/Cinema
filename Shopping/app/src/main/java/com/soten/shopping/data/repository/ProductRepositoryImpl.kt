@@ -6,7 +6,7 @@ import com.soten.shopping.data.network.ProductApiService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class DefaultProductRepository(
+class ProductRepositoryImpl(
     private val productApiService: ProductApiService,
     private val ioDispatcher: CoroutineDispatcher,
     private val productDao: ProductDao
@@ -30,11 +30,11 @@ class DefaultProductRepository(
     }
 
     override suspend fun insertProductList(ProductList: List<ProductEntity>) = withContext(ioDispatcher) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override suspend fun updateProductItem(ProductItem: ProductEntity) = withContext(ioDispatcher) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override suspend fun getProductItem(itemId: Long): ProductEntity? = withContext(ioDispatcher) {
@@ -51,6 +51,6 @@ class DefaultProductRepository(
     }
 
     override suspend fun deleteProductItem(id: Long) = withContext(ioDispatcher) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 }

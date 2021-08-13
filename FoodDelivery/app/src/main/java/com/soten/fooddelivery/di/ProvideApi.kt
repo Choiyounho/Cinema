@@ -34,7 +34,7 @@ fun provideFoodRetrofit(
     gsonConverterFactory: GsonConverterFactory
 ): Retrofit {
     return Retrofit.Builder()
-        .baseUrl(Url.FOOD_URL)
+        .baseUrl(Url.MY_FOOD_URL)
         .addConverterFactory(gsonConverterFactory)
         .client(okHttpClient)
         .build()

@@ -7,7 +7,7 @@ import com.soten.shopping.data.network.provideGsonConverterFactory
 import com.soten.shopping.data.network.provideProductApiService
 import com.soten.shopping.data.network.provideProductRetrofit
 import com.soten.shopping.data.preference.PreferenceManager
-import com.soten.shopping.data.repository.DefaultProductRepository
+import com.soten.shopping.data.repository.ProductRepositoryImpl
 import com.soten.shopping.data.repository.ProductRepository
 import com.soten.shopping.domain.*
 import com.soten.shopping.presentation.detail.ProductDetailViewModel
@@ -37,7 +37,7 @@ val appModule = module {
     single { Dispatchers.IO }
 
     // repositories
-    single<ProductRepository> { DefaultProductRepository(get(), get(), get()) }
+    single<ProductRepository> { ProductRepositoryImpl(get(), get(), get()) }
 
     // UseCase
     factory { GetProductItemUseCase(get()) }

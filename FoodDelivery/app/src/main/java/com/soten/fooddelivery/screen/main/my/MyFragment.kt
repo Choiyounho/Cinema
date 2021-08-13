@@ -18,7 +18,12 @@ import com.google.firebase.ktx.Firebase
 import com.soten.fooddelivery.R
 import com.soten.fooddelivery.databinding.FragmentMyBinding
 import com.soten.fooddelivery.extensions.load
+import com.soten.fooddelivery.model.OrderModel
 import com.soten.fooddelivery.screen.base.BaseFragment
+import com.soten.fooddelivery.util.provider.ResourceProvider
+import com.soten.fooddelivery.widget.adapter.ModelRecyclerAdapter
+import com.soten.fooddelivery.widget.adapter.listener.AdapterListener
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
@@ -53,6 +58,17 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
             }
         }
 
+    private val resourceProvider by inject<ResourceProvider>()
+
+    private val adapter by lazy {
+        ModelRecyclerAdapter<OrderModel, MyViewModel>(
+            listOf(),
+            viewModel,
+            resourceProvider,
+            adapterListener = object : AdapterListener {}
+        )
+    }
+
 
     override fun initViews() = with(binding) {
         loginButton.setOnClickListener {
@@ -63,6 +79,7 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
             viewModel.signOut()
             Snackbar.make(binding.root, "로그아웃 완료.", Snackbar.LENGTH_SHORT).show()
         }
+        orderRecyclerView.adapter = adapter
     }
 
     private fun signInGoogle() {
@@ -77,7 +94,8 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
             is MyState.Success -> handleSuccessState(state)
             is MyState.Login -> handleLoginState(state)
             is MyState.Error -> handleErrorState(state)
-            else -> { }
+            else -> {
+            }
         }
     }
 
@@ -103,7 +121,8 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         profileImageView.load(state.profileImageUri.toString(), 60f)
         userNameTextView.text = state.userName
 
-        Toast.makeText(requireContext(), state.orderList.toString(), Toast.LENGTH_SHORT).show()
+        adapter.submitList(state.orderList)
+//        Toast.makeText(requireContext(), state.orderList.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun handleLoginState(state: MyState.Login) {

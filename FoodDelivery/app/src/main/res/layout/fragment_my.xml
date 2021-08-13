@@ -40,12 +40,12 @@
         android:id="@+id/profileGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:constraint_referenced_ids="logoutButton,userNameTextView,profileImageView,recyclerView"
+        app:constraint_referenced_ids="logoutButton,userNameTextView,profileImageView,orderRecyclerView"
         android:visibility="gone"
         tools:visibility="visible"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/orderRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -63,10 +63,10 @@
         android:layout_height="wrap_content"
         android:text="@string/empty_orders_text"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="@id/recyclerView"
-        app:layout_constraintStart_toStartOf="@id/recyclerView"
-        app:layout_constraintEnd_toEndOf="@id/recyclerView"
-        app:layout_constraintBottom_toBottomOf="@id/recyclerView"
+        app:layout_constraintTop_toTopOf="@id/orderRecyclerView"
+        app:layout_constraintStart_toStartOf="@id/orderRecyclerView"
+        app:layout_constraintEnd_toEndOf="@id/orderRecyclerView"
+        app:layout_constraintBottom_toBottomOf="@id/orderRecyclerView"
         tools:visibility="visible" />
 
     <ProgressBar

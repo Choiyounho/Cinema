@@ -47,4 +47,5 @@
 
     <string name="error_message">예상치 못한 오류가 발생했습니다. : %s</string>
     <string name="user_id_not_found">유저 ID가 존재하지 않습니다.</string>
+    <string name="order_history_title">주문내역 : %s</string>
 </resources>

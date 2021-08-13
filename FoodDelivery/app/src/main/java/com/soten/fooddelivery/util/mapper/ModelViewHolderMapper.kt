@@ -11,6 +11,7 @@ import com.soten.fooddelivery.widget.adapter.viewholder.EmptyViewHolder
 import com.soten.fooddelivery.widget.adapter.viewholder.ModelViewHolder
 import com.soten.fooddelivery.widget.adapter.viewholder.food.FoodMenuViewHolder
 import com.soten.fooddelivery.widget.adapter.viewholder.order.OrderMenuViewHolder
+import com.soten.fooddelivery.widget.adapter.viewholder.order.OrderViewHolder
 import com.soten.fooddelivery.widget.adapter.viewholder.restaurant.LikeRestaurantViewHolder
 import com.soten.fooddelivery.widget.adapter.viewholder.restaurant.RestaurantViewHolder
 import com.soten.fooddelivery.widget.adapter.viewholder.review.RestaurantReviewViewHolder
@@ -53,6 +54,11 @@ object ModelViewHolderMapper {
             )
             CellType.ORDER_FOOD_CELL -> OrderMenuViewHolder(
                 ViewholderOrderMenuBinding.inflate(inflater, parent, false),
+                viewModel,
+                resourceProvider
+            )
+            CellType.ORDER_CELL -> OrderViewHolder(
+                ViewholderOrderBinding.inflate(inflater, parent, false),
                 viewModel,
                 resourceProvider
             )

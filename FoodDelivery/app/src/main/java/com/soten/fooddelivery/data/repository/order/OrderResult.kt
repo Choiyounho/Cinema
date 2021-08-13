@@ -6,6 +6,6 @@ sealed class OrderResult {
     ) : OrderResult()
 
     data class Error(
-        val e: Throwable
+        val exception: Throwable
     ) : OrderResult()
 }

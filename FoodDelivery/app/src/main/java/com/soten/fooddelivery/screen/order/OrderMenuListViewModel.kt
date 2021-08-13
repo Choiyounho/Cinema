@@ -7,7 +7,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.repository.order.OrderRepository
-import com.soten.fooddelivery.data.repository.order.OrderRepositoryImpl
 import com.soten.fooddelivery.data.repository.order.OrderResult
 import com.soten.fooddelivery.data.repository.restaurant.food.RestaurantFoodRepository
 import com.soten.fooddelivery.model.CellType
@@ -57,7 +56,7 @@ class OrderMenuListViewModel(
                     }
                     is OrderResult.Error -> {
                         _orderMenuStateLiveData.value = OrderMenuState.Error(
-                            R.string.error_message, data.e
+                            R.string.error_message, data.exception
                         )
                     }
                 }

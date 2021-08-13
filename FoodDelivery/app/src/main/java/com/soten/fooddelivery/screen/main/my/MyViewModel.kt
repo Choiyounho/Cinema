@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
+import com.soten.fooddelivery.R
 import com.soten.fooddelivery.data.entity.OrderEntity
 import com.soten.fooddelivery.data.preference.AppPreferenceManager
 import com.soten.fooddelivery.data.repository.order.OrderRepository
 import com.soten.fooddelivery.data.repository.order.OrderResult
 import com.soten.fooddelivery.data.repository.user.UserRepository
+import com.soten.fooddelivery.model.OrderModel
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -48,9 +50,21 @@ class MyViewModel(
                     _myStateLiveData.value = MyState.Success.Registered(
                         userName = user.displayName ?: "익명",
                         profileImageUri = user.photoUrl,
-                        orderList = orderList
+                        orderList = orderList.map {
+                            OrderModel(
+                                id = it.hashCode().toLong(),
+                                orderId = it.id,
+                                userId = it.userId,
+                                restaurantId = it.restaurantId,
+                                foodMenuList = it.foodMenuList
+                            )
+                        }
                     )
                 }
+                is OrderResult.Error -> _myStateLiveData.value = MyState.Error(
+                    R.string.error_message,
+                    orderMenuResult.exception
+                )
             }
         } ?: run {
             _myStateLiveData.value = MyState.Success.NotRegistered

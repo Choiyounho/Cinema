@@ -7,7 +7,8 @@ interface OrderRepository {
     suspend fun orderMenu(
         userId: String,
         restaurantId: Long,
-        foodMenuList: List<RestaurantFoodEntity>
+        foodMenuList: List<RestaurantFoodEntity>,
+        restaurantTitle: String
     ): OrderResult
 
     suspend fun getAllOrderMenus(

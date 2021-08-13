@@ -39,6 +39,7 @@ class OrderMenuListViewModel(
                     imageUrl = it.imageUrl,
                     restaurantId = it.restaurantId,
                     foodId = it.id,
+                    restaurantTitle = it.restaurantTitle
                 )
             }
         )
@@ -48,8 +49,9 @@ class OrderMenuListViewModel(
         val foodMenuList = restaurantFoodRepository.getAllFoodMenuListInBasket()
         if (foodMenuList.isNotEmpty()) {
             val restaurantId = foodMenuList.first().restaurantId
+            val restaurantTitle = foodMenuList.first().restaurantTitle
             auth.currentUser?.let { user ->
-                when(val data = orderRepository.orderMenu(user.uid, restaurantId, foodMenuList)) {
+                when(val data = orderRepository.orderMenu(user.uid, restaurantId, foodMenuList, restaurantTitle)) {
                     is OrderResult.Success<*> -> {
                         restaurantFoodRepository.clearFoodMenuListInBasket()
                         _orderMenuStateLiveData.value = OrderMenuState.Order

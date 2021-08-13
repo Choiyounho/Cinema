@@ -48,4 +48,15 @@
     <string name="error_message">예상치 못한 오류가 발생했습니다. : %s</string>
     <string name="user_id_not_found">유저 ID가 존재하지 않습니다.</string>
     <string name="order_history_title">주문내역 : %s</string>
+    <string name="add_review">리뷰 등록하기</string>
+    <string name="add_image">이미지 등록하기</string>
+    <string name="content">내용</string>
+    <string name="add_restaurant_review">%s 리뷰 등록</string>
+
+    <string name="flash">플래시</string>
+    <string name="images_page">(%d/%d)</string>
+    <string name="image_preview">미리보기</string>
+
+    <string name="confirm">확인</string>
+    <string name="delete">삭제</string>
 </resources>

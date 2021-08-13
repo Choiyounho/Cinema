@@ -28,7 +28,10 @@ class RestaurantDetailViewModel(
         )
         _restaurantDetailStateLiveData.value = RestaurantDetailState.Loading
         val foods =
-            restaurantFoodRepository.getFoods(restaurantId = restaurantEntity.restaurantInfoId)
+            restaurantFoodRepository.getFoods(
+                restaurantId = restaurantEntity.restaurantInfoId,
+                restaurantTitle = restaurantEntity.restaurantTitle
+            )
 
         val foodMenuListInBasket = restaurantFoodRepository.getAllFoodMenuListInBasket()
 
@@ -93,17 +96,18 @@ class RestaurantDetailViewModel(
             }
         }
 
-    fun notifyClearNeedAlertInBasket(clearNeed: Boolean, afterAction: () -> Unit) = viewModelScope.launch {
-        when (val data = _restaurantDetailStateLiveData.value) {
-            is RestaurantDetailState.Success -> {
-                _restaurantDetailStateLiveData.value = data.copy(
-                    isClearNeedInBasketAndAction = Pair(clearNeed, afterAction)
-                )
-            }
-            else -> {
+    fun notifyClearNeedAlertInBasket(clearNeed: Boolean, afterAction: () -> Unit) =
+        viewModelScope.launch {
+            when (val data = _restaurantDetailStateLiveData.value) {
+                is RestaurantDetailState.Success -> {
+                    _restaurantDetailStateLiveData.value = data.copy(
+                        isClearNeedInBasketAndAction = Pair(clearNeed, afterAction)
+                    )
+                }
+                else -> {
+                }
             }
         }
-    }
 
     fun notifyClearBasket() = viewModelScope.launch {
         when (val data = _restaurantDetailStateLiveData.value) {

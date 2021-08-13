@@ -6,6 +6,7 @@ import com.soten.fooddelivery.model.OrderModel
 import com.soten.fooddelivery.screen.base.BaseViewModel
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.widget.adapter.listener.AdapterListener
+import com.soten.fooddelivery.widget.adapter.listener.order.OrderListListener
 import com.soten.fooddelivery.widget.adapter.viewholder.ModelViewHolder
 
 class OrderViewHolder(
@@ -42,6 +43,10 @@ class OrderViewHolder(
     }
 
     override fun bindViews(model: OrderModel, adapterListener: AdapterListener) {
-
+        if (adapterListener is OrderListListener) {
+            binding.root.setOnClickListener {
+                adapterListener.writeRestaurantReview(model.orderId, model.restaurantTitle)
+            }
+        }
     }
 }

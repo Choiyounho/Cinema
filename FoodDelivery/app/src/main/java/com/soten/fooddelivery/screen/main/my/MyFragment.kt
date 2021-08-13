@@ -20,9 +20,11 @@ import com.soten.fooddelivery.databinding.FragmentMyBinding
 import com.soten.fooddelivery.extensions.load
 import com.soten.fooddelivery.model.OrderModel
 import com.soten.fooddelivery.screen.base.BaseFragment
+import com.soten.fooddelivery.screen.review.AddRestaurantReviewActivity
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.widget.adapter.ModelRecyclerAdapter
 import com.soten.fooddelivery.widget.adapter.listener.AdapterListener
+import com.soten.fooddelivery.widget.adapter.listener.order.OrderListListener
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -65,7 +67,13 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
             listOf(),
             viewModel,
             resourceProvider,
-            adapterListener = object : AdapterListener {}
+            adapterListener = object : OrderListListener {
+                override fun writeRestaurantReview(orderId: String, restaurantTitle: String) {
+                    startActivity(
+                        AddRestaurantReviewActivity.newIntent(requireContext(), orderId, restaurantTitle)
+                    )
+                }
+            }
         )
     }
 

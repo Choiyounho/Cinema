@@ -1,7 +1,9 @@
 package com.soten.fooddelivery.di
 
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.soten.fooddelivery.data.entity.LocationLatLngEntity
 import com.soten.fooddelivery.data.entity.MapSearchInformationEntity
 import com.soten.fooddelivery.data.entity.RestaurantEntity
@@ -29,6 +31,8 @@ import com.soten.fooddelivery.screen.main.like.RestaurantLikeListViewModel
 import com.soten.fooddelivery.screen.main.my.MyViewModel
 import com.soten.fooddelivery.screen.mylocation.MyLocationViewModel
 import com.soten.fooddelivery.screen.order.OrderMenuListViewModel
+import com.soten.fooddelivery.screen.review.gallery.GalleryPhotoRepository
+import com.soten.fooddelivery.screen.review.gallery.GalleryViewModel
 import com.soten.fooddelivery.util.event.MenuChangeEventBus
 import com.soten.fooddelivery.util.provider.ResourceProvider
 import com.soten.fooddelivery.util.provider.ResourceProviderImpl
@@ -71,6 +75,7 @@ val appModule = module {
     viewModel { (restaurantTitle: String) -> RestaurantReviewListViewModel(restaurantTitle, get()) }
     viewModel { RestaurantLikeListViewModel(get()) }
     viewModel { OrderMenuListViewModel(get(), get()) }
+    viewModel { GalleryViewModel(get()) }
 
     single<RestaurantRepository> { RestaurantRepositoryImpl(get(), get(), get()) }
     single<MapRepository> { MapRepositoryImpl(get(), get()) }
@@ -78,6 +83,7 @@ val appModule = module {
     single<RestaurantFoodRepository> { RestaurantFoodRepositoryImpl(get(), get(), get()) }
     single<RestaurantReviewRepository> { RestaurantReviewRepositoryImpl(get()) }
     single<OrderRepository> { OrderRepositoryImpl(get(), get()) }
+    single { GalleryPhotoRepository(androidApplication()) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }
@@ -103,4 +109,6 @@ val appModule = module {
     single { MenuChangeEventBus() }
 
     single { Firebase.firestore }
+    single { Firebase.auth }
+    single { Firebase.storage }
 }
